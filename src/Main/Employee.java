@@ -1,5 +1,6 @@
 package Main;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public abstract class Employee {
@@ -10,17 +11,17 @@ public abstract class Employee {
     protected String empJob;
 
     static Account account = new Account();
+
     public static boolean login(String empID, String empPassword){
+
         List<Account> empAccounts = account.getAllEmpCredential();
         for (Account account: empAccounts){
             if(account.getEmpID().equals(empID) && account.getEmpPassword().equals(empPassword)){
-                System.out.println("Employee Exist!");
+                System.out.println("Login Successful!");
                 return true;
             }
-            else{
-                System.out.println(account.getEmpID() + account.getEmpPassword());
-            }
         }
+        System.out.println("Warning: Wrong Credential!");
         return false;
     }
 
@@ -35,7 +36,4 @@ public abstract class Employee {
                 ", empJob='" + empJob + '\'' +
                 '}';
     }
-
-
-
 }

@@ -18,11 +18,20 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 2);
         switch(intUserChoice){
             case 1:
-                boolean credentialExist = Employee.login("MS0001", "MSP0001");
+                System.out.print("ID: ");
+                String empID = Scanner.next();
+                System.out.print("Password: ");
+                String empPassword = Scanner.next();
+                boolean credentialExist = Employee.login(empID, empPassword);
                 if (credentialExist){
-                    //call respective employee
-
-            }
+                    if(empID.contains("MS")){
+                        // call Managing Staff UI
+                        managingStaffMainCLI(empID);
+                    }else{
+                        // call Delivery Staff UI
+                    }
+                }
+                loginCLI();
                 break;
             case 2:
                 System.out.println("Program exiting...");
@@ -34,6 +43,42 @@ public class Main {
     }
 
 
+    private static void managingStaffMainCLI(String empID){
+        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("X     Managing Staff    X");
+        System.out.printf("X         %s        X\n", empID);
+        System.out.println("X-----------------------X");
+        System.out.println("X       [1] Order       X");
+        System.out.println("X       [2] Feedback    X");
+        System.out.println("X       [3] Report      X");
+        System.out.println("X       [4] Account     X");
+        System.out.println("X       [5] Logout      X");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.print("--> ");
+        String userChoice = Scanner.next();
+        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        switch(intUserChoice){
+            case 1:
+                managingStaffMainCLI(empID);
+                break;
+            case 2:
+                managingStaffMainCLI(empID);
+                break;
+            case 3:
+                managingStaffMainCLI(empID);
+                break;
+            case 4:
+                managingStaffMainCLI(empID);
+                break;
+            case 5:
+                break;
+            default:
+                managingStaffMainCLI(empID);
+                break;
+        }
+
+    }
+
     private static int userChoiceVerification(String userInput, int initialInput, int finalInput){
         try {
             int intUserInput = Integer.parseInt(userInput);
@@ -43,10 +88,10 @@ public class Main {
                 }
                 initialInput++;
             }
-            System.out.println("Please provide a valid input value!");
+            System.out.println("Warning: Please provide a valid input value!");
             return 0;
         } catch (NumberFormatException e){
-            System.out.println("Input is not an integer!");
+            System.out.println("Warning: Input is not an integer!");
             return 0;
         }
     }

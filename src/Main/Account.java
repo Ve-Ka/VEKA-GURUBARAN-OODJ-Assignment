@@ -49,19 +49,19 @@ public class Account {
 
     }
 
-    public String getEmpID() {
+    protected String getEmpID() {
         return empID;
     }
 
-    public void setEmpID(String empID) {
+    private void setEmpID(String empID) {
         this.empID = empID;
     }
 
-    public String getEmpPassword() {
+    protected String getEmpPassword() {
         return empPassword;
     }
 
-    public void setEmpPassword(String empPassword) {
+    private void setEmpPassword(String empPassword) {
         this.empPassword = empPassword;
     }
 }
