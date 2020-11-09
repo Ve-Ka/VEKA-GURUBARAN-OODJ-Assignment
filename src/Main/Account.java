@@ -10,21 +10,22 @@ public class Account {
     private String empID;
     private String empPassword;
     private final static String empCredentialFile = "empCredential.txt";
-
+/*
     public static boolean login(String empID, String empPassword){
         List<Account> empAccounts = getAllEmpCredential();
         for (Account account: empAccounts){
             if(account.getEmpID().equals(empID) && account.getEmpPassword().equals(empPassword)){
                 System.out.println("Employee Exist!");
+                return true;
             }
             else{
                 System.out.println(account.getEmpID() + account.getEmpPassword());
             }
         }
-        return true;
+        return false;
     }
-
-    private static List<Account> getAllEmpCredential(){
+*/
+    protected List<Account> getAllEmpCredential(){
         List<Account> accountList = new ArrayList();
         try {
             List<String> empCredentialList = Files.readAllLines(Paths.get(empCredentialFile));
