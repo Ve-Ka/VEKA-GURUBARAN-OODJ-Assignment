@@ -1,4 +1,4 @@
 package Main;
 
-public class Employee {
+public abstract class Employee {
 }
