@@ -28,10 +28,10 @@ public class Main {
                 boolean credentialExist = Employee.login(empID, empPassword);
                 if (credentialExist){
                     if(empID.contains("MS")){
-                        // call Managing Staff UI
                         managingStaffMainCLI(empID);
-                    }else{
-                        // call Delivery Staff UI
+                    }
+                    else if(empID.contains("DS")){
+                        deliveryStaffMainCLI(empID);
                     }
                 }
                 loginCLI();
@@ -45,6 +45,11 @@ public class Main {
         }
     }
 
+/*
+
+    Managing Staff CLI Section
+
+ */
 
     private static void managingStaffMainCLI(String empID){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -115,7 +120,7 @@ public class Main {
     private static void staffAccountSelfCLI(String empID){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.println("X         Self          X");
-        System.out.println("X        Account        X");
+        System.out.println("X        Details        X");
         System.out.println("X-----------------------X");
         System.out.println("X       [1] View        X");
         System.out.println("X       [2] Edit        X");
@@ -135,7 +140,12 @@ public class Main {
                 staffAccountSelfCLI(empID);
                 break;
             case 2:
-
+                if(empID.contains("MS")){
+                    managingStaff.editStaffDetails(empID);
+                }
+                else if(empID.contains("DS")){
+                    deliveryStaff.editStaffDetails(empID);
+                }
                 staffAccountSelfCLI(empID);
                 break;
             case 3:
@@ -177,6 +187,41 @@ public class Main {
                 break;
             default:
                 managingStaffAccountOthersCLI();
+                break;
+        }
+    }
+
+
+
+/*
+
+    Delivery Staff Section
+
+*/
+    private static void deliveryStaffMainCLI(String empID){
+        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("X     Delivery Staff    X");
+        System.out.printf("X         %s        X\n", empID);
+        System.out.println("X-----------------------X");
+        System.out.println("X       [1] Delivery    X");
+        System.out.println("X       [2] Account     X");
+        System.out.println("X       [3] Logout      X");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.print("--> ");
+        String userChoice = Scanner.next();
+        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        switch(intUserChoice) {
+            case 1:
+                deliveryStaffMainCLI(empID);
+                break;
+            case 2:
+                staffAccountSelfCLI(empID);
+                deliveryStaffMainCLI(empID);
+                break;
+            case 3:
+                break;
+            default:
+                deliveryStaffMainCLI(empID);
                 break;
         }
     }
