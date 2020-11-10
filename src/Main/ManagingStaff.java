@@ -52,6 +52,7 @@ public class ManagingStaff extends Employee{
         viewStaffDetails(empID);
         System.out.println("-----------------------");
 
+        // load data in to default list
         List<ManagingStaff> managingStaffDetails = getAllManagingStaffDetails();
         List<String> managingStaffDefaultDetails = new ArrayList<>();
         for (ManagingStaff managingStaff : managingStaffDetails) {
@@ -64,6 +65,7 @@ public class ManagingStaff extends Employee{
             }
         }
 
+        // accept input from user
         List<String> managingStaffNewDetails = new ArrayList<>();
         managingStaffNewDetails.add(empID);
         String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
@@ -77,6 +79,7 @@ public class ManagingStaff extends Employee{
             }
         }
 
+        // overwrite default list
         for (ManagingStaff managingStaff : managingStaffDetails) {
             if (managingStaff.getEmpID().equals(empID)) {
                 managingStaff.setEmpName(managingStaffNewDetails.get(1));
@@ -86,6 +89,7 @@ public class ManagingStaff extends Employee{
             }
         }
 
+        // write to file
         try{
             FileWriter WriteData = new FileWriter(managingStaffDetailsFile);
             for (ManagingStaff managingStaff : managingStaffDetails) {
@@ -123,7 +127,6 @@ public class ManagingStaff extends Employee{
         }
         return managingStaffDetailsList;
     }
-
 
     @Override
     public String toString() {
