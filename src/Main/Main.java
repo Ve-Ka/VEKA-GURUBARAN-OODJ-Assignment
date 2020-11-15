@@ -196,6 +196,40 @@ public class Main {
     }
 
 
+    public static void managingStaffOrderCLI(){
+        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("X         Order         X");
+        System.out.println("X       Management      X");
+        System.out.println("X-----------------------X");
+        System.out.println("X       [1] Search      X");
+        System.out.println("X       [2] Add         X");
+        System.out.println("X       [3] Edit        X");
+        System.out.println("X       [4] Remove      X");
+        System.out.println("X       [5] Back        X");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.print("--> ");
+        String userChoice = Scanner.next();
+        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        switch(intUserChoice){
+            case 1:
+                managingStaffOrderCLI();
+                break;
+            case 2:
+                managingStaffOrderCLI();
+                break;
+            case 3:
+                managingStaffOrderCLI();
+                break;
+            case 4:
+                managingStaffOrderCLI();
+                break;
+            case 5:
+                break;
+            default:
+                managingStaffOrderCLI();
+                break;
+        }
+    }
 
 /*
 
