@@ -79,7 +79,7 @@ public class ManagingStaff extends Employee{
             }
         }
 
-        // overwrite default list
+        // overwrite default class list
         for (ManagingStaff managingStaff : managingStaffDetails) {
             if (managingStaff.getEmpID().equals(empID)) {
                 managingStaff.setEmpName(managingStaffNewDetails.get(1));
