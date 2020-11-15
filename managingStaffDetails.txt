@@ -1,2 +1,2 @@
 MS0001|VeKa|21|Male|veka@mail.com
-MS0002|Gurubaran|20|Male|gurubaran@mail.com
+MS0002|Gurubaran|20|Female|gurubaran@mail.com

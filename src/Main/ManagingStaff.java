@@ -13,25 +13,6 @@ public class ManagingStaff extends Employee{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
     java.util.Scanner Scanner = new Scanner(System.in);
 
-    public boolean searchStaff(){
-        return true;
-    }
-
-    public boolean addStaff(){
-
-        return true;
-    }
-
-    public boolean modifyStaff(){
-        return true;
-    }
-
-    public boolean removeStaff(){
-        return true;
-    }
-
-    Order order = new Order();
-
     @Override
     public void viewStaffDetails(String empID) {
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();
@@ -127,6 +108,7 @@ public class ManagingStaff extends Employee{
         }
         return managingStaffDetailsList;
     }
+
 
     @Override
     public String toString() {

@@ -6,7 +6,7 @@ public class Main {
     static java.util.Scanner Scanner = new Scanner(System.in);
     static ManagingStaff managingStaff = new ManagingStaff();
     static DeliveryStaff deliveryStaff = new DeliveryStaff();
-
+    static Staff staff = new Staff();
 
     private static void loginCLI(){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -172,15 +172,19 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch(intUserChoice){
             case 1:
+                staff.search();
                 managingStaffAccountOthersCLI();
                 break;
             case 2:
+                staff.add();
                 managingStaffAccountOthersCLI();
                 break;
             case 3:
+                staff.modify();
                 managingStaffAccountOthersCLI();
                 break;
             case 4:
+                staff.remove();
                 managingStaffAccountOthersCLI();
                 break;
             case 5:
