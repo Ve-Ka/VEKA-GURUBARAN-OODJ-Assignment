@@ -91,10 +91,9 @@ public class Main {
         System.out.println("X         Account       X");
         System.out.println("X          Menu         X");
         System.out.println("X-----------------------X");
-        System.out.println("X     [1] Self          X");
-        System.out.println("X     [2] Emp Account   X");
-        System.out.println("X     [3] Emp Details   X");
-        System.out.println("X     [4] Back          X");
+        System.out.println("X       [1] Self        X");
+        System.out.println("X       [2] Others      X");
+        System.out.println("X       [3] Back        X");
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
@@ -105,14 +104,10 @@ public class Main {
                 managingStaffAccountCLI(empID);
                 break;
             case 2:
-                managingStaffAccountEmpAccountCLI();
+                managingStaffAccountOthersCLI();
                 managingStaffAccountCLI(empID);
                 break;
             case 3:
-                managingStaffAccountEmpDetailsCLI();
-                managingStaffAccountCLI(empID);
-                break;
-            case 4:
                 break;
             default:
                 managingStaffAccountCLI(empID);
@@ -194,49 +189,10 @@ public class Main {
         }
     }
 
-    private static void managingStaffAccountEmpAccountCLI(){
+    private static void managingStaffAccountOthersCLI(){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("X        Employee       X");
+        System.out.println("X        Others         X");
         System.out.println("X        Account        X");
-        System.out.println("X-----------------------X");
-        System.out.println("X       [1] Search      X");
-        System.out.println("X       [2] Add         X");
-        System.out.println("X       [3] Edit        X");
-        System.out.println("X       [4] Remove      X");
-        System.out.println("X       [5] Back        X");
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.print("--> ");
-        String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
-        switch(intUserChoice){
-            case 1:
-                System.out.print("Search ID: ");
-                String searchEmpID = Scanner.next();
-                Employee.account.viewSelfAccount(searchEmpID);
-                managingStaffAccountEmpAccountCLI();
-                break;
-            case 2:
-                managingStaffAccountEmpAccountCLI();
-                break;
-            case 3:
-                managingStaffAccountEmpAccountCLI();
-                break;
-            case 4:
-                managingStaffAccountEmpAccountCLI();
-                break;
-            case 5:
-                break;
-            default:
-                managingStaffAccountEmpAccountCLI();
-                break;
-        }
-    }
-
-
-    private static void managingStaffAccountEmpDetailsCLI(){
-        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("X        Employee       X");
-        System.out.println("X        Details        X");
         System.out.println("X-----------------------X");
         System.out.println("X       [1] Search      X");
         System.out.println("X       [2] Add         X");
@@ -259,11 +215,10 @@ public class Main {
                     Employee employee = new DeliveryStaff();
                     employee.viewStaffDetails(searchEmpID);
                 }
-                managingStaffAccountEmpDetailsCLI();
+                managingStaffAccountOthersCLI();
                 break;
             case 2:
-
-                managingStaffAccountEmpDetailsCLI();
+                managingStaffAccountOthersCLI();
                 break;
             case 3:
                 System.out.print("Edit ID: ");
@@ -307,16 +262,15 @@ public class Main {
                     employee.editStaffDetails(empID, deliveryStaffNewDetails);
                 }
 
-                managingStaffAccountEmpDetailsCLI();
+                managingStaffAccountOthersCLI();
                 break;
             case 4:
-
-                managingStaffAccountEmpDetailsCLI();
+                managingStaffAccountOthersCLI();
                 break;
             case 5:
                 break;
             default:
-                managingStaffAccountEmpDetailsCLI();
+                managingStaffAccountOthersCLI();
                 break;
         }
     }
@@ -357,11 +311,11 @@ public class Main {
         }
     }
 
-/*
+    /*
 
-    Delivery Staff Section
+        Delivery Staff Section
 
-*/
+    */
     private static void deliveryStaffMainCLI(String empID){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.println("X     Delivery Staff    X");
