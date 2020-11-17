@@ -132,19 +132,23 @@ public class Main {
         switch(intUserChoice){
             case 1:
                 if(empID.contains("MS")){
-                    managingStaff.viewStaffDetails(empID);
+                    Employee employee = new ManagingStaff();
+                    employee.viewStaffDetails(empID);
                 }
                 else if(empID.contains("DS")){
-                    deliveryStaff.viewStaffDetails(empID);
+                    Employee employee = new DeliveryStaff();
+                    employee.viewStaffDetails(empID);
                 }
                 staffAccountSelfCLI(empID);
                 break;
             case 2:
                 if(empID.contains("MS")){
-                    managingStaff.editStaffDetails(empID);
+                    Employee employee = new ManagingStaff();
+                    employee.editStaffDetails(empID);
                 }
                 else if(empID.contains("DS")){
-                    deliveryStaff.editStaffDetails(empID);
+                    Employee employee = new DeliveryStaff();
+                    employee.editStaffDetails(empID);
                 }
                 staffAccountSelfCLI(empID);
                 break;
