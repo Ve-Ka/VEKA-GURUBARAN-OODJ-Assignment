@@ -17,7 +17,6 @@ public class ManagingStaff extends Employee{
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();
         for (ManagingStaff managingStaff: managingStaffDetailsList){
             if(managingStaff.getEmpID().equals(empID)){
-                System.out.println("ID: " + managingStaff.getEmpID());
                 System.out.println("Name: " + managingStaff.getEmpName());
                 System.out.println("Age: " + managingStaff.getEmpAge());
                 System.out.println("Gender: " + managingStaff.getEmpGender());
@@ -98,6 +97,78 @@ public class ManagingStaff extends Employee{
             e.printStackTrace();
         }
         return managingStaffDetailsList;
+    }
+
+    protected void addEmpAccount(String newEmpID, String newEmpPassword, List<String> newStaffDetails){
+        try{
+            // Write to Credential File
+            FileWriter WriteData = new FileWriter(Account.empCredentialFile, true);
+            WriteData.write(String.format("%s|%s\n", newEmpID, newEmpPassword));
+            WriteData.close();
+
+            // Write to Staff Details File
+            if(newEmpID.contains("MS")){
+                WriteData = new FileWriter(managingStaffDetailsFile, true);
+                WriteData.write(String.format("%s|%s|%d|%s|%s\n", newStaffDetails.get(0), newStaffDetails.get(1),
+                        Integer.parseInt(newStaffDetails.get(2)), newStaffDetails.get(3), newStaffDetails.get(4)));
+            }else if(newEmpID.contains("DS")){
+                WriteData = new FileWriter(DeliveryStaff.deliveryStaffDetailsFile, true);
+                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", newStaffDetails.get(0), newStaffDetails.get(1),
+                        Integer.parseInt(newStaffDetails.get(2)), newStaffDetails.get(3), newStaffDetails.get(4),
+                        newStaffDetails.get(5), newStaffDetails.get(6)));
+            }
+
+            WriteData.close();
+            System.out.println("Alert: New Account and Details Added!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void removeEmpAccount(String empID){
+        // Remove Account from Account Object List
+        List<Account> accounts = account.getAllEmpCredential();
+        accounts.removeIf(account -> account.getEmpID().equals(empID));
+
+        // Remove Details from Details Object List
+        List<ManagingStaff> managingStaffs = getAllManagingStaffDetails();
+        List<DeliveryStaff> deliveryStaffs = DeliveryStaff.getAllDeliveryStaffDetails();
+        if (empID.contains("MS")){
+            managingStaffs.removeIf(managingStaff -> managingStaff.getEmpID().equals(empID));
+        }else if (empID.contains("DS")){
+            deliveryStaffs.removeIf(deliveryStaff -> deliveryStaff.getEmpID().equals(empID));
+        }
+
+        // Write all data to file
+
+        try {
+            FileWriter WriteData = new FileWriter(Account.empCredentialFile);
+            for (Account account: accounts){
+                WriteData.write(String.format("%s|%s\n", account.getEmpID(), account.getEmpPassword()));
+            }
+            WriteData.close();
+
+            if(empID.contains("MS")){
+                WriteData = new FileWriter(managingStaffDetailsFile);
+                for (ManagingStaff managingStaff: managingStaffs){
+                    WriteData.write(String.format("%s|%s|%d|%s|%s\n", managingStaff.getEmpID(), managingStaff.getEmpName(),
+                            managingStaff.getEmpAge(), managingStaff.getEmpGender(), managingStaff.getEmpEmail()));
+                }
+            }else if(empID.contains("DS")){
+                WriteData = new FileWriter(DeliveryStaff.deliveryStaffDetailsFile);
+                for (DeliveryStaff deliveryStaff: deliveryStaffs){
+                    WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", deliveryStaff.getEmpID(),
+                            deliveryStaff.getEmpName(), deliveryStaff.getEmpAge(), deliveryStaff.getEmpGender(),
+                            deliveryStaff.getEmpEmail(), deliveryStaff.getCarBrand(), deliveryStaff.getCarPlateNo()));
+                }
+            }
+
+            WriteData.close();
+            System.out.println("Alert: Employee Account and Details Removed!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 
 

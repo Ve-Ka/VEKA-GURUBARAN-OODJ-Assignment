@@ -10,14 +10,13 @@ import java.util.List;
 public class DeliveryStaff extends Employee{
     private String carBrand;
     private String carPlateNo;
-    private final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
+    protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
 
     @Override
     public void viewStaffDetails(String empID) {
         List<DeliveryStaff> deliveryStaffDetailsList = getAllDeliveryStaffDetails();
         for (DeliveryStaff deliveryStaff: deliveryStaffDetailsList){
             if(deliveryStaff.getEmpID().equals(empID)){
-                System.out.println("ID: " + deliveryStaff.getEmpID());
                 System.out.println("Name: " + deliveryStaff.getEmpName());
                 System.out.println("Age: " + deliveryStaff.getEmpAge());
                 System.out.println("Gender: " + deliveryStaff.getEmpGender());
@@ -88,7 +87,7 @@ public class DeliveryStaff extends Employee{
         }
     }
 
-    private List<DeliveryStaff> getAllDeliveryStaffDetails(){
+    protected static List<DeliveryStaff> getAllDeliveryStaffDetails(){
         List<DeliveryStaff> deliveryStaffDetailsList = new ArrayList();
         try {
             List<String> empDetailsList = Files.readAllLines(Paths.get(deliveryStaffDetailsFile));
@@ -110,7 +109,7 @@ public class DeliveryStaff extends Employee{
         return deliveryStaffDetailsList;
     }
 
-    private String getCarBrand() {
+    protected String getCarBrand() {
         return carBrand;
     }
 
@@ -118,7 +117,7 @@ public class DeliveryStaff extends Employee{
         this.carBrand = carBrand;
     }
 
-    private String getCarPlateNo() {
+    protected String getCarPlateNo() {
         return carPlateNo;
     }
 

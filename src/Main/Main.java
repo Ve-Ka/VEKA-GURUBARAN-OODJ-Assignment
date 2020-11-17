@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Main {
     static java.util.Scanner Scanner = new Scanner(System.in);
+    static Employee employee;
 
     private static void loginCLI(){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -207,64 +208,119 @@ public class Main {
             case 1:
                 System.out.print("Search ID: ");
                 String searchEmpID = Scanner.next();
-                if(searchEmpID.contains("MS")){
-                    Employee employee = new ManagingStaff();
-                    employee.viewStaffDetails(searchEmpID);
+
+                if(!accountExist(searchEmpID)){
+                    System.out.println("Alert: Employee ID does not exist!");
+                    managingStaffAccountOthersCLI();
+                    break;
+                }else if(searchEmpID.contains("MS")){
+                    employee = new ManagingStaff();
+                }else if(searchEmpID.contains("DS")){
+                    employee = new DeliveryStaff();
                 }
-                else if(searchEmpID.contains("DS")){
-                    Employee employee = new DeliveryStaff();
-                    employee.viewStaffDetails(searchEmpID);
-                }
+
+                Employee.account.viewSelfAccount(searchEmpID);
+                System.out.println("-----------------------");
+                employee.viewStaffDetails(searchEmpID);
+
                 managingStaffAccountOthersCLI();
                 break;
             case 2:
+                // Add new Account
+                System.out.print("New ID: ");
+                String newEmpID = Scanner.next();
+
+                if ((newEmpID.contains("MS") || newEmpID.contains("DS")) && !accountExist(newEmpID)){
+                    employee = new ManagingStaff();
+                }else{
+                    System.out.println("Alert: Employee ID input not valid or exist!");
+                    managingStaffAccountOthersCLI();
+                    break;
+                }
+
+                System.out.print("New Password: ");
+                String newEmpPassword = Scanner.next();
+
+                // Add new Details based on Account
+                String[] staffAddableDetails = {};
+                if(newEmpID.contains("MS")){
+                    employee = new ManagingStaff();
+                    staffAddableDetails = new String[]{"Name", "Age", "Gender", "Email"};
+                }
+                else if(newEmpID.contains("DS")){
+                    employee = new DeliveryStaff();
+                    staffAddableDetails = new String[]{"Name", "Age", "Gender", "Email", "Car Brand", "Car Plate NO"};
+                }
+
+
+                System.out.println("-----------------------");
+                Scanner.nextLine();
+                List<String> newStaffDetails = new ArrayList<>();
+                newStaffDetails.add(newEmpID);
+                for (String staffAddableDetail : staffAddableDetails) {
+                    System.out.printf("New %s: ", staffAddableDetail);
+                    String userInput = Scanner.nextLine();
+                    while (userInput.equals("")){
+                        System.out.println("Warning: Field cannot be empty!");
+                        System.out.printf("New %s: ", staffAddableDetail);
+                        userInput = Scanner.nextLine();
+                    }
+                    newStaffDetails.add(userInput);
+                }
+
+                ManagingStaff managingStaff = new ManagingStaff();
+                managingStaff.addEmpAccount(newEmpID, newEmpPassword, newStaffDetails);
+
                 managingStaffAccountOthersCLI();
                 break;
             case 3:
+                String[] staffEditableDetails = {};
                 System.out.print("Edit ID: ");
-                String empID = Scanner.next();
-                if(empID.contains("MS")){
-                    Employee employee = new ManagingStaff();
-                    employee.viewStaffDetails(empID);
-                    System.out.println("-----------------------");
-                    Scanner.nextLine();
-                    List<String> managingStaffNewDetails = new ArrayList<>();
-                    managingStaffNewDetails.add(empID);
-                    String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
-                    for (String managingStaffEditableDetail : managingStaffEditableDetails) {
-                        System.out.printf("New %s: ", managingStaffEditableDetail);
-                        String userInput = Scanner.nextLine();
-                        if (userInput.equals("")){
-                            managingStaffNewDetails.add("");
-                        } else {
-                            managingStaffNewDetails.add(userInput);
-                        }
-                    }
-                    employee.editStaffDetails(empID, managingStaffNewDetails);
+                String editEmpID = Scanner.next();
+
+                if(!accountExist(editEmpID)){
+                    System.out.println("Alert: Employee ID does not exist!");
+                    managingStaffAccountOthersCLI();
+                    break;
+                }else if(editEmpID.contains("MS")){
+                    employee = new ManagingStaff();
+                    staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email"};
                 }
-                else if(empID.contains("DS")){
-                    Employee employee = new DeliveryStaff();
-                    employee.viewStaffDetails(empID);
-                    System.out.println("-----------------------");
-                    Scanner.nextLine();
-                    List<String> deliveryStaffNewDetails = new ArrayList<>();
-                    deliveryStaffNewDetails.add(empID);
-                    String[] deliveryStaffEditableDetails = {"Name", "Age", "Gender", "Email", "Car Brand", "Car Plate NO"};
-                    for (String deliveryStaffEditableDetail : deliveryStaffEditableDetails) {
-                        System.out.printf("New %s: ", deliveryStaffEditableDetail);
-                        String userInput = Scanner.nextLine();
-                        if (userInput.equals("")){
-                            deliveryStaffNewDetails.add("");
-                        } else {
-                            deliveryStaffNewDetails.add(userInput);
-                        }
-                    }
-                    employee.editStaffDetails(empID, deliveryStaffNewDetails);
+                else if(editEmpID.contains("DS")){
+                    employee = new DeliveryStaff();
+                    staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email", "Car Brand", "Car Plate NO"};
                 }
+
+                employee.viewStaffDetails(editEmpID);
+                System.out.println("-----------------------");
+                Scanner.nextLine();
+                List<String> staffNewDetails = new ArrayList<>();
+                staffNewDetails.add(editEmpID);
+                for (String StaffEditableDetail : staffEditableDetails) {
+                    System.out.printf("New %s: ", StaffEditableDetail);
+                    String userInput = Scanner.nextLine();
+                    if (userInput.equals("")){
+                        staffNewDetails.add("");
+                    } else {
+                        staffNewDetails.add(userInput);
+                    }
+                }
+                employee.editStaffDetails(editEmpID, staffNewDetails);
 
                 managingStaffAccountOthersCLI();
                 break;
             case 4:
+                System.out.print("Remove ID: ");
+                String removeEmpID = Scanner.next();
+
+                if(!accountExist(removeEmpID)){
+                    System.out.println("Alert: Employee ID does not exist!");
+                } else{
+                    employee = new ManagingStaff();
+                    ManagingStaff managingStaff1 = (ManagingStaff) employee;
+                    managingStaff1.removeEmpAccount(removeEmpID);
+                }
+
                 managingStaffAccountOthersCLI();
                 break;
             case 5:
@@ -344,6 +400,11 @@ public class Main {
         }
     }
 
+    /*
+
+        Data Validation Section
+
+     */
 
     private static int userChoiceVerification(String userInput, int initialInput, int finalInput){
         try {
@@ -355,6 +416,17 @@ public class Main {
         } catch (NumberFormatException e){
             System.out.println("Warning: Input is not an integer!");
         } return 0;
+    }
+
+    private static Boolean accountExist(String empID){
+        Account account = new Account();
+        List<Account> accounts = account.getAllEmpCredential();
+        for (Account account1: accounts){
+            if(account1.getEmpID().equals(empID)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) {
