@@ -7,11 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class ManagingStaff extends Employee{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
-    java.util.Scanner Scanner = new Scanner(System.in);
 
     @Override
     public void viewStaffDetails(String empID) {
@@ -28,11 +27,7 @@ public class ManagingStaff extends Employee{
     }
 
     @Override
-    public void editStaffDetails(String empID) {
-        // display staff details first to user can know what is the default value
-        viewStaffDetails(empID);
-        System.out.println("-----------------------");
-
+    public void editStaffDetails(String empID, List<String> empDetails) {
         // load data in to default list
         List<ManagingStaff> managingStaffDetails = getAllManagingStaffDetails();
         List<String> managingStaffDefaultDetails = new ArrayList<>();
@@ -46,27 +41,23 @@ public class ManagingStaff extends Employee{
             }
         }
 
-        // accept input from user
-        List<String> managingStaffNewDetails = new ArrayList<>();
-        managingStaffNewDetails.add(empID);
-        String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
-        for (int a = 0; a < managingStaffEditableDetails.length; a++) {
-            System.out.printf("New %s: ", managingStaffEditableDetails[a]);
-            String userInput = Scanner.nextLine();
-            if (!userInput.equals("")) {
-                managingStaffNewDetails.add(userInput);
-            } else {
-                managingStaffNewDetails.add(managingStaffDefaultDetails.get(a + 1));
+        // verify and replace empty value with default
+        List<String> managingStaffVerifiedDetails = new ArrayList<>();
+        for(int a = 0; a < empDetails.toArray().length; a ++){
+            if(empDetails.get(a).equals("")){
+                managingStaffVerifiedDetails.add(managingStaffDefaultDetails.get(a));
+            } else{
+                managingStaffVerifiedDetails.add(empDetails.get(a));
             }
         }
 
         // overwrite default class list
         for (ManagingStaff managingStaff : managingStaffDetails) {
             if (managingStaff.getEmpID().equals(empID)) {
-                managingStaff.setEmpName(managingStaffNewDetails.get(1));
-                managingStaff.setEmpAge(Integer.parseInt(managingStaffNewDetails.get(2)));
-                managingStaff.setEmpGender(managingStaffNewDetails.get(3));
-                managingStaff.setEmpEmail(managingStaffNewDetails.get(4));
+                managingStaff.setEmpName(managingStaffVerifiedDetails.get(1));
+                managingStaff.setEmpAge(Integer.parseInt(managingStaffVerifiedDetails.get(2)));
+                managingStaff.setEmpGender(managingStaffVerifiedDetails.get(3));
+                managingStaff.setEmpEmail(managingStaffVerifiedDetails.get(4));
             }
         }
 

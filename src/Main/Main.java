@@ -1,11 +1,11 @@
 package Main;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     static java.util.Scanner Scanner = new Scanner(System.in);
-    static ManagingStaff managingStaff = new ManagingStaff();
-    static DeliveryStaff deliveryStaff = new DeliveryStaff();
     static Staff staff = new Staff();
 
     private static void loginCLI(){
@@ -144,11 +144,41 @@ public class Main {
             case 2:
                 if(empID.contains("MS")){
                     Employee employee = new ManagingStaff();
-                    employee.editStaffDetails(empID);
+                    employee.viewStaffDetails(empID);
+                    System.out.println("-----------------------");
+                    Scanner.nextLine();
+                    List<String> managingStaffNewDetails = new ArrayList<>();
+                    managingStaffNewDetails.add(empID);
+                    String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
+                    for (String managingStaffEditableDetail : managingStaffEditableDetails) {
+                        System.out.printf("New %s: ", managingStaffEditableDetail);
+                        String userInput = Scanner.nextLine();
+                        if (userInput.equals("")){
+                            managingStaffNewDetails.add("");
+                        } else {
+                            managingStaffNewDetails.add(userInput);
+                        }
+                    }
+                    employee.editStaffDetails(empID, managingStaffNewDetails);
                 }
                 else if(empID.contains("DS")){
                     Employee employee = new DeliveryStaff();
-                    employee.editStaffDetails(empID);
+                    employee.viewStaffDetails(empID);
+                    System.out.println("-----------------------");
+                    Scanner.nextLine();
+                    List<String> deliveryStaffNewDetails = new ArrayList<>();
+                    deliveryStaffNewDetails.add(empID);
+                    String[] deliveryStaffEditableDetails = {"Name", "Age", "Gender", "Email", "Car Brand", "Car Plate NO"};
+                    for (String deliveryStaffEditableDetail : deliveryStaffEditableDetails) {
+                        System.out.printf("New %s: ", deliveryStaffEditableDetail);
+                        String userInput = Scanner.nextLine();
+                        if (userInput.equals("")){
+                            deliveryStaffNewDetails.add("");
+                        } else {
+                            deliveryStaffNewDetails.add(userInput);
+                        }
+                    }
+                    employee.editStaffDetails(empID, deliveryStaffNewDetails);
                 }
                 staffAccountSelfCLI(empID);
                 break;
@@ -176,7 +206,16 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch(intUserChoice){
             case 1:
-                staff.search();
+                System.out.print("Search ID: ");
+                String empID = Scanner.next();
+                if(empID.contains("MS")){
+                    Employee employee = new ManagingStaff();
+                    employee.viewStaffDetails(empID);
+                }
+                else if(empID.contains("DS")){
+                    Employee employee = new DeliveryStaff();
+                    employee.viewStaffDetails(empID);
+                }
                 managingStaffAccountOthersCLI();
                 break;
             case 2:
@@ -185,6 +224,7 @@ public class Main {
                 break;
             case 3:
                 staff.modify();
+
                 managingStaffAccountOthersCLI();
                 break;
             case 4:

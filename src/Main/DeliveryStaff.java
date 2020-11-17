@@ -6,13 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class DeliveryStaff extends Employee{
     private String carBrand;
     private String carPlateNo;
     private final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
-    java.util.Scanner Scanner = new Scanner(System.in);
 
     @Override
     public void viewStaffDetails(String empID) {
@@ -31,11 +29,7 @@ public class DeliveryStaff extends Employee{
     }
 
     @Override
-    public void editStaffDetails(String empID) {
-        // display staff details first to user can know what is the default value
-        viewStaffDetails(empID);
-        System.out.println("-----------------------");
-
+    public void editStaffDetails(String empID, List<String> empDetails) {
         // load data in to default list
         List<DeliveryStaff> deliveryStaffDetails = getAllDeliveryStaffDetails();
         List<String> deliveryStaffDefaultDetails = new ArrayList<>();
@@ -51,30 +45,25 @@ public class DeliveryStaff extends Employee{
             }
         }
 
-        // accept input from user
-        List<String> deliveryStaffNewDetails = new ArrayList<>();
-        deliveryStaffNewDetails.add(empID);
-        String[] deliveryStaffEditableDetails = {"Name", "Age", "Gender", "Email", "Car Brand", "Car Plate NO"};
-        for (int a = 0; a < deliveryStaffEditableDetails.length; a++) {
-            System.out.printf("New %s: ", deliveryStaffEditableDetails[a]);
-            String userInput = Scanner.nextLine();
-            if (!userInput.equals("")) {
-                deliveryStaffNewDetails.add(userInput);
-            } else {
-                deliveryStaffNewDetails.add(deliveryStaffDefaultDetails.get(a + 1));
+        // verify and replace empty value with default
+        List<String> deliveryStaffVerifiedDetails = new ArrayList<>();
+        for(int a = 0; a < empDetails.toArray().length; a ++){
+            if(empDetails.get(a).equals("")){
+                deliveryStaffVerifiedDetails.add(deliveryStaffDefaultDetails.get(a));
+            } else{
+                deliveryStaffVerifiedDetails.add(empDetails.get(a));
             }
         }
-
 
         // overwrite default list
         for (DeliveryStaff deliveryStaff : deliveryStaffDetails) {
             if (deliveryStaff.getEmpID().equals(empID)) {
-                deliveryStaff.setEmpName(deliveryStaffNewDetails.get(1));
-                deliveryStaff.setEmpAge(Integer.parseInt(deliveryStaffNewDetails.get(2)));
-                deliveryStaff.setEmpGender(deliveryStaffNewDetails.get(3));
-                deliveryStaff.setEmpEmail(deliveryStaffNewDetails.get(4));
-                deliveryStaff.setCarBrand(deliveryStaffNewDetails.get(5));
-                deliveryStaff.setCarPlateNo(deliveryStaffNewDetails.get(6));
+                deliveryStaff.setEmpName(deliveryStaffVerifiedDetails.get(1));
+                deliveryStaff.setEmpAge(Integer.parseInt(deliveryStaffVerifiedDetails.get(2)));
+                deliveryStaff.setEmpGender(deliveryStaffVerifiedDetails.get(3));
+                deliveryStaff.setEmpEmail(deliveryStaffVerifiedDetails.get(4));
+                deliveryStaff.setCarBrand(deliveryStaffVerifiedDetails.get(5));
+                deliveryStaff.setCarPlateNo(deliveryStaffVerifiedDetails.get(6));
             }
         }
 

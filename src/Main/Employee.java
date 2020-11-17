@@ -25,7 +25,7 @@ public abstract class Employee {
     }
 
     public abstract void viewStaffDetails(String empID);
-    public abstract void editStaffDetails(String empID);
+    public abstract void editStaffDetails(String empID, List<String> empDetails);
 
 
     protected String getEmpID() {
