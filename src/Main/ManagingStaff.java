@@ -1,6 +1,5 @@
 package Main;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +12,7 @@ public class ManagingStaff extends Employee{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
 
     @Override
-    public void viewStaffDetails(String empID) {
+    protected void viewStaffDetails(String empID) {
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();
         for (ManagingStaff managingStaff: managingStaffDetailsList){
             if(managingStaff.getEmpID().equals(empID)){
@@ -23,7 +22,7 @@ public class ManagingStaff extends Employee{
     }
 
     @Override
-    public void editStaffDetails(String empID, List<String> empDetails) {
+    protected void editStaffDetails(String empID, List<String> empDetails) {
         // load data in to default list
         List<ManagingStaff> managingStaffDetails = getAllManagingStaffDetails();
         List<String> managingStaffDefaultDetails = new ArrayList<>();

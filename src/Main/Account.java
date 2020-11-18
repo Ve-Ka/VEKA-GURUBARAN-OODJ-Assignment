@@ -42,7 +42,7 @@ public class Account {
         return empID;
     }
 
-    protected void setEmpID(String empID) {
+    private void setEmpID(String empID) {
         this.empID = empID;
     }
 
@@ -50,7 +50,7 @@ public class Account {
         return empPassword;
     }
 
-    protected void setEmpPassword(String empPassword) {
+    private void setEmpPassword(String empPassword) {
         this.empPassword = empPassword;
     }
 }

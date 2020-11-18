@@ -24,8 +24,8 @@ public abstract class Employee {
         return false;
     }
 
-    public abstract void viewStaffDetails(String empID);
-    public abstract void editStaffDetails(String empID, List<String> empDetails);
+    protected abstract void viewStaffDetails(String empID);
+    protected abstract void editStaffDetails(String empID, List<String> empDetails);
 
 
     protected String getEmpID() {

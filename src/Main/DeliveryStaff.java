@@ -13,7 +13,7 @@ public class DeliveryStaff extends Employee{
     protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
 
     @Override
-    public void viewStaffDetails(String empID) {
+    protected void viewStaffDetails(String empID) {
         List<DeliveryStaff> deliveryStaffDetailsList = getAllDeliveryStaffDetails();
         for (DeliveryStaff deliveryStaff: deliveryStaffDetailsList){
             if(deliveryStaff.getEmpID().equals(empID)){
@@ -23,7 +23,7 @@ public class DeliveryStaff extends Employee{
     }
 
     @Override
-    public void editStaffDetails(String empID, List<String> empDetails) {
+    protected void editStaffDetails(String empID, List<String> empDetails) {
         // load data in to default list
         List<DeliveryStaff> deliveryStaffDetails = getAllDeliveryStaffDetails();
         List<String> deliveryStaffDefaultDetails = new ArrayList<>();
