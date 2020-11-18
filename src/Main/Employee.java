@@ -3,7 +3,7 @@ package Main;
 import java.util.List;
 
 public abstract class Employee {
-    protected String empID;
+    private String empID;
     protected String empName;
     protected int empAge;
     protected String empGender;
