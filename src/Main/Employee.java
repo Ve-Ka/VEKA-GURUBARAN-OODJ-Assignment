@@ -9,11 +9,12 @@ public abstract class Employee {
     protected String empGender;
     protected String empEmail;
 
-    static Account account = new Account();
+    static Account account;
 
     public static boolean login(String empID, String empPassword){
-        List<Account> empAccounts = account.getAllEmpCredential();
-        for (Account account: empAccounts){
+        account = new Account();
+        List<Account> accounts = account.getAllEmpCredential();
+        for (Account account: accounts){
             if(account.getEmpID().equals(empID) && account.getEmpPassword().equals(empPassword)){
                 System.out.println("Login Successful!");
                 return true;
@@ -24,7 +25,7 @@ public abstract class Employee {
     }
 
     public abstract void viewStaffDetails(String empID);
-    public abstract void editStaffDetails(String empID);
+    public abstract void editStaffDetails(String empID, List<String> empDetails);
 
 
     protected String getEmpID() {

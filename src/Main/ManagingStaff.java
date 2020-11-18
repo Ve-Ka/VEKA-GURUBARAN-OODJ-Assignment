@@ -7,37 +7,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class ManagingStaff extends Employee{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
-    java.util.Scanner Scanner = new Scanner(System.in);
-
-    public boolean searchStaff(){
-        return true;
-    }
-
-    public boolean addStaff(){
-
-        return true;
-    }
-
-    public boolean modifyStaff(){
-        return true;
-    }
-
-    public boolean removeStaff(){
-        return true;
-    }
-
-    Order order = new Order();
 
     @Override
     public void viewStaffDetails(String empID) {
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();
         for (ManagingStaff managingStaff: managingStaffDetailsList){
             if(managingStaff.getEmpID().equals(empID)){
-                System.out.println("ID: " + managingStaff.getEmpID());
                 System.out.println("Name: " + managingStaff.getEmpName());
                 System.out.println("Age: " + managingStaff.getEmpAge());
                 System.out.println("Gender: " + managingStaff.getEmpGender());
@@ -47,11 +26,7 @@ public class ManagingStaff extends Employee{
     }
 
     @Override
-    public void editStaffDetails(String empID) {
-        // display staff details first to user can know what is the default value
-        viewStaffDetails(empID);
-        System.out.println("-----------------------");
-
+    public void editStaffDetails(String empID, List<String> empDetails) {
         // load data in to default list
         List<ManagingStaff> managingStaffDetails = getAllManagingStaffDetails();
         List<String> managingStaffDefaultDetails = new ArrayList<>();
@@ -65,27 +40,23 @@ public class ManagingStaff extends Employee{
             }
         }
 
-        // accept input from user
-        List<String> managingStaffNewDetails = new ArrayList<>();
-        managingStaffNewDetails.add(empID);
-        String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
-        for (int a = 0; a < managingStaffEditableDetails.length; a++) {
-            System.out.printf("New %s: ", managingStaffEditableDetails[a]);
-            String userInput = Scanner.nextLine();
-            if (!userInput.equals("")) {
-                managingStaffNewDetails.add(userInput);
-            } else {
-                managingStaffNewDetails.add(managingStaffDefaultDetails.get(a + 1));
+        // verify and replace empty value with default
+        List<String> managingStaffVerifiedDetails = new ArrayList<>();
+        for(int a = 0; a < empDetails.toArray().length; a ++){
+            if(empDetails.get(a).equals("")){
+                managingStaffVerifiedDetails.add(managingStaffDefaultDetails.get(a));
+            } else{
+                managingStaffVerifiedDetails.add(empDetails.get(a));
             }
         }
 
         // overwrite default class list
         for (ManagingStaff managingStaff : managingStaffDetails) {
             if (managingStaff.getEmpID().equals(empID)) {
-                managingStaff.setEmpName(managingStaffNewDetails.get(1));
-                managingStaff.setEmpAge(Integer.parseInt(managingStaffNewDetails.get(2)));
-                managingStaff.setEmpGender(managingStaffNewDetails.get(3));
-                managingStaff.setEmpEmail(managingStaffNewDetails.get(4));
+                managingStaff.setEmpName(managingStaffVerifiedDetails.get(1));
+                managingStaff.setEmpAge(Integer.parseInt(managingStaffVerifiedDetails.get(2)));
+                managingStaff.setEmpGender(managingStaffVerifiedDetails.get(3));
+                managingStaff.setEmpEmail(managingStaffVerifiedDetails.get(4));
             }
         }
 
@@ -127,6 +98,79 @@ public class ManagingStaff extends Employee{
         }
         return managingStaffDetailsList;
     }
+
+    protected void addEmpAccount(String newEmpID, String newEmpPassword, List<String> newStaffDetails){
+        try{
+            // Write to Credential File
+            FileWriter WriteData = new FileWriter(Account.empCredentialFile, true);
+            WriteData.write(String.format("%s|%s\n", newEmpID, newEmpPassword));
+            WriteData.close();
+
+            // Write to Staff Details File
+            if(newEmpID.contains("MS")){
+                WriteData = new FileWriter(managingStaffDetailsFile, true);
+                WriteData.write(String.format("%s|%s|%d|%s|%s\n", newStaffDetails.get(0), newStaffDetails.get(1),
+                        Integer.parseInt(newStaffDetails.get(2)), newStaffDetails.get(3), newStaffDetails.get(4)));
+            }else if(newEmpID.contains("DS")){
+                WriteData = new FileWriter(DeliveryStaff.deliveryStaffDetailsFile, true);
+                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", newStaffDetails.get(0), newStaffDetails.get(1),
+                        Integer.parseInt(newStaffDetails.get(2)), newStaffDetails.get(3), newStaffDetails.get(4),
+                        newStaffDetails.get(5), newStaffDetails.get(6)));
+            }
+
+            WriteData.close();
+            System.out.println("Alert: New Account and Details Added!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void removeEmpAccount(String empID){
+        // Remove Account from Account Object List
+        List<Account> accounts = account.getAllEmpCredential();
+        accounts.removeIf(account -> account.getEmpID().equals(empID));
+
+        // Remove Details from Details Object List
+        List<ManagingStaff> managingStaffs = getAllManagingStaffDetails();
+        List<DeliveryStaff> deliveryStaffs = DeliveryStaff.getAllDeliveryStaffDetails();
+        if (empID.contains("MS")){
+            managingStaffs.removeIf(managingStaff -> managingStaff.getEmpID().equals(empID));
+        }else if (empID.contains("DS")){
+            deliveryStaffs.removeIf(deliveryStaff -> deliveryStaff.getEmpID().equals(empID));
+        }
+
+        // Write all data to file
+
+        try {
+            FileWriter WriteData = new FileWriter(Account.empCredentialFile);
+            for (Account account: accounts){
+                WriteData.write(String.format("%s|%s\n", account.getEmpID(), account.getEmpPassword()));
+            }
+            WriteData.close();
+
+            if(empID.contains("MS")){
+                WriteData = new FileWriter(managingStaffDetailsFile);
+                for (ManagingStaff managingStaff: managingStaffs){
+                    WriteData.write(String.format("%s|%s|%d|%s|%s\n", managingStaff.getEmpID(), managingStaff.getEmpName(),
+                            managingStaff.getEmpAge(), managingStaff.getEmpGender(), managingStaff.getEmpEmail()));
+                }
+            }else if(empID.contains("DS")){
+                WriteData = new FileWriter(DeliveryStaff.deliveryStaffDetailsFile);
+                for (DeliveryStaff deliveryStaff: deliveryStaffs){
+                    WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", deliveryStaff.getEmpID(),
+                            deliveryStaff.getEmpName(), deliveryStaff.getEmpAge(), deliveryStaff.getEmpGender(),
+                            deliveryStaff.getEmpEmail(), deliveryStaff.getCarBrand(), deliveryStaff.getCarPlateNo()));
+                }
+            }
+
+            WriteData.close();
+            System.out.println("Alert: Employee Account and Details Removed!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
 
     @Override
     public String toString() {
