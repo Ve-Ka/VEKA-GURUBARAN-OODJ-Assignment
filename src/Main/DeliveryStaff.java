@@ -17,12 +17,7 @@ public class DeliveryStaff extends Employee{
         List<DeliveryStaff> deliveryStaffDetailsList = getAllDeliveryStaffDetails();
         for (DeliveryStaff deliveryStaff: deliveryStaffDetailsList){
             if(deliveryStaff.getEmpID().equals(empID)){
-                System.out.println("Name: " + deliveryStaff.getEmpName());
-                System.out.println("Age: " + deliveryStaff.getEmpAge());
-                System.out.println("Gender: " + deliveryStaff.getEmpGender());
-                System.out.println("Email: " + deliveryStaff.getEmpEmail());
-                System.out.println("Car Brand: " + deliveryStaff.getCarBrand());
-                System.out.println("Car Plate NO: " + deliveryStaff.getCarPlateNo());
+                System.out.println(deliveryStaff.toString());
             }
         }
     }
@@ -54,7 +49,7 @@ public class DeliveryStaff extends Employee{
             }
         }
 
-        // overwrite default list
+        // overwrite default object list
         for (DeliveryStaff deliveryStaff : deliveryStaffDetails) {
             if (deliveryStaff.getEmpID().equals(empID)) {
                 deliveryStaff.setEmpName(deliveryStaffVerifiedDetails.get(1));
@@ -70,15 +65,9 @@ public class DeliveryStaff extends Employee{
         try{
             FileWriter WriteData = new FileWriter(deliveryStaffDetailsFile);
             for (DeliveryStaff deliveryStaff : deliveryStaffDetails) {
-                String tempEmpID = deliveryStaff.getEmpID();
-                String tempEmpName = deliveryStaff.getEmpName();
-                int tempEmpAge = deliveryStaff.getEmpAge();
-                String tempEmpGender = deliveryStaff.getEmpGender();
-                String tempEmpEmail = deliveryStaff.getEmpEmail();
-                String tempCarBrand = deliveryStaff.getCarBrand();
-                String tempCarPlateNo = deliveryStaff.getCarPlateNo();
-                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", tempEmpID, tempEmpName, tempEmpAge,
-                        tempEmpGender, tempEmpEmail, tempCarBrand, tempCarPlateNo));
+                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", deliveryStaff.getEmpID(),
+                        deliveryStaff.getEmpName(), deliveryStaff.getEmpAge(), deliveryStaff.getEmpGender(),
+                        deliveryStaff.getEmpEmail(), deliveryStaff.getCarBrand(), deliveryStaff.getCarPlateNo()));
             }
             WriteData.close();
             System.out.println("Alert: Details Updated!");
@@ -123,5 +112,16 @@ public class DeliveryStaff extends Employee{
 
     private void setCarPlateNo(String carPlateNo) {
         this.carPlateNo = carPlateNo;
+    }
+
+
+    @Override
+    public String toString() {
+        return  "Name: " + empName + '\n' +
+                "Age: " + empAge + '\n' +
+                "Gender: " + empGender + '\n' +
+                "Email: " + empEmail + '\n' +
+                "Car Brand: " + carBrand + '\n' +
+                "Car Plate NO.: " + carPlateNo;
     }
 }

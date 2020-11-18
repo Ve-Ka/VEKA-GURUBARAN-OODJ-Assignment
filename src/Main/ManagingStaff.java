@@ -17,10 +17,7 @@ public class ManagingStaff extends Employee{
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();
         for (ManagingStaff managingStaff: managingStaffDetailsList){
             if(managingStaff.getEmpID().equals(empID)){
-                System.out.println("Name: " + managingStaff.getEmpName());
-                System.out.println("Age: " + managingStaff.getEmpAge());
-                System.out.println("Gender: " + managingStaff.getEmpGender());
-                System.out.println("Email: " + managingStaff.getEmpEmail());
+                System.out.println(managingStaff.toString());
             }
         }
     }
@@ -50,7 +47,7 @@ public class ManagingStaff extends Employee{
             }
         }
 
-        // overwrite default class list
+        // overwrite default object list
         for (ManagingStaff managingStaff : managingStaffDetails) {
             if (managingStaff.getEmpID().equals(empID)) {
                 managingStaff.setEmpName(managingStaffVerifiedDetails.get(1));
@@ -64,13 +61,8 @@ public class ManagingStaff extends Employee{
         try{
             FileWriter WriteData = new FileWriter(managingStaffDetailsFile);
             for (ManagingStaff managingStaff : managingStaffDetails) {
-                String tempEmpID = managingStaff.getEmpID();
-                String tempEmpName = managingStaff.getEmpName();
-                int tempEmpAge = managingStaff.getEmpAge();
-                String tempEmpGender = managingStaff.getEmpGender();
-                String tempEmpEmail = managingStaff.getEmpEmail();
-                WriteData.write(String.format("%s|%s|%d|%s|%s\n", tempEmpID, tempEmpName, tempEmpAge, tempEmpGender
-                        , tempEmpEmail));
+                WriteData.write(String.format("%s|%s|%d|%s|%s\n", managingStaff.getEmpID(), managingStaff.getEmpName(),
+                        managingStaff.getEmpAge(), managingStaff.getEmpGender(), managingStaff.getEmpEmail()));
             }
             WriteData.close();
             System.out.println("Alert: Details Updated!");
@@ -174,12 +166,9 @@ public class ManagingStaff extends Employee{
 
     @Override
     public String toString() {
-        return "ManagingStaff{" +
-                "empID='" + empID + '\'' +
-                ", empName='" + empName + '\'' +
-                ", empAge=" + empAge +
-                ", empGender='" + empGender + '\'' +
-                ", empEmail='" + empEmail + '\'' +
-                '}';
+        return  "Name: " + empName + '\n' +
+                "Age: " + empAge + '\n' +
+                "Gender: " + empGender + '\n' +
+                "Email: " + empEmail + '\n';
     }
 }
