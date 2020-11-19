@@ -9,7 +9,7 @@ public abstract class Employee {
     protected String empGender;
     protected String empEmail;
 
-    static Account account;
+    protected static Account account;
 
     public static boolean login(String empID, String empPassword){
         account = new Account();
