@@ -143,15 +143,17 @@ public class ManagingStaff extends Employee{
             if(empID.contains("MS")){
                 WriteData = new FileWriter(managingStaffDetailsFile);
                 for (ManagingStaff managingStaff: managingStaffs){
-                    WriteData.write(String.format("%s|%s|%d|%s|%s\n", managingStaff.getEmpID(), managingStaff.getEmpName(),
-                            managingStaff.getEmpAge(), managingStaff.getEmpGender(), managingStaff.getEmpEmail()));
+                    WriteData.write(String.format("%s|%s|%d|%s|%s\n", managingStaff.getEmpID(),
+                            managingStaff.getEmpName(), managingStaff.getEmpAge(), managingStaff.getEmpGender(),
+                            managingStaff.getEmpEmail()));
                 }
             }else if(empID.contains("DS")){
                 WriteData = new FileWriter(DeliveryStaff.deliveryStaffDetailsFile);
                 for (DeliveryStaff deliveryStaff: deliveryStaffs){
                     WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", deliveryStaff.getEmpID(),
                             deliveryStaff.getEmpName(), deliveryStaff.getEmpAge(), deliveryStaff.getEmpGender(),
-                            deliveryStaff.getEmpEmail(), deliveryStaff.getCarBrand(), deliveryStaff.getCarPlateNo()));
+                            deliveryStaff.getEmpEmail(), deliveryStaff.getVehicleBrand(),
+                            deliveryStaff.getVehiclePlateNo()));
                 }
             }
 
@@ -172,7 +174,7 @@ public class ManagingStaff extends Employee{
                     newCustDetails.get(2), newCustDetails.get(3), newCustDetails.get(4)));
 
             WriteData.close();
-            System.out.println("Alert: New Account and Details Added!");
+            System.out.println("Alert: New Customer Added!");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -241,14 +243,99 @@ public class ManagingStaff extends Employee{
                         detail.getCustEmail(), detail.getCustPhoneNo(), detail.getCustAddress()));
             }
             WriteData.close();
-            System.out.println("Alert: Employee Account and Details Removed!");
+            System.out.println("Alert: Customer Details Removed!");
         }catch (IOException e){
             e.printStackTrace();
         }
     }
 
     // modify item section
+    protected void addItemDetails(List<String> newItemDetails){
+        try{
+            // Write to Customer File
+            FileWriter WriteData = new FileWriter(Item.itemDetailsFile, true);
+            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newItemDetails.get(0), newItemDetails.get(1),
+                    newItemDetails.get(2), newItemDetails.get(3), newItemDetails.get(4)));
 
+            WriteData.close();
+            System.out.println("Alert: New Item Added!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void editItemDetails(String itemID, List<String> details){
+        // load data in to default list
+        Item items = new Item();
+        List<Item> originalDetails = items.getAllItemDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Item detail : originalDetails) {
+            if (detail.getItemID().equals(itemID)) {
+                defaultDetails.add(detail.getItemID());
+                defaultDetails.add(detail.getItemName());
+                defaultDetails.add(Integer.toString(detail.getItemQuantity()));
+                defaultDetails.add(Double.toString(detail.getItemPrice()));
+                defaultDetails.add(detail.getItemSupplier());
+                defaultDetails.add(detail.getItemDescription());
+            }
+        }
+
+        // verify and replace empty value with default
+        List<String> verifiedDetails = new ArrayList<>();
+        for(int a = 0; a < details.toArray().length; a ++){
+            if(details.get(a).equals("")){
+                verifiedDetails.add(defaultDetails.get(a));
+            } else{
+                verifiedDetails.add(details.get(a));
+            }
+        }
+
+        // overwrite default object list
+        for (Item detail : originalDetails) {
+            if (detail.getItemID().equals(itemID)) {
+                detail.setItemName(verifiedDetails.get(1));
+                detail.setItemQuantity(Integer.parseInt(verifiedDetails.get(2)));
+                detail.setItemPrice(Double.parseDouble(verifiedDetails.get(3)));
+                detail.setItemSupplier(verifiedDetails.get(4));
+                detail.setItemDescription(verifiedDetails.get(5));
+            }
+        }
+
+        // write to file
+        try{
+            FileWriter WriteData = new FileWriter(Item.itemDetailsFile);
+            for (Item detail : originalDetails) {
+                WriteData.write(String.format("%s|%s|%d|%.2f|%s|%s\n", detail.getItemID(), detail.getItemName(),
+                        detail.getItemQuantity(), detail.getItemPrice(), detail.getItemSupplier(),
+                        detail.getItemDescription()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Details Updated!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void removeItemDetails(String itemID){
+        // Remove Details from Customer Object List
+        Item item = new Item();
+        List<Item> items = item.getAllItemDetails();
+        items.removeIf(item1 -> item1.getItemID().equals(itemID));
+
+        // Write all data to file
+        try{
+            FileWriter WriteData = new FileWriter(Item.itemDetailsFile);
+            for (Item detail : items) {
+                WriteData.write(String.format("%s|%s|%d|%.2f|%s|%s\n", detail.getItemID(), detail.getItemName(),
+                        detail.getItemQuantity(), detail.getItemPrice(), detail.getItemSupplier(),
+                        detail.getItemDescription()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Item Details Removed!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String toString() {

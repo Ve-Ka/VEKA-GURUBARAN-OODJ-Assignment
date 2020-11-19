@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryStaff extends Employee{
-    private String carBrand;
-    private String carPlateNo;
+    private String vehicleBrand;
+    private String vehiclePlateNo;
     protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
 
     @Override
@@ -34,8 +34,8 @@ public class DeliveryStaff extends Employee{
                 defaultDetails.add(Integer.toString(detail.getEmpAge()));
                 defaultDetails.add(detail.getEmpGender());
                 defaultDetails.add(detail.getEmpEmail());
-                defaultDetails.add(detail.getCarBrand());
-                defaultDetails.add(detail.getCarPlateNo());
+                defaultDetails.add(detail.getVehicleBrand());
+                defaultDetails.add(detail.getVehiclePlateNo());
             }
         }
 
@@ -56,8 +56,8 @@ public class DeliveryStaff extends Employee{
                 detail.setEmpAge(Integer.parseInt(verifiedDetails.get(2)));
                 detail.setEmpGender(verifiedDetails.get(3));
                 detail.setEmpEmail(verifiedDetails.get(4));
-                detail.setCarBrand(verifiedDetails.get(5));
-                detail.setCarPlateNo(verifiedDetails.get(6));
+                detail.setVehicleBrand(verifiedDetails.get(5));
+                detail.setVehiclePlateNo(verifiedDetails.get(6));
             }
         }
 
@@ -67,7 +67,7 @@ public class DeliveryStaff extends Employee{
             for (DeliveryStaff detail : originalDetails) {
                 WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", detail.getEmpID(),
                         detail.getEmpName(), detail.getEmpAge(), detail.getEmpGender(),
-                        detail.getEmpEmail(), detail.getCarBrand(), detail.getCarPlateNo()));
+                        detail.getEmpEmail(), detail.getVehicleBrand(), detail.getVehiclePlateNo()));
             }
             WriteData.close();
             System.out.println("Alert: Details Updated!");
@@ -88,8 +88,8 @@ public class DeliveryStaff extends Employee{
                 deliveryStaff.setEmpAge(Integer.parseInt(rec[2]));
                 deliveryStaff.setEmpGender(rec[3]);
                 deliveryStaff.setEmpEmail(rec[4]);
-                deliveryStaff.setCarBrand(rec[5]);
-                deliveryStaff.setCarPlateNo(rec[6]);
+                deliveryStaff.setVehicleBrand(rec[5]);
+                deliveryStaff.setVehiclePlateNo(rec[6]);
                 deliveryStaffDetailsList.add(deliveryStaff);
             }
         }catch (IOException e){
@@ -98,27 +98,27 @@ public class DeliveryStaff extends Employee{
         return deliveryStaffDetailsList;
     }
 
-    protected String getCarBrand() {
-        return carBrand;
+    protected String getVehicleBrand() {
+        return vehicleBrand;
     }
 
-    private void setCarBrand(String carBrand) {
-        this.carBrand = carBrand;
+    private void setVehicleBrand(String VehicleBrand) {
+        this.vehicleBrand = VehicleBrand;
     }
 
-    protected String getCarPlateNo() {
-        return carPlateNo;
+    protected String getVehiclePlateNo() {
+        return vehiclePlateNo;
     }
 
-    private void setCarPlateNo(String carPlateNo) {
-        this.carPlateNo = carPlateNo;
+    private void setVehiclePlateNo(String VehiclePlateNo) {
+        this.vehiclePlateNo = VehiclePlateNo;
     }
 
 
     @Override
     public String toString() {
         return  super.toString() + '\n' +
-                "Car Brand: " + carBrand + '\n' +
-                "Car Plate NO.: " + carPlateNo;
+                "Vehicle Brand: " + vehicleBrand + '\n' +
+                "Vehicle Plate NO.: " + vehiclePlateNo;
     }
 }
