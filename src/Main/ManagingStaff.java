@@ -166,8 +166,18 @@ public class ManagingStaff extends Employee{
 
 
     // modify customer section
-    protected void addCustDetails(String newCustID, List<String> newCustDetails){
+    protected void addCustDetails(List<String> newCustDetails){
+        try{
+            // Write to Customer File
+            FileWriter WriteData = new FileWriter(Customer.custDetailsFile, true);
+            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newCustDetails.get(0), newCustDetails.get(1),
+                    newCustDetails.get(2), newCustDetails.get(3), newCustDetails.get(4)));
 
+            WriteData.close();
+            System.out.println("Alert: New Account and Details Added!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     protected void editCustDetails(){

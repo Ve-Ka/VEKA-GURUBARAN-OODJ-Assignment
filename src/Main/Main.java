@@ -222,7 +222,7 @@ public class Main {
                 System.out.print("Search ID: ");
                 String searchEmpID = Scanner.next();
 
-                if(!accountExistVerification(searchEmpID, idType.STAFF)){
+                if(!idExistVerification(searchEmpID, idType.STAFF)){
                     System.out.println("Alert: Employee ID does not exist!");
                     managingStaffAccountStaffCLI();
                     break;
@@ -243,7 +243,7 @@ public class Main {
                 System.out.print("New ID: ");
                 String newEmpID = Scanner.next();
 
-                if ((newEmpID.contains("MS") || newEmpID.contains("DS")) && !accountExistVerification(newEmpID, idType.STAFF)){
+                if ((newEmpID.contains("MS") || newEmpID.contains("DS")) && !idExistVerification(newEmpID, idType.STAFF)){
                     employee = new ManagingStaff();
                 }else{
                     System.out.println("Alert: Employee ID input not valid or exist!");
@@ -291,7 +291,7 @@ public class Main {
                 System.out.print("Edit ID: ");
                 String editEmpID = Scanner.next();
 
-                if(!accountExistVerification(editEmpID, idType.STAFF)){
+                if(!idExistVerification(editEmpID, idType.STAFF)){
                     System.out.println("Alert: Employee ID does not exist!");
                     managingStaffAccountStaffCLI();
                     break;
@@ -326,7 +326,7 @@ public class Main {
                 System.out.print("Remove ID: ");
                 String removeEmpID = Scanner.next();
 
-                if(!accountExistVerification(removeEmpID, idType.STAFF)){
+                if(!idExistVerification(removeEmpID, idType.STAFF)){
                     System.out.println("Alert: Employee ID does not exist!");
                 } else{
                     employee = new ManagingStaff();
@@ -363,7 +363,7 @@ public class Main {
                 System.out.print("Search ID: ");
                 String searchCustID = Scanner.next();
 
-                if(!accountExistVerification(searchCustID, idType.CUSTOMER)){
+                if(!idExistVerification(searchCustID, idType.CUSTOMER)){
                     System.out.println("Alert: Customer ID does not exist!");
                     managingStaffAccountCustomerCLI();
                     break;
@@ -375,9 +375,39 @@ public class Main {
                 managingStaffAccountCustomerCLI();
                 break;
             case 2:
+                System.out.print("New ID: ");
+                String newCustID = Scanner.next();
+                String[] custAddableDetails = {};
+
+                if (newCustID.contains("CS") && !idExistVerification(newCustID, idType.CUSTOMER)){
+                    custAddableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
+                    System.out.println("-----------------------");
+                    Scanner.nextLine();
+                    List<String> newCustDetails = new ArrayList<>();
+                    newCustDetails.add(newCustID);
+                    for (String custAddableDetail: custAddableDetails) {
+                        System.out.printf("New %s: ", custAddableDetail);
+                        String userInput = Scanner.nextLine();
+                        while (userInput.equals("")){
+                            System.out.println("Warning: Field cannot be empty!");
+                            System.out.printf("New %s: ", custAddableDetail);
+                            userInput = Scanner.nextLine();
+                        }
+                        newCustDetails.add(userInput);
+                    }
+                    ManagingStaff managingStaff = new ManagingStaff();
+                    managingStaff.addCustDetails(newCustDetails);
+                }else{
+                    System.out.println("Alert: Customer ID input not valid or exist!");
+                    managingStaffAccountCustomerCLI();
+                    break;
+                }
+
                 managingStaffAccountCustomerCLI();
                 break;
             case 3:
+
+
                 managingStaffAccountCustomerCLI();
                 break;
             case 4:
@@ -479,7 +509,7 @@ public class Main {
         } return 0;
     }
 
-    private static Boolean accountExistVerification(String ID, idType idType){
+    private static Boolean idExistVerification(String ID, idType idType){
         switch(idType){
             case STAFF:
                 Account account = new Account();
