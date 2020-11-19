@@ -32,8 +32,7 @@ public class Account {
         List<Account> accounts = getAllEmpCredential();
         for (Account account: accounts){
             if (account.getEmpID().equals(empID)){
-                System.out.printf("ID: %s\n", account.getEmpID());
-                System.out.printf("Password: %s\n", account.getEmpPassword());
+                System.out.println(account.toString());
             }
         }
     }
@@ -52,5 +51,11 @@ public class Account {
 
     private void setEmpPassword(String empPassword) {
         this.empPassword = empPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + empID + '\n' +
+                "Password: " + empPassword + '\n';
     }
 }
