@@ -48,7 +48,7 @@ public class Customer {
         return custID;
     }
 
-    private void setCustID(String custID) {
+    protected void setCustID(String custID) {
         this.custID = custID;
     }
 
@@ -56,7 +56,7 @@ public class Customer {
         return custName;
     }
 
-    private void setCustName(String custName) {
+    protected void setCustName(String custName) {
         this.custName = custName;
     }
 
@@ -64,7 +64,7 @@ public class Customer {
         return custEmail;
     }
 
-    private void setCustEmail(String custEmail) {
+    protected void setCustEmail(String custEmail) {
         this.custEmail = custEmail;
     }
 
@@ -72,7 +72,7 @@ public class Customer {
         return custPhoneNo;
     }
 
-    private void setCustPhoneNo(String custPhoneNo) {
+    protected void setCustPhoneNo(String custPhoneNo) {
         this.custPhoneNo = custPhoneNo;
     }
 
@@ -80,7 +80,7 @@ public class Customer {
         return custAddress;
     }
 
-    private void setCustAddress(String custAddress) {
+    protected void setCustAddress(String custAddress) {
         this.custAddress = custAddress;
     }
 
@@ -90,6 +90,6 @@ public class Customer {
                 "Name: " + custName + '\n' +
                 "Email: " + custEmail + '\n' +
                 "Phone NO.: " + custPhoneNo + '\n' +
-                "Home Address: " + custAddress + '\n';
+                "Home Address: " + custAddress;
     }
 }

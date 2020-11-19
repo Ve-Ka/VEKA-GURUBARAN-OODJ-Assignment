@@ -22,46 +22,45 @@ public class ManagingStaff extends Employee{
     }
 
     @Override
-    protected void editStaffDetails(String empID, List<String> empDetails) {
+    protected void editStaffDetails(String empID, List<String> details) {
         // load data in to default list
-        List<ManagingStaff> managingStaffDetails = getAllManagingStaffDetails();
-        List<String> managingStaffDefaultDetails = new ArrayList<>();
-        for (ManagingStaff managingStaff : managingStaffDetails) {
-            if (managingStaff.getEmpID().equals(empID)) {
-                managingStaffDefaultDetails.add(managingStaff.getEmpID());
-                managingStaffDefaultDetails.add(managingStaff.getEmpName());
-                managingStaffDefaultDetails.add(Integer.toString(managingStaff.getEmpAge()));
-                managingStaffDefaultDetails.add(managingStaff.getEmpGender());
-                managingStaffDefaultDetails.add(managingStaff.getEmpEmail());
+        List<ManagingStaff> originalDetails = getAllManagingStaffDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (ManagingStaff detail : originalDetails) {
+            if (detail.getEmpID().equals(empID)) {
+                defaultDetails.add(detail.getEmpID());
+                defaultDetails.add(detail.getEmpName());
+                defaultDetails.add(Integer.toString(detail.getEmpAge()));
+                defaultDetails.add(detail.getEmpGender());
+                defaultDetails.add(detail.getEmpEmail());
             }
         }
 
         // verify and replace empty value with default
-        List<String> managingStaffVerifiedDetails = new ArrayList<>();
-        for(int a = 0; a < empDetails.toArray().length; a ++){
-            if(empDetails.get(a).equals("")){
-                managingStaffVerifiedDetails.add(managingStaffDefaultDetails.get(a));
+        List<String> verifiedDetails = new ArrayList<>();
+        for(int a = 0; a < details.toArray().length; a ++){
+            if(details.get(a).equals("")){
+                verifiedDetails.add(defaultDetails.get(a));
             } else{
-                managingStaffVerifiedDetails.add(empDetails.get(a));
+                verifiedDetails.add(details.get(a));
             }
         }
 
         // overwrite default object list
-        for (ManagingStaff managingStaff : managingStaffDetails) {
-            if (managingStaff.getEmpID().equals(empID)) {
-                managingStaff.setEmpName(managingStaffVerifiedDetails.get(1));
-                managingStaff.setEmpAge(Integer.parseInt(managingStaffVerifiedDetails.get(2)));
-                managingStaff.setEmpGender(managingStaffVerifiedDetails.get(3));
-                managingStaff.setEmpEmail(managingStaffVerifiedDetails.get(4));
+        for (ManagingStaff detail : originalDetails) {
+            if (detail.getEmpID().equals(empID)) {
+                detail.setEmpName(verifiedDetails.get(1));
+                detail.setEmpGender(verifiedDetails.get(3));
+                detail.setEmpEmail(verifiedDetails.get(4));
             }
         }
 
         // write to file
         try{
             FileWriter WriteData = new FileWriter(managingStaffDetailsFile);
-            for (ManagingStaff managingStaff : managingStaffDetails) {
-                WriteData.write(String.format("%s|%s|%d|%s|%s\n", managingStaff.getEmpID(), managingStaff.getEmpName(),
-                        managingStaff.getEmpAge(), managingStaff.getEmpGender(), managingStaff.getEmpEmail()));
+            for (ManagingStaff detail : originalDetails) {
+                WriteData.write(String.format("%s|%s|%d|%s|%s\n", detail.getEmpID(), detail.getEmpName(),
+                        detail.getEmpAge(), detail.getEmpGender(), detail.getEmpEmail()));
             }
             WriteData.close();
             System.out.println("Alert: Details Updated!");
@@ -161,7 +160,6 @@ public class ManagingStaff extends Employee{
         }catch (IOException e){
             e.printStackTrace();
         }
-
     }
 
 
@@ -180,12 +178,73 @@ public class ManagingStaff extends Employee{
         }
     }
 
-    protected void editCustDetails(){
+    protected void editCustDetails(String custID, List<String> details){
+        // load data in to default list
+        Customer customers = new Customer();
+        List<Customer> originalDetails = customers.getAllCustDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Customer detail : originalDetails) {
+            if (detail.getCustID().equals(custID)) {
+                defaultDetails.add(detail.getCustID());
+                defaultDetails.add(detail.getCustName());
+                defaultDetails.add(detail.getCustEmail());
+                defaultDetails.add(detail.getCustPhoneNo());
+                defaultDetails.add(detail.getCustAddress());
+            }
+        }
 
+        // verify and replace empty value with default
+        List<String> verifiedDetails = new ArrayList<>();
+        for(int a = 0; a < details.toArray().length; a ++){
+            if(details.get(a).equals("")){
+                verifiedDetails.add(defaultDetails.get(a));
+            } else{
+                verifiedDetails.add(details.get(a));
+            }
+        }
+
+        // overwrite default object list
+        for (Customer detail : originalDetails) {
+            if (detail.getCustID().equals(custID)) {
+                detail.setCustName(verifiedDetails.get(1));
+                detail.setCustEmail(verifiedDetails.get(2));
+                detail.setCustPhoneNo(verifiedDetails.get(3));
+                detail.setCustAddress(verifiedDetails.get(4));
+            }
+        }
+
+        // write to file
+        try{
+            FileWriter WriteData = new FileWriter(Customer.custDetailsFile);
+            for (Customer detail : originalDetails) {
+                WriteData.write(String.format("%s|%s|%s|%s|%s\n", detail.getCustID(), detail.getCustName(),
+                        detail.getCustEmail(), detail.getCustPhoneNo(), detail.getCustAddress()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Details Updated!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
-    protected void removeCustDetails(){
+    protected void removeCustDetails(String custID){
+        // Remove Details from Customer Object List
+        Customer customer = new Customer();
+        List<Customer> customers = customer.getAllCustDetails();
+        customers.removeIf(customer1 -> customer1.getCustID().equals(custID));
 
+        // Write all data to file
+        try {
+            FileWriter WriteData = new FileWriter(Customer.custDetailsFile);
+            for (Customer detail : customers) {
+                WriteData.write(String.format("%s|%s|%s|%s|%s\n", detail.getCustID(), detail.getCustName(),
+                        detail.getCustEmail(), detail.getCustPhoneNo(), detail.getCustAddress()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Employee Account and Details Removed!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     // modify item section

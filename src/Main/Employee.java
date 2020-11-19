@@ -25,7 +25,7 @@ public abstract class Employee {
     }
 
     protected abstract void viewStaffDetails(String empID);
-    protected abstract void editStaffDetails(String empID, List<String> empDetails);
+    protected abstract void editStaffDetails(String empID, List<String> details);
 
 
     protected String getEmpID() {
@@ -73,6 +73,6 @@ public abstract class Employee {
         return  "Name: " + empName + '\n' +
                 "Age: " + empAge + '\n' +
                 "Gender: " + empGender + '\n' +
-                "Email: " + empEmail + '\n';
+                "Email: " + empEmail;
     }
 }
