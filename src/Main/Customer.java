@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
-    public String custID;
-    public String custName;
-    public String custEmail;
-    public String custPhoneNo;
-    public String custAddress;
+    private String custID;
+    private String custName;
+    private String custEmail;
+    private String custPhoneNo;
+    private String custAddress;
 
     protected final static String custDetailsFile = "custDetails.txt";
 
@@ -44,7 +44,7 @@ public class Customer {
         }
     }
 
-    public String getCustID() {
+    protected String getCustID() {
         return custID;
     }
 
@@ -52,7 +52,7 @@ public class Customer {
         this.custID = custID;
     }
 
-    public String getCustName() {
+    protected String getCustName() {
         return custName;
     }
 
@@ -60,7 +60,7 @@ public class Customer {
         this.custName = custName;
     }
 
-    public String getCustEmail() {
+    protected String getCustEmail() {
         return custEmail;
     }
 
@@ -68,7 +68,7 @@ public class Customer {
         this.custEmail = custEmail;
     }
 
-    public String getCustPhoneNo() {
+    protected String getCustPhoneNo() {
         return custPhoneNo;
     }
 
@@ -76,7 +76,7 @@ public class Customer {
         this.custPhoneNo = custPhoneNo;
     }
 
-    public String getCustAddress() {
+    protected String getCustAddress() {
         return custAddress;
     }
 
