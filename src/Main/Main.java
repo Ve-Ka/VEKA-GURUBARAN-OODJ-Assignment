@@ -69,7 +69,7 @@ public class Main {
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        int intUserChoice = userChoiceVerification(userChoice, 1, 6);
         switch(intUserChoice){
             case 1:
                 managingStaffMainCLI(empID);
@@ -107,7 +107,7 @@ public class Main {
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        int intUserChoice = userChoiceVerification(userChoice, 1, 4);
         switch(intUserChoice){
             case 1:
                 staffAccountSelfCLI(empID);
@@ -141,7 +141,7 @@ public class Main {
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        int intUserChoice = userChoiceVerification(userChoice, 1, 3);
         switch(intUserChoice){
             case 1:
                 if(empID.contains("MS")){
@@ -360,24 +360,18 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch (intUserChoice) {
             case 1:
-                /*
                 System.out.print("Search ID: ");
                 String searchCustID = Scanner.next();
 
                 if(!accountExistVerification(searchCustID, idType.CUSTOMER)){
-                    System.out.println("Alert: Employee ID does not exist!");
-                    managingStaffAccountStaffCLI();
+                    System.out.println("Alert: Customer ID does not exist!");
+                    managingStaffAccountCustomerCLI();
                     break;
-                }else if(searchCustID.contains("MS")){
-                    employee = new ManagingStaff();
-                }else if(searchCustID.contains("DS")){
-                    employee = new DeliveryStaff();
+                } else{
+                    Customer customer = new Customer();
+                    customer.viewCustDetails(searchCustID);
                 }
 
-                Employee.account.viewSelfAccount(searchCustID);
-                System.out.println("-----------------------");
-                employee.viewStaffDetails(searchCustID);
-*/
                 managingStaffAccountCustomerCLI();
                 break;
             case 2:
@@ -450,7 +444,7 @@ public class Main {
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
+        int intUserChoice = userChoiceVerification(userChoice, 1, 3);
         switch(intUserChoice) {
             case 1:
                 deliveryStaffMainCLI(empID);
@@ -498,7 +492,7 @@ public class Main {
                 break;
             case CUSTOMER:
                 Customer customer = new Customer();
-                List<Customer> customers = customer.getAllCustCredential();
+                List<Customer> customers = customer.getAllCustDetails();
                 for (Customer customer1: customers){
                     if(customer1.getCustID().equals(ID)){
                         return true;
