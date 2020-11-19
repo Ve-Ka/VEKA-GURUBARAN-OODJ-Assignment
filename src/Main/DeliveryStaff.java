@@ -8,77 +8,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryStaff extends Employee{
-    private String carBrand;
-    private String carPlateNo;
+    private String vehicleBrand;
+    private String vehiclePlateNo;
     protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
 
     @Override
-    public void viewStaffDetails(String empID) {
+    protected void viewStaffDetails(String empID) {
         List<DeliveryStaff> deliveryStaffDetailsList = getAllDeliveryStaffDetails();
         for (DeliveryStaff deliveryStaff: deliveryStaffDetailsList){
             if(deliveryStaff.getEmpID().equals(empID)){
-                System.out.println("Name: " + deliveryStaff.getEmpName());
-                System.out.println("Age: " + deliveryStaff.getEmpAge());
-                System.out.println("Gender: " + deliveryStaff.getEmpGender());
-                System.out.println("Email: " + deliveryStaff.getEmpEmail());
-                System.out.println("Car Brand: " + deliveryStaff.getCarBrand());
-                System.out.println("Car Plate NO: " + deliveryStaff.getCarPlateNo());
+                System.out.println(deliveryStaff.toString());
             }
         }
     }
 
     @Override
-    public void editStaffDetails(String empID, List<String> empDetails) {
+    protected void editStaffDetails(String empID, List<String> details) {
         // load data in to default list
-        List<DeliveryStaff> deliveryStaffDetails = getAllDeliveryStaffDetails();
-        List<String> deliveryStaffDefaultDetails = new ArrayList<>();
-        for (DeliveryStaff deliveryStaff : deliveryStaffDetails) {
-            if (deliveryStaff.getEmpID().equals(empID)) {
-                deliveryStaffDefaultDetails.add(deliveryStaff.getEmpID());
-                deliveryStaffDefaultDetails.add(deliveryStaff.getEmpName());
-                deliveryStaffDefaultDetails.add(Integer.toString(deliveryStaff.getEmpAge()));
-                deliveryStaffDefaultDetails.add(deliveryStaff.getEmpGender());
-                deliveryStaffDefaultDetails.add(deliveryStaff.getEmpEmail());
-                deliveryStaffDefaultDetails.add(deliveryStaff.getCarBrand());
-                deliveryStaffDefaultDetails.add(deliveryStaff.getCarPlateNo());
+        List<DeliveryStaff> originalDetails = getAllDeliveryStaffDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (DeliveryStaff detail : originalDetails) {
+            if (detail.getEmpID().equals(empID)) {
+                defaultDetails.add(detail.getEmpID());
+                defaultDetails.add(detail.getEmpName());
+                defaultDetails.add(Integer.toString(detail.getEmpAge()));
+                defaultDetails.add(detail.getEmpGender());
+                defaultDetails.add(detail.getEmpEmail());
+                defaultDetails.add(detail.getVehicleBrand());
+                defaultDetails.add(detail.getVehiclePlateNo());
             }
         }
 
         // verify and replace empty value with default
-        List<String> deliveryStaffVerifiedDetails = new ArrayList<>();
-        for(int a = 0; a < empDetails.toArray().length; a ++){
-            if(empDetails.get(a).equals("")){
-                deliveryStaffVerifiedDetails.add(deliveryStaffDefaultDetails.get(a));
+        List<String> verifiedDetails = new ArrayList<>();
+        for(int a = 0; a < details.toArray().length; a ++){
+            if(details.get(a).equals("")){
+                verifiedDetails.add(defaultDetails.get(a));
             } else{
-                deliveryStaffVerifiedDetails.add(empDetails.get(a));
+                verifiedDetails.add(details.get(a));
             }
         }
 
-        // overwrite default list
-        for (DeliveryStaff deliveryStaff : deliveryStaffDetails) {
-            if (deliveryStaff.getEmpID().equals(empID)) {
-                deliveryStaff.setEmpName(deliveryStaffVerifiedDetails.get(1));
-                deliveryStaff.setEmpAge(Integer.parseInt(deliveryStaffVerifiedDetails.get(2)));
-                deliveryStaff.setEmpGender(deliveryStaffVerifiedDetails.get(3));
-                deliveryStaff.setEmpEmail(deliveryStaffVerifiedDetails.get(4));
-                deliveryStaff.setCarBrand(deliveryStaffVerifiedDetails.get(5));
-                deliveryStaff.setCarPlateNo(deliveryStaffVerifiedDetails.get(6));
+        // overwrite default object list
+        for (DeliveryStaff detail : originalDetails) {
+            if (detail.getEmpID().equals(empID)) {
+                detail.setEmpName(verifiedDetails.get(1));
+                detail.setEmpAge(Integer.parseInt(verifiedDetails.get(2)));
+                detail.setEmpGender(verifiedDetails.get(3));
+                detail.setEmpEmail(verifiedDetails.get(4));
+                detail.setVehicleBrand(verifiedDetails.get(5));
+                detail.setVehiclePlateNo(verifiedDetails.get(6));
             }
         }
 
         // write to file
         try{
             FileWriter WriteData = new FileWriter(deliveryStaffDetailsFile);
-            for (DeliveryStaff deliveryStaff : deliveryStaffDetails) {
-                String tempEmpID = deliveryStaff.getEmpID();
-                String tempEmpName = deliveryStaff.getEmpName();
-                int tempEmpAge = deliveryStaff.getEmpAge();
-                String tempEmpGender = deliveryStaff.getEmpGender();
-                String tempEmpEmail = deliveryStaff.getEmpEmail();
-                String tempCarBrand = deliveryStaff.getCarBrand();
-                String tempCarPlateNo = deliveryStaff.getCarPlateNo();
-                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", tempEmpID, tempEmpName, tempEmpAge,
-                        tempEmpGender, tempEmpEmail, tempCarBrand, tempCarPlateNo));
+            for (DeliveryStaff detail : originalDetails) {
+                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", detail.getEmpID(),
+                        detail.getEmpName(), detail.getEmpAge(), detail.getEmpGender(),
+                        detail.getEmpEmail(), detail.getVehicleBrand(), detail.getVehiclePlateNo()));
             }
             WriteData.close();
             System.out.println("Alert: Details Updated!");
@@ -99,8 +88,8 @@ public class DeliveryStaff extends Employee{
                 deliveryStaff.setEmpAge(Integer.parseInt(rec[2]));
                 deliveryStaff.setEmpGender(rec[3]);
                 deliveryStaff.setEmpEmail(rec[4]);
-                deliveryStaff.setCarBrand(rec[5]);
-                deliveryStaff.setCarPlateNo(rec[6]);
+                deliveryStaff.setVehicleBrand(rec[5]);
+                deliveryStaff.setVehiclePlateNo(rec[6]);
                 deliveryStaffDetailsList.add(deliveryStaff);
             }
         }catch (IOException e){
@@ -109,19 +98,27 @@ public class DeliveryStaff extends Employee{
         return deliveryStaffDetailsList;
     }
 
-    protected String getCarBrand() {
-        return carBrand;
+    protected String getVehicleBrand() {
+        return vehicleBrand;
     }
 
-    private void setCarBrand(String carBrand) {
-        this.carBrand = carBrand;
+    private void setVehicleBrand(String VehicleBrand) {
+        this.vehicleBrand = VehicleBrand;
     }
 
-    protected String getCarPlateNo() {
-        return carPlateNo;
+    protected String getVehiclePlateNo() {
+        return vehiclePlateNo;
     }
 
-    private void setCarPlateNo(String carPlateNo) {
-        this.carPlateNo = carPlateNo;
+    private void setVehiclePlateNo(String VehiclePlateNo) {
+        this.vehiclePlateNo = VehiclePlateNo;
+    }
+
+
+    @Override
+    public String toString() {
+        return  super.toString() + '\n' +
+                "Vehicle Brand: " + vehicleBrand + '\n' +
+                "Vehicle Plate NO.: " + vehiclePlateNo;
     }
 }

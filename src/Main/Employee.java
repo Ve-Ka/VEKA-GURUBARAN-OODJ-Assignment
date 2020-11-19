@@ -3,13 +3,13 @@ package Main;
 import java.util.List;
 
 public abstract class Employee {
-    protected String empID;
+    private String empID;
     protected String empName;
     protected int empAge;
     protected String empGender;
     protected String empEmail;
 
-    static Account account;
+    protected static Account account;
 
     public static boolean login(String empID, String empPassword){
         account = new Account();
@@ -24,8 +24,8 @@ public abstract class Employee {
         return false;
     }
 
-    public abstract void viewStaffDetails(String empID);
-    public abstract void editStaffDetails(String empID, List<String> empDetails);
+    protected abstract void viewStaffDetails(String empID);
+    protected abstract void editStaffDetails(String empID, List<String> details);
 
 
     protected String getEmpID() {
@@ -66,5 +66,13 @@ public abstract class Employee {
 
     protected void setEmpEmail(String empEmail) {
         this.empEmail = empEmail;
+    }
+
+    @Override
+    public String toString() {
+        return  "Name: " + empName + '\n' +
+                "Age: " + empAge + '\n' +
+                "Gender: " + empGender + '\n' +
+                "Email: " + empEmail;
     }
 }
