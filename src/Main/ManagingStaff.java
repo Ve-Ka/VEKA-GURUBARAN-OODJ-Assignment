@@ -254,8 +254,8 @@ public class ManagingStaff extends Employee{
         try{
             // Write to Customer File
             FileWriter WriteData = new FileWriter(Item.itemDetailsFile, true);
-            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newItemDetails.get(0), newItemDetails.get(1),
-                    newItemDetails.get(2), newItemDetails.get(3), newItemDetails.get(4)));
+            WriteData.write(String.format("%s|%s|%s|%s|%s|%s\n", newItemDetails.get(0), newItemDetails.get(1),
+                    newItemDetails.get(2), newItemDetails.get(3), newItemDetails.get(4), newItemDetails.get(5)));
 
             WriteData.close();
             System.out.println("Alert: New Item Added!");
