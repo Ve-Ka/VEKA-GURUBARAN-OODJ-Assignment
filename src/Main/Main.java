@@ -221,7 +221,6 @@ public class Main {
                 System.out.println("X        Item           X");
                 break;
         }
-
         System.out.println("X      Management       X");
         System.out.println("X-----------------------X");
         System.out.println("X       [1] Search      X");
