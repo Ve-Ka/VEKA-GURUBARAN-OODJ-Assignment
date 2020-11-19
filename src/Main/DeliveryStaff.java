@@ -117,10 +117,7 @@ public class DeliveryStaff extends Employee{
 
     @Override
     public String toString() {
-        return  "Name: " + empName + '\n' +
-                "Age: " + empAge + '\n' +
-                "Gender: " + empGender + '\n' +
-                "Email: " + empEmail + '\n' +
+        return  super.toString()+
                 "Car Brand: " + carBrand + '\n' +
                 "Car Plate NO.: " + carPlateNo;
     }

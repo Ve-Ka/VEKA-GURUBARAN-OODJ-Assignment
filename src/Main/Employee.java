@@ -67,4 +67,12 @@ public abstract class Employee {
     protected void setEmpEmail(String empEmail) {
         this.empEmail = empEmail;
     }
+
+    @Override
+    public String toString() {
+        return  "Name: " + empName + '\n' +
+                "Age: " + empAge + '\n' +
+                "Gender: " + empGender + '\n' +
+                "Email: " + empEmail + '\n';
+    }
 }

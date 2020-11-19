@@ -70,6 +70,8 @@ public class ManagingStaff extends Employee{
         }
     }
 
+
+    // modify all staff section
     private List<ManagingStaff> getAllManagingStaffDetails(){
         List<ManagingStaff> managingStaffDetailsList = new ArrayList();
         try {
@@ -163,11 +165,24 @@ public class ManagingStaff extends Employee{
     }
 
 
+    // modify customer section
+    protected void addCustDetails(String newCustID, List<String> newCustDetails){
+
+    }
+
+    protected void editCustDetails(){
+
+    }
+
+    protected void removeCustDetails(){
+
+    }
+
+    // modify item section
+
+
     @Override
     public String toString() {
-        return  "Name: " + empName + '\n' +
-                "Age: " + empAge + '\n' +
-                "Gender: " + empGender + '\n' +
-                "Email: " + empEmail + '\n';
+        return super.toString();
     }
 }
