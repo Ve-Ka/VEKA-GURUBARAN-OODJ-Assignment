@@ -29,12 +29,20 @@ public class Main {
                 String empID = Scanner.next();
                 System.out.print("Password: ");
                 String empPassword = Scanner.next();
-                boolean credentialExist = Employee.login(empID, empPassword);
-                if (credentialExist){
-                    if(empID.contains("MS")){
+
+                boolean credentialExist;
+
+                if(empID.contains("MS")){
+                    employee = new ManagingStaff();
+                    credentialExist = employee.login(empID, empPassword);
+                    if (credentialExist) {
                         managingStaffMainCLI(empID);
                     }
-                    else if(empID.contains("DS")){
+                }
+                else if(empID.contains("DS")){
+                    employee = new DeliveryStaff();
+                    credentialExist = employee.login(empID, empPassword);
+                    if (credentialExist) {
                         deliveryStaffMainCLI(empID);
                     }
                 }
@@ -241,14 +249,8 @@ public class Main {
                     System.out.println("Alert: ID does not exist!");
                     managingStaffManagementCLI(idType);
                     break;
-                }else if(searchID.contains("MS")){
-                    employee = new ManagingStaff();
-                    Employee.account.viewSelfAccount(searchID);
-                    System.out.println("-----------------------");
-                    employee.viewStaffDetails(searchID);
-                }else if(searchID.contains("DS")){
-                    employee = new DeliveryStaff();
-                    Employee.account.viewSelfAccount(searchID);
+                }else if(searchID.contains("MS") || searchID.contains("DS")){
+                    employee.viewSelfAccount(searchID);
                     System.out.println("-----------------------");
                     employee.viewStaffDetails(searchID);
                 }else if(searchID.contains("CS")){

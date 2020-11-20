@@ -28,15 +28,6 @@ public class Account {
         return accountList;
     }
 
-    protected void viewSelfAccount(String empID){
-        List<Account> accounts = getAllEmpCredential();
-        for (Account account: accounts){
-            if (account.getEmpID().equals(empID)){
-                System.out.println(account.toString());
-            }
-        }
-    }
-
     protected String getEmpID() {
         return empID;
     }

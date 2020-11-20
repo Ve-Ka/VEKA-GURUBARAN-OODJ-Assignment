@@ -9,9 +9,9 @@ public abstract class Employee {
     protected String empGender;
     protected String empEmail;
 
-    protected static Account account;
+    private Account account;
 
-    public static boolean login(String empID, String empPassword){
+    protected boolean login(String empID, String empPassword){
         account = new Account();
         List<Account> accounts = account.getAllEmpCredential();
         for (Account account: accounts){
@@ -22,6 +22,16 @@ public abstract class Employee {
         }
         System.out.println("Warning: Wrong Credential!");
         return false;
+    }
+
+    protected void viewSelfAccount(String empID){
+        account = new Account();
+        List<Account> accounts = account.getAllEmpCredential();
+        for (Account account: accounts){
+            if (account.getEmpID().equals(empID)){
+                System.out.println(account.toString());
+            }
+        }
     }
 
     protected abstract void viewStaffDetails(String empID);

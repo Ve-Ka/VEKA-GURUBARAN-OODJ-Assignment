@@ -119,7 +119,8 @@ public class ManagingStaff extends Employee{
 
     protected void removeEmpAccount(String empID){
         // Remove Account from Account Object List
-        List<Account> accounts = account.getAllEmpCredential();
+        Account accountTemp = new Account();
+        List<Account> accounts = accountTemp.getAllEmpCredential();
         accounts.removeIf(account -> account.getEmpID().equals(empID));
 
         // Remove Details from Details Object List
