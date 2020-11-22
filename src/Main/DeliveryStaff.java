@@ -12,8 +12,17 @@ public class DeliveryStaff extends Employee{
     private String vehiclePlateNo;
     protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
 
+    public DeliveryStaff(){}
+
+    public DeliveryStaff(String empID, String empName, int empAge, String empGender, String empEmail,
+                         String vehicleBrand, String vehiclePlateNo) {
+        super(empID, empName, empAge, empGender, empEmail);
+        this.vehicleBrand = vehicleBrand;
+        this.vehiclePlateNo = vehiclePlateNo;
+    }
+
     @Override
-    protected void viewStaffDetails(String empID) {
+    protected void displayStaffDetails(String empID) {
         List<DeliveryStaff> deliveryStaffDetailsList = getAllDeliveryStaffDetails();
         for (DeliveryStaff deliveryStaff: deliveryStaffDetailsList){
             if(deliveryStaff.getEmpID().equals(empID)){
@@ -23,8 +32,7 @@ public class DeliveryStaff extends Employee{
     }
 
     @Override
-    protected void editStaffDetails(String empID, List<String> details) {
-        // load data in to default list
+    protected List<String> defaultStaffDetails(String empID) {
         List<DeliveryStaff> originalDetails = getAllDeliveryStaffDetails();
         List<String> defaultDetails = new ArrayList<>();
         for (DeliveryStaff detail : originalDetails) {
@@ -38,37 +46,15 @@ public class DeliveryStaff extends Employee{
                 defaultDetails.add(detail.getVehiclePlateNo());
             }
         }
+        return defaultDetails;
+    }
 
-        // verify and replace empty value with default
-        List<String> verifiedDetails = new ArrayList<>();
-        for(int a = 0; a < details.toArray().length; a ++){
-            if(details.get(a).equals("")){
-                verifiedDetails.add(defaultDetails.get(a));
-            } else{
-                verifiedDetails.add(details.get(a));
-            }
-        }
-
-        // overwrite default object list
-        for (DeliveryStaff detail : originalDetails) {
-            if (detail.getEmpID().equals(empID)) {
-                detail.setEmpName(verifiedDetails.get(1));
-                detail.setEmpAge(Integer.parseInt(verifiedDetails.get(2)));
-                detail.setEmpGender(verifiedDetails.get(3));
-                detail.setEmpEmail(verifiedDetails.get(4));
-                detail.setVehicleBrand(verifiedDetails.get(5));
-                detail.setVehiclePlateNo(verifiedDetails.get(6));
-            }
-        }
-
-        // write to file
+    protected void editStaffDetails(DeliveryStaff deliveryStaff) {
         try{
             FileWriter WriteData = new FileWriter(deliveryStaffDetailsFile);
-            for (DeliveryStaff detail : originalDetails) {
-                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", detail.getEmpID(),
-                        detail.getEmpName(), detail.getEmpAge(), detail.getEmpGender(),
-                        detail.getEmpEmail(), detail.getVehicleBrand(), detail.getVehiclePlateNo()));
-            }
+            WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", deliveryStaff.getEmpID(),
+                    deliveryStaff.getEmpName(), deliveryStaff.getEmpAge(), deliveryStaff.getEmpGender(),
+                    deliveryStaff.getEmpEmail(), deliveryStaff.getVehicleBrand(), deliveryStaff.getVehiclePlateNo()));
             WriteData.close();
             System.out.println("Alert: Details Updated!");
         }catch (IOException e){

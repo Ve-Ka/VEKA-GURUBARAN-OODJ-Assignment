@@ -30,19 +30,15 @@ public class Main {
                 System.out.print("Password: ");
                 String empPassword = Scanner.next();
 
-                boolean credentialExist;
-
                 if(empID.contains("MS")){
                     employee = new ManagingStaff();
-                    credentialExist = employee.login(empID, empPassword);
-                    if (credentialExist) {
+                    if (employee.login(empID, empPassword)) {
                         managingStaffMainCLI(empID);
                     }
                 }
                 else if(empID.contains("DS")){
                     employee = new DeliveryStaff();
-                    credentialExist = employee.login(empID, empPassword);
-                    if (credentialExist) {
+                    if (employee.login(empID, empPassword)) {
                         deliveryStaffMainCLI(empID);
                     }
                 }
@@ -123,11 +119,11 @@ public class Main {
                 managingStaffAccountCLI(empID);
                 break;
             case 2:
-                managingStaffManagementCLI(idType.STAFF);;
+                managingStaffManagementCLI(idType.STAFF);
                 managingStaffAccountCLI(empID);
                 break;
             case 3:
-                managingStaffManagementCLI(idType.CUSTOMER);;
+                managingStaffManagementCLI(idType.CUSTOMER);
                 managingStaffAccountCLI(empID);
                 break;
             case 4:
@@ -154,57 +150,64 @@ public class Main {
         switch(intUserChoice){
             case 1:
                 if(empID.contains("MS")){
-                    Employee employee = new ManagingStaff();
-                    employee.viewStaffDetails(empID);
+                    employee.displayStaffDetails(empID);
                 }
                 else if(empID.contains("DS")){
-                    Employee employee = new DeliveryStaff();
-                    employee.viewStaffDetails(empID);
+                    employee.displayStaffDetails(empID);
                 }
                 staffAccountSelfCLI(empID);
                 break;
             case 2:
                 if(empID.contains("MS")){
-                    Employee employee = new ManagingStaff();
-                    employee.viewStaffDetails(empID);
+                    employee = new ManagingStaff();
+                    employee.displayStaffDetails(empID);
                     System.out.println("-----------------------");
                     Scanner.nextLine();
-                    List<String> managingStaffNewDetails = new ArrayList<>();
-                    managingStaffNewDetails.add(empID);
-                    String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
-                    for (String managingStaffEditableDetail : managingStaffEditableDetails) {
-                        System.out.printf("New %s: ", managingStaffEditableDetail);
+
+                    List<String> defaultStaffDetails = employee.defaultStaffDetails(empID);
+
+                    String[] staffEditableDetails = {"Name", "Age", "Gender", "Email"};
+                    for (int a = 0; a < staffEditableDetails.length; a ++){
+                        System.out.printf("New %s: ", staffEditableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")){
-                            managingStaffNewDetails.add("");
-                        } else {
-                            managingStaffNewDetails.add(userInput);
+                            staffEditableDetails[a] = defaultStaffDetails.get(a + 1);
+                        }else{
+                            staffEditableDetails[a] = userInput;
                         }
                     }
-                    employee.editStaffDetails(empID, managingStaffNewDetails);
+
+                    employee = new ManagingStaff(empID, staffEditableDetails[0],
+                            Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                            staffEditableDetails[3]);
+                    ManagingStaff managingStaff = (ManagingStaff) employee;
+                    managingStaff.editStaffDetails(managingStaff);
                 }
                 else if(empID.contains("DS")){
-                    Employee employee = new DeliveryStaff();
-                    employee.viewStaffDetails(empID);
+                    employee = new DeliveryStaff();
+                    employee.displayStaffDetails(empID);
                     System.out.println("-----------------------");
                     Scanner.nextLine();
-                    List<String> deliveryStaffNewDetails = new ArrayList<>();
-                    deliveryStaffNewDetails.add(empID);
-                    String[] deliveryStaffEditableDetails = {"Name", "Age", "Gender", "Email", "Vehicle Brand",
-                            "Vehicle" +
-                            " " +
-                            "Plate " +
-                            "NO"};
-                    for (String deliveryStaffEditableDetail : deliveryStaffEditableDetails) {
-                        System.out.printf("New %s: ", deliveryStaffEditableDetail);
+
+                    List<String> defaultStaffDetails = employee.defaultStaffDetails(empID);
+
+                    String[] staffEditableDetails = {"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                            "Vehicle Plate No"};
+                    for (int a = 0; a < staffEditableDetails.length; a ++){
+                        System.out.printf("New %s: ", staffEditableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")){
-                            deliveryStaffNewDetails.add("");
-                        } else {
-                            deliveryStaffNewDetails.add(userInput);
+                            staffEditableDetails[a] = defaultStaffDetails.get(a + 1);
+                        }else{
+                            staffEditableDetails[a] = userInput;
                         }
                     }
-                    employee.editStaffDetails(empID, deliveryStaffNewDetails);
+
+                    employee = new DeliveryStaff(empID, staffEditableDetails[0],
+                            Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                            staffEditableDetails[3], staffEditableDetails[4], staffEditableDetails[5]);
+                    DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+                    deliveryStaff.editStaffDetails(deliveryStaff);
                 }
                 staffAccountSelfCLI(empID);
                 break;
@@ -229,7 +232,7 @@ public class Main {
                 System.out.println("X        Item           X");
                 break;
         }
-        System.out.println("X      Management       X");
+        System.out.println("X       Management      X");
         System.out.println("X-----------------------X");
         System.out.println("X       [1] Search      X");
         System.out.println("X       [2] Add         X");
@@ -252,7 +255,7 @@ public class Main {
                 }else if(searchID.contains("MS") || searchID.contains("DS")){
                     employee.viewSelfAccount(searchID);
                     System.out.println("-----------------------");
-                    employee.viewStaffDetails(searchID);
+                    employee.displayStaffDetails(searchID);
                 }else if(searchID.contains("CS")){
                     Customer customer = new Customer();
                     System.out.println("ID: " + searchID);
@@ -337,62 +340,69 @@ public class Main {
             case 3:
                 System.out.print("Edit ID: ");
                 String editID = Scanner.next();
-                String[] editableDetails = {};
+                String[] staffEditableDetails = {};
 
                 if(!idExistVerification(editID, idType)){
-                    System.out.println("Alert: Employee ID does not exist!");
+                    System.out.println("Alert: ID does not exist!");
                     managingStaffManagementCLI(idType);
                     break;
                 }else if(editID.contains("MS")){
                     employee = new ManagingStaff();
-                    editableDetails = new String[]{"Name", "Age", "Gender", "Email"};
-                    employee.viewStaffDetails(editID);
-                    System.out.println("-----------------------");
+                    staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email"};
+                    employee.displayStaffDetails(editID);
                 }else if(editID.contains("DS")){
                     employee = new DeliveryStaff();
-                    editableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand", "Vehicle Plate " +
-                            "NO"};
-                    employee.viewStaffDetails(editID);
-                    System.out.println("-----------------------");
+                    staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                            "Vehicle Plate NO"};
+                    employee.displayStaffDetails(editID);
                 }else if(editID.contains("CS")){
                     Customer customer = new Customer();
-                    editableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
+                    staffEditableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
                     customer.viewCustDetails(editID);
-                    System.out.println("-----------------------");
                 }else if(editID.contains("IT")){
                     Item item = new Item();
-                    editableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
+                    staffEditableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                     item.viewItemDetails(editID);
-                    System.out.println("-----------------------");
                 }
 
-                Scanner.nextLine();
-                List<String> newDetails1 = new ArrayList<>();
-                newDetails1.add(editID);
-                for (String editableDetail : editableDetails) {
-                    System.out.printf("New %s: ", editableDetail);
-                    String userInput = Scanner.nextLine();
+                System.out.println("-----------------------");
+                List<String> defaultStaffDetails = employee.defaultStaffDetails(editID);
 
+                for (int a = 0; a < staffEditableDetails.length; a ++){
+                    System.out.printf("New %s: ", staffEditableDetails[a]);
+                    String userInput = Scanner.nextLine();
                     if (userInput.equals("")){
-                        newDetails1.add("");
-                    } else {
-                        newDetails1.add(userInput);
+                        staffEditableDetails[a] = defaultStaffDetails.get(a + 1);
+                    }else{
+                        staffEditableDetails[a] = userInput;
                     }
                 }
 
                 switch(idType) {
                     case STAFF:
-                        employee.editStaffDetails(editID, newDetails1);
+                        if (editID.contains("MS")){
+                            employee = new ManagingStaff(editID, staffEditableDetails[0],
+                                    Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                                    staffEditableDetails[3]);
+                            ManagingStaff managingStaff1 = (ManagingStaff) employee;
+                            managingStaff1.editStaffDetails(managingStaff1);
+                        }else if (editID.contains("DS")){
+                            employee = new DeliveryStaff(editID, staffEditableDetails[0],
+                                    Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                                    staffEditableDetails[3], staffEditableDetails[4], staffEditableDetails[5]);
+                            DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+                            deliveryStaff.editStaffDetails(deliveryStaff);
+                        }
                         break;
                     case CUSTOMER:
                         employee = new ManagingStaff();
                         ManagingStaff managingStaff1 = (ManagingStaff) employee;
-                        managingStaff1.editCustDetails(editID, newDetails1);
+                        //managingStaff1.editCustDetails(editID, newDetails1);
                         break;
                     case ITEM:
                         employee = new ManagingStaff();
                         ManagingStaff managingStaff2 = (ManagingStaff) employee;
-                        managingStaff2.editItemDetails(editID, newDetails1);
+                        //managingStaff2.editItemDetails(editID, newDetails1);
                         break;
                 }
 

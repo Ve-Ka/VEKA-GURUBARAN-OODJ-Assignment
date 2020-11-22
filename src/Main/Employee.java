@@ -1,5 +1,6 @@
 package Main;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public abstract class Employee {
@@ -10,6 +11,18 @@ public abstract class Employee {
     protected String empEmail;
 
     private Account account;
+
+    // Need to create a constructor to promote constructor overloading (static polymorphism)
+    public Employee(){}
+
+    public Employee(String empID, String empName, int empAge, String empGender, String empEmail){
+        this.empID = empID;
+        this.empName = empName;
+        this.empAge = empAge;
+        this.empGender = empGender;
+        this.empEmail = empEmail;
+    }
+
 
     protected boolean login(String empID, String empPassword){
         account = new Account();
@@ -34,8 +47,9 @@ public abstract class Employee {
         }
     }
 
-    protected abstract void viewStaffDetails(String empID);
-    protected abstract void editStaffDetails(String empID, List<String> details);
+    protected abstract void displayStaffDetails(String empID);
+    protected abstract List<String> defaultStaffDetails(String empID);
+   // protected abstract void editStaffDetails(String empID, List<String> details);
 
 
     protected String getEmpID() {
