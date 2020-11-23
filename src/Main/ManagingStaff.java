@@ -13,9 +13,15 @@ public class ManagingStaff extends Employee{
 
     public ManagingStaff(){}
 
+    public ManagingStaff(String empID, String empPassword) {
+        super(empID, empPassword);
+    }
+
     public ManagingStaff(String empID, String empName, int empAge, String empGender, String empEmail) {
         super(empID, empName, empAge, empGender, empEmail);
     }
+
+
 
     @Override
     protected void displayStaffDetails(String empID) {

@@ -10,10 +10,16 @@ public abstract class Employee {
     protected String empGender;
     protected String empEmail;
 
-    private Account account;
+    protected Account account;
 
     // Need to create a constructor to promote constructor overloading (static polymorphism)
     public Employee(){}
+
+    public Employee(String empID, String empPassword){
+        this.account = new Account();
+        account.setEmpID(empID);
+        account.setEmpPassword(empPassword);
+    }
 
     public Employee(String empID, String empName, int empAge, String empGender, String empEmail){
         this.empID = empID;
@@ -23,11 +29,11 @@ public abstract class Employee {
         this.empEmail = empEmail;
     }
 
-    protected boolean login(String empID, String empPassword){
-        account = new Account();
-        List<Account> accounts = account.getAllEmpCredential();
-        for (Account account: accounts){
-            if(account.getEmpID().equals(empID) && account.getEmpPassword().equals(empPassword)){
+    protected boolean login(){
+        List<Account> accountList = account.getAllEmpCredential();
+        for (Account item: accountList){
+            if(item.getEmpID().equals(account.getEmpID()) &&
+                    item.getEmpPassword().equals(account.getEmpPassword())){
                 System.out.println("Login Successful!");
                 return true;
             }

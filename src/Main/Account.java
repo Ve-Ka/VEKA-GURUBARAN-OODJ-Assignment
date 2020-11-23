@@ -34,7 +34,7 @@ public class Account {
         return empID;
     }
 
-    private void setEmpID(String empID) {
+    protected void setEmpID(String empID) {
         this.empID = empID;
     }
 
@@ -42,7 +42,7 @@ public class Account {
         return empPassword;
     }
 
-    private void setEmpPassword(String empPassword) {
+    protected void setEmpPassword(String empPassword) {
         this.empPassword = empPassword;
     }
 

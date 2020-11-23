@@ -14,12 +14,17 @@ public class DeliveryStaff extends Employee{
 
     public DeliveryStaff(){}
 
+    public DeliveryStaff(String empID, String empPassword) {
+        super(empID, empPassword);
+    }
+
     public DeliveryStaff(String empID, String empName, int empAge, String empGender, String empEmail,
                          String vehicleBrand, String vehiclePlateNo) {
         super(empID, empName, empAge, empGender, empEmail);
         this.vehicleBrand = vehicleBrand;
         this.vehiclePlateNo = vehiclePlateNo;
     }
+
 
     @Override
     protected void displayStaffDetails(String empID) {

@@ -31,14 +31,14 @@ public class Main {
                 String empPassword = Scanner.next();
 
                 if(empID.contains("MS")){
-                    employee = new ManagingStaff();
-                    if (employee.login(empID, empPassword)) {
+                    employee = new ManagingStaff(empID, empPassword);
+                    if (employee.login()) {
                         managingStaffMainCLI(empID);
                     }
                 }
                 else if(empID.contains("DS")){
-                    employee = new DeliveryStaff();
-                    if (employee.login(empID, empPassword)) {
+                    employee = new DeliveryStaff(empID, empPassword);
+                    if (employee.login()) {
                         deliveryStaffMainCLI(empID);
                     }
                 }
