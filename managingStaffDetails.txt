@@ -1,1 +1,4 @@
-MS0001|VeKa|19|Male|veka@mail.com
+MS0001|Ve Ka|19|Male|veka@mail.com
+MS0002|Gurubaran|20|Male|gurubarn@mail.com
+MS0003|Clement|21|Male|clement@mail.com
+MS0004|Inaan|19|Male|inaan@mail.com

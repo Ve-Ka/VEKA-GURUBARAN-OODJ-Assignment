@@ -16,6 +16,18 @@ public class Item {
 
     protected final static String itemDetailsFile = "itemDetails.txt";
 
+    public Item(){}
+
+    public Item(String itemID, String itemName, int itemQuantity, double itemPrice, String itemSupplier,
+                String itemDescription) {
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.itemQuantity = itemQuantity;
+        this.itemPrice = itemPrice;
+        this.itemSupplier = itemSupplier;
+        this.itemDescription = itemDescription;
+    }
+
     protected List<Item> getAllItemDetails(){
         List<Item> itemList = new ArrayList();
         try {
@@ -44,6 +56,22 @@ public class Item {
                 System.out.println(item.toString());
             }
         }
+    }
+
+    protected List<String> defaultItemDetails(String itemID){
+        List<Item> originalDetails = getAllItemDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Item detail : originalDetails) {
+            if (detail.getItemID().equals(itemID)) {
+                defaultDetails.add(detail.getItemID());
+                defaultDetails.add(detail.getItemName());
+                defaultDetails.add(Integer.toString(detail.getItemQuantity()));
+                defaultDetails.add(Double.toString(detail.getItemPrice()));
+                defaultDetails.add(detail.getItemSupplier());
+                defaultDetails.add(detail.getItemDescription());
+            }
+        }
+        return defaultDetails;
     }
 
 

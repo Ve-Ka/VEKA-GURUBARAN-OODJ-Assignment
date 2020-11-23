@@ -50,11 +50,26 @@ public class DeliveryStaff extends Employee{
     }
 
     protected void editStaffDetails(DeliveryStaff deliveryStaff) {
+        // Overwrite Original List with new data
+        List<DeliveryStaff> originalDetails = getAllDeliveryStaffDetails();
+        int position = 0;
+        for (DeliveryStaff detail: originalDetails){
+            if (detail.getEmpID().equals(deliveryStaff.getEmpID())) {
+                break;
+            }else{
+                position ++;
+            }
+        }
+        originalDetails.set(position, deliveryStaff);
+
+        // Write to file
         try{
             FileWriter WriteData = new FileWriter(deliveryStaffDetailsFile);
-            WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", deliveryStaff.getEmpID(),
-                    deliveryStaff.getEmpName(), deliveryStaff.getEmpAge(), deliveryStaff.getEmpGender(),
-                    deliveryStaff.getEmpEmail(), deliveryStaff.getVehicleBrand(), deliveryStaff.getVehiclePlateNo()));
+            for (DeliveryStaff detail: originalDetails){
+                WriteData.write(String.format("%s|%s|%d|%s|%s|%s|%s\n", detail.getEmpID(), detail.getEmpName(),
+                        detail.getEmpAge(), detail.getEmpGender(), detail.getEmpEmail(), detail.getVehicleBrand(),
+                        detail.getVehiclePlateNo()));
+            }
             WriteData.close();
             System.out.println("Alert: Details Updated!");
         }catch (IOException e){

@@ -23,7 +23,6 @@ public abstract class Employee {
         this.empEmail = empEmail;
     }
 
-
     protected boolean login(String empID, String empPassword){
         account = new Account();
         List<Account> accounts = account.getAllEmpCredential();
