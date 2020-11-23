@@ -12,7 +12,7 @@ public abstract class Employee {
 
     private Account account;
 
-    // Need to create a constructor to promote constructor overloading (static polymorphism)
+    // Static polymorphism (constructor overloading)
     public Employee(){}
 
     public Employee(String empID, String empPassword){
@@ -43,7 +43,6 @@ public abstract class Employee {
     }
 
     protected void viewSelfAccount(String empID){
-        account = new Account();
         List<Account> accounts = account.getAllEmpCredential();
         for (Account account: accounts){
             if (account.getEmpID().equals(empID)){
@@ -54,7 +53,6 @@ public abstract class Employee {
 
     protected abstract void displayStaffDetails(String empID);
     protected abstract List<String> defaultStaffDetails(String empID);
-   // protected abstract void editStaffDetails(String empID, List<String> details);
 
 
     protected String getEmpID() {

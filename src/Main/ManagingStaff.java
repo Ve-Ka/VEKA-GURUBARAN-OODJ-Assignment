@@ -97,7 +97,6 @@ public class ManagingStaff extends Employee{
         return managingStaffDetailsList;
     }
 
-
     protected void addEmpAccount(String newEmpID, String newEmpPassword, ManagingStaff managingStaff){
         try{
             // Write to Credential File
