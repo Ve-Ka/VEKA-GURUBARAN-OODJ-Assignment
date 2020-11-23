@@ -22,7 +22,6 @@ public class ManagingStaff extends Employee{
     }
 
 
-
     @Override
     protected void displayStaffDetails(String empID) {
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();

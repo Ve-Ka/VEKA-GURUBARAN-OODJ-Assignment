@@ -10,7 +10,7 @@ public abstract class Employee {
     protected String empGender;
     protected String empEmail;
 
-    protected Account account;
+    private Account account;
 
     // Need to create a constructor to promote constructor overloading (static polymorphism)
     public Employee(){}
