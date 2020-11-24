@@ -74,7 +74,6 @@ public class Item {
         return defaultDetails;
     }
 
-
     protected String getItemID() {
         return itemID;
     }

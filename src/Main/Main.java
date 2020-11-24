@@ -340,10 +340,20 @@ public class Main {
                         }
                         break;
                     case CUSTOMER:
-                        //managingStaff.addCustDetails(newDetails);
+                        Customer customer = new Customer(addID, addableDetails[0], addableDetails[1],
+                                addableDetails[2], addableDetails[3]);
+
+                        employee = new ManagingStaff();
+                        ManagingStaff managingStaff = (ManagingStaff) employee;
+                        managingStaff.addCustDetails(customer);
                         break;
                     case ITEM:
-                        //managingStaff.addItemDetails(newDetails);
+                        Item item = new Item(addID, addableDetails[0], Integer.parseInt(addableDetails[1]),
+                                Double.parseDouble(addableDetails[2]), addableDetails[3], addableDetails[4]);
+
+                        employee = new ManagingStaff();
+                        ManagingStaff managingStaff1 = (ManagingStaff) employee;
+                        managingStaff1.addItemDetails(item);
                         break;
                 }
 

@@ -25,7 +25,6 @@ public class DeliveryStaff extends Employee{
         this.vehiclePlateNo = vehiclePlateNo;
     }
 
-
     @Override
     protected void displayStaffDetails(String empID) {
         List<DeliveryStaff> deliveryStaffDetailsList = getAllDeliveryStaffDetails();
@@ -119,7 +118,6 @@ public class DeliveryStaff extends Employee{
     private void setVehiclePlateNo(String VehiclePlateNo) {
         this.vehiclePlateNo = VehiclePlateNo;
     }
-
 
     @Override
     public String toString() {

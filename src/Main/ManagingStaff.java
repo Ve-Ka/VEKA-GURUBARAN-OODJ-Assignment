@@ -21,7 +21,6 @@ public class ManagingStaff extends Employee{
         super(empID, empName, empAge, empGender, empEmail);
     }
 
-
     @Override
     protected void displayStaffDetails(String empID) {
         List<ManagingStaff> managingStaffDetailsList = getAllManagingStaffDetails();
@@ -74,7 +73,6 @@ public class ManagingStaff extends Employee{
             e.printStackTrace();
         }
     }
-
 
     // modify all staff section
     protected List<ManagingStaff> getAllManagingStaffDetails(){
@@ -183,15 +181,13 @@ public class ManagingStaff extends Employee{
         }
     }
 
-
     // modify customer section
-    protected void addCustDetails(List<String> newCustDetails){
+    protected void addCustDetails(Customer customer){
         try{
             // Write to Customer File
             FileWriter WriteData = new FileWriter(Customer.custDetailsFile, true);
-            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newCustDetails.get(0), newCustDetails.get(1),
-                    newCustDetails.get(2), newCustDetails.get(3), newCustDetails.get(4)));
-
+            WriteData.write(String.format("%s|%s|%s|%s|%s\n", customer.getCustID(), customer.getCustName(),
+                    customer.getCustEmail(), customer.getCustPhoneNo(), customer.getCustAddress()));
             WriteData.close();
             System.out.println("Alert: New Customer Added!");
         }catch (IOException e){
@@ -248,13 +244,12 @@ public class ManagingStaff extends Employee{
     }
 
     // modify item section
-    protected void addItemDetails(List<String> newItemDetails){
+    protected void addItemDetails(Item item){
         try{
             // Write to Customer File
             FileWriter WriteData = new FileWriter(Item.itemDetailsFile, true);
-            WriteData.write(String.format("%s|%s|%s|%s|%s|%s\n", newItemDetails.get(0), newItemDetails.get(1),
-                    newItemDetails.get(2), newItemDetails.get(3), newItemDetails.get(4), newItemDetails.get(5)));
-
+            WriteData.write(String.format("%s|%s|%s|%s|%s|%s\n", item.getItemID(), item.getItemName(),
+                    item.getItemQuantity(), item.getItemPrice(), item.getItemSupplier(), item.getItemDescription()));
             WriteData.close();
             System.out.println("Alert: New Item Added!");
         }catch (IOException e){

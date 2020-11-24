@@ -54,7 +54,6 @@ public abstract class Employee {
     protected abstract void displayStaffDetails(String empID);
     protected abstract List<String> defaultStaffDetails(String empID);
 
-
     protected String getEmpID() {
         return empID;
     }

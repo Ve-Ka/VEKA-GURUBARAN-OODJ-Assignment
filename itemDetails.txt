@@ -3,3 +3,5 @@ IT0002|Nvidia GT1030|5|349.90|Nvidia|Graphics Card for Computer
 IT0003|E5-2620V3|21|80.00|Intel|Server CPU
 IT0004|Seagate Skyhawk 1TB|13|149.90|Seagate|Hard Disk With Survalence Write Performance
 IT0005|SoundBlasterX M1|3|399.99|Crucial|Audio Soundcard for Computer
+IT0006|X5670|5|20.00|Intel|Server CPU
+IT0007|480GB SAS SSD|34|399.90|Samsung|Server SAS SSD
