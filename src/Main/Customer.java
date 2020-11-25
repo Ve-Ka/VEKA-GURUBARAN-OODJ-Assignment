@@ -15,6 +15,20 @@ public class Customer {
 
     protected final static String custDetailsFile = "custDetails.txt";
 
+    public Customer(){}
+
+    public Customer(String custID){
+        this.custID = custID;
+    }
+
+    public Customer(String custID, String custName, String custEmail, String custPhoneNo, String custAddress) {
+        this.custID = custID;
+        this.custName = custName;
+        this.custEmail = custEmail;
+        this.custPhoneNo = custPhoneNo;
+        this.custAddress = custAddress;
+    }
+
     protected List<Customer> getAllCustDetails(){
         List<Customer> custList = new ArrayList();
         try {
@@ -42,6 +56,30 @@ public class Customer {
                 System.out.println(customer.toString());
             }
         }
+    }
+
+    protected void displayLimitedCustDetails(){
+        List<Customer> customers = getAllCustDetails();
+        System.out.println("\nAll customer details");
+        for (Customer customer: customers){
+            System.out.printf("%S|%S|%s\n", customer.getCustID(), customer.getCustName(), customer.getCustPhoneNo());
+        }
+        System.out.println("");
+    }
+
+    protected List<String> defaultCustomerDetails(String custID){
+        List<Customer> originalDetails = getAllCustDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Customer detail : originalDetails) {
+            if (detail.getCustID().equals(custID)) {
+                defaultDetails.add(detail.getCustID());
+                defaultDetails.add(detail.getCustName());
+                defaultDetails.add(detail.getCustEmail());
+                defaultDetails.add(detail.getCustPhoneNo());
+                defaultDetails.add(detail.getCustAddress());
+            }
+        }
+        return defaultDetails;
     }
 
     protected String getCustID() {

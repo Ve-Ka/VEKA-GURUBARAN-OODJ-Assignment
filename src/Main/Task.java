@@ -1,8 +1,8 @@
 package Main;
 
 public interface Task {
-    void search();
+    void search(String ID);
     void add();
     void modify();
-    void remove();
+    void remove(String ID);
 }

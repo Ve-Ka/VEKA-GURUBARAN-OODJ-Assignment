@@ -1,5 +1,6 @@
 package Main;
 
+import java.util.EnumMap;
 import java.util.List;
 
 public abstract class Employee {
@@ -9,24 +10,53 @@ public abstract class Employee {
     protected String empGender;
     protected String empEmail;
 
-    protected static Account account;
+    private Account account;
 
-    public static boolean login(String empID, String empPassword){
-        account = new Account();
-        List<Account> accounts = account.getAllEmpCredential();
-        for (Account account: accounts){
-            if(account.getEmpID().equals(empID) && account.getEmpPassword().equals(empPassword)){
+    // Static polymorphism (constructor overloading)
+    public Employee(){}
+
+    public Employee(String empID){
+        this.empID = empID;
+    }
+
+    public Employee(String empID, String empPassword){
+        this.account = new Account();
+        account.setEmpID(empID);
+        account.setEmpPassword(empPassword);
+    }
+
+    public Employee(String empID, String empName, int empAge, String empGender, String empEmail){
+        this.empID = empID;
+        this.empName = empName;
+        this.empAge = empAge;
+        this.empGender = empGender;
+        this.empEmail = empEmail;
+    }
+
+    protected boolean login(){
+        List<Account> accountList = account.getAllEmpCredential();
+        for (Account item: accountList){
+            if(item.getEmpID().equals(account.getEmpID()) &&
+                    item.getEmpPassword().equals(account.getEmpPassword())){
                 System.out.println("Login Successful!");
                 return true;
             }
         }
-        System.out.println("Warning: Wrong Credential!");
+        System.out.println("Warning: Invalid Credential!");
         return false;
     }
 
-    protected abstract void viewStaffDetails(String empID);
-    protected abstract void editStaffDetails(String empID, List<String> details);
+    protected void viewSelfAccount(String empID){
+        List<Account> accounts = account.getAllEmpCredential();
+        for (Account account: accounts){
+            if (account.getEmpID().equals(empID)){
+                System.out.println(account.toString());
+            }
+        }
+    }
 
+    protected abstract void displayStaffDetails(String empID);
+    protected abstract List<String> defaultStaffDetails(String empID);
 
     protected String getEmpID() {
         return empID;

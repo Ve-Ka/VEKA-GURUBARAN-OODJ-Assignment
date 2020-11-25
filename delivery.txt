@@ -1,1 +1,1 @@
-DeliveryID|DeliveryDate|DeliveryTime|CustomerName|CustomerAddress|ItemID
+DE0001|26/11/2020 05:11:44|DS0002|CS0004|40, Jalan Orod, Penang|IT0002|2

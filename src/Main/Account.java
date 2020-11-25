@@ -28,20 +28,11 @@ public class Account {
         return accountList;
     }
 
-    protected void viewSelfAccount(String empID){
-        List<Account> accounts = getAllEmpCredential();
-        for (Account account: accounts){
-            if (account.getEmpID().equals(empID)){
-                System.out.println(account.toString());
-            }
-        }
-    }
-
     protected String getEmpID() {
         return empID;
     }
 
-    private void setEmpID(String empID) {
+    protected void setEmpID(String empID) {
         this.empID = empID;
     }
 
@@ -49,7 +40,7 @@ public class Account {
         return empPassword;
     }
 
-    private void setEmpPassword(String empPassword) {
+    protected void setEmpPassword(String empPassword) {
         this.empPassword = empPassword;
     }
 

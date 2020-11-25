@@ -1,15 +1,19 @@
 package Main;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    static java.util.Scanner Scanner = new Scanner(System.in);
-    static Employee employee;
+    private static java.util.Scanner Scanner = new Scanner(System.in);
+    private static Employee employee;
 
     private enum idType{
-        STAFF, CUSTOMER, ITEM
+        STAFF, CUSTOMER, ORDER, ITEM, DELIVERY
     }
 
     private static void loginCLI(){
@@ -29,14 +33,20 @@ public class Main {
                 String empID = Scanner.next();
                 System.out.print("Password: ");
                 String empPassword = Scanner.next();
-                boolean credentialExist = Employee.login(empID, empPassword);
-                if (credentialExist){
-                    if(empID.contains("MS")){
+
+                if(empID.startsWith("MS")){
+                    employee = new ManagingStaff(empID, empPassword);
+                    if (employee.login()) {
                         managingStaffMainCLI(empID);
                     }
-                    else if(empID.contains("DS")){
+                }
+                else if(empID.startsWith("DS")){
+                    employee = new DeliveryStaff(empID, empPassword);
+                    if (employee.login()) {
                         deliveryStaffMainCLI(empID);
                     }
+                }else{
+                    System.out.println("Warning: Login ID or Password invalid!");
                 }
                 loginCLI();
                 break;
@@ -72,6 +82,7 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 6);
         switch(intUserChoice){
             case 1:
+                managingStaffOrderCLI(empID);
                 managingStaffMainCLI(empID);
                 break;
             case 2:
@@ -115,11 +126,11 @@ public class Main {
                 managingStaffAccountCLI(empID);
                 break;
             case 2:
-                managingStaffManagementCLI(idType.STAFF);;
+                managingStaffManagementCLI(idType.STAFF);
                 managingStaffAccountCLI(empID);
                 break;
             case 3:
-                managingStaffManagementCLI(idType.CUSTOMER);;
+                managingStaffManagementCLI(idType.CUSTOMER);
                 managingStaffAccountCLI(empID);
                 break;
             case 4:
@@ -145,58 +156,64 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 3);
         switch(intUserChoice){
             case 1:
-                if(empID.contains("MS")){
-                    Employee employee = new ManagingStaff();
-                    employee.viewStaffDetails(empID);
+                if(empID.startsWith("MS")){
+                    employee.displayStaffDetails(empID);
                 }
-                else if(empID.contains("DS")){
-                    Employee employee = new DeliveryStaff();
-                    employee.viewStaffDetails(empID);
+                else if(empID.startsWith("DS")){
+                    employee.displayStaffDetails(empID);
                 }
                 staffAccountSelfCLI(empID);
                 break;
             case 2:
-                if(empID.contains("MS")){
-                    Employee employee = new ManagingStaff();
-                    employee.viewStaffDetails(empID);
+                if(empID.startsWith("MS")){
+                    employee = new ManagingStaff();
+                    employee.displayStaffDetails(empID);
                     System.out.println("-----------------------");
                     Scanner.nextLine();
-                    List<String> managingStaffNewDetails = new ArrayList<>();
-                    managingStaffNewDetails.add(empID);
-                    String[] managingStaffEditableDetails = {"Name", "Age", "Gender", "Email"};
-                    for (String managingStaffEditableDetail : managingStaffEditableDetails) {
-                        System.out.printf("New %s: ", managingStaffEditableDetail);
+
+                    List<String> defaultStaffDetails = employee.defaultStaffDetails(empID);
+
+                    String[] editableDetails = {"Name", "Age", "Gender", "Email"};
+                    for (int a = 0; a < editableDetails.length; a ++){
+                        System.out.printf("New %s: ", editableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")){
-                            managingStaffNewDetails.add("");
-                        } else {
-                            managingStaffNewDetails.add(userInput);
+                            editableDetails[a] = defaultStaffDetails.get(a + 1);
+                        }else{
+                            editableDetails[a] = userInput;
                         }
                     }
-                    employee.editStaffDetails(empID, managingStaffNewDetails);
+
+                    employee = new ManagingStaff(empID, editableDetails[0], Integer.parseInt(editableDetails[1]),
+                            editableDetails[2], editableDetails[3]);
+                    ManagingStaff managingStaff = (ManagingStaff) employee;
+                    managingStaff.editStaffDetails(managingStaff);
                 }
-                else if(empID.contains("DS")){
-                    Employee employee = new DeliveryStaff();
-                    employee.viewStaffDetails(empID);
+                else if(empID.startsWith("DS")){
+                    employee = new DeliveryStaff();
+                    employee.displayStaffDetails(empID);
                     System.out.println("-----------------------");
                     Scanner.nextLine();
-                    List<String> deliveryStaffNewDetails = new ArrayList<>();
-                    deliveryStaffNewDetails.add(empID);
-                    String[] deliveryStaffEditableDetails = {"Name", "Age", "Gender", "Email", "Vehicle Brand",
-                            "Vehicle" +
-                            " " +
-                            "Plate " +
-                            "NO"};
-                    for (String deliveryStaffEditableDetail : deliveryStaffEditableDetails) {
-                        System.out.printf("New %s: ", deliveryStaffEditableDetail);
+
+                    List<String> defaultStaffDetails = employee.defaultStaffDetails(empID);
+
+                    String[] staffEditableDetails = {"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                            "Vehicle Plate No"};
+                    for (int a = 0; a < staffEditableDetails.length; a ++){
+                        System.out.printf("New %s: ", staffEditableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")){
-                            deliveryStaffNewDetails.add("");
-                        } else {
-                            deliveryStaffNewDetails.add(userInput);
+                            staffEditableDetails[a] = defaultStaffDetails.get(a + 1);
+                        }else{
+                            staffEditableDetails[a] = userInput;
                         }
                     }
-                    employee.editStaffDetails(empID, deliveryStaffNewDetails);
+
+                    employee = new DeliveryStaff(empID, staffEditableDetails[0],
+                            Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                            staffEditableDetails[3], staffEditableDetails[4], staffEditableDetails[5]);
+                    DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+                    deliveryStaff.editStaffDetails(deliveryStaff);
                 }
                 staffAccountSelfCLI(empID);
                 break;
@@ -221,8 +238,7 @@ public class Main {
                 System.out.println("X        Item           X");
                 break;
         }
-
-        System.out.println("X      Management       X");
+        System.out.println("X       Management      X");
         System.out.println("X-----------------------X");
         System.out.println("X       [1] Search      X");
         System.out.println("X       [2] Add         X");
@@ -242,22 +258,16 @@ public class Main {
                     System.out.println("Alert: ID does not exist!");
                     managingStaffManagementCLI(idType);
                     break;
-                }else if(searchID.contains("MS")){
-                    employee = new ManagingStaff();
-                    Employee.account.viewSelfAccount(searchID);
+                }else if(searchID.startsWith("MS") || searchID.startsWith("DS")){
+                    employee.viewSelfAccount(searchID);
                     System.out.println("-----------------------");
-                    employee.viewStaffDetails(searchID);
-                }else if(searchID.contains("DS")){
-                    employee = new DeliveryStaff();
-                    Employee.account.viewSelfAccount(searchID);
-                    System.out.println("-----------------------");
-                    employee.viewStaffDetails(searchID);
-                }else if(searchID.contains("CS")){
+                    employee.displayStaffDetails(searchID);
+                }else if(searchID.startsWith("CS")){
                     Customer customer = new Customer();
                     System.out.println("ID: " + searchID);
                     System.out.println("-----------------------");
                     customer.viewCustDetails(searchID);
-                }else if(searchID.contains("IT")){
+                }else if(searchID.startsWith("IT")){
                     Item item = new Item();
                     System.out.println("ID: " + searchID);
                     System.out.println("-----------------------");
@@ -269,31 +279,29 @@ public class Main {
             case 2:
                 // Add new Account
                 System.out.print("New ID: ");
-                String newEmpID = Scanner.next();
+                String addID = Scanner.next();
 
                 String newPassword = "";
                 String[] addableDetails = {};
 
 
-                if ((newEmpID.contains("MS") || newEmpID.contains("DS")) && !idExistVerification(newEmpID, idType)){
+                if ((addID.startsWith("MS") || addID.startsWith("DS")) && !idExistVerification(addID, idType)){
                     employee = new ManagingStaff();
                     System.out.print("New Password: ");
                     newPassword = Scanner.next();
                     employee = new ManagingStaff();
 
-                    if(newEmpID.contains("MS")){
+                    if(addID.startsWith("MS")){
                         addableDetails = new String[]{"Name", "Age", "Gender", "Email"};
                     }
-                    else if(newEmpID.contains("DS")){
-                        addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand", "Vehicle " +
-                                "Plate" +
-                                " " +
-                                "NO"};
+                    else if(addID.startsWith("DS")){
+                        addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                                "Vehicle Plate NO"};
                     }
 
-                }else if (newEmpID.contains("CS") && !idExistVerification(newEmpID, idType)){
+                }else if (addID.startsWith("CS") && !idExistVerification(addID, idType)){
                     addableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
-                }else if (newEmpID.contains("IT") && !idExistVerification(newEmpID, idType)){
+                }else if (addID.startsWith("IT") && !idExistVerification(addID, idType)){
                     addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                 }else{
                     System.out.println("Alert: ID input not valid or exist!");
@@ -301,33 +309,58 @@ public class Main {
                     break;
                 }
 
-                // add data into new list
+
                 System.out.println("-----------------------");
                 Scanner.nextLine();
-                List<String> newDetails = new ArrayList<>();
-                newDetails.add(newEmpID);
-                for (String addableDetail : addableDetails) {
-                    System.out.printf("New %s: ", addableDetail);
+                List<String> defaultStaffDetails = employee.defaultStaffDetails(addID);
+
+                for (int a = 0; a < addableDetails.length; a ++){
+                    System.out.printf("New %s: ", addableDetails[a]);
                     String userInput = Scanner.nextLine();
-                    while (userInput.equals("")){
-                        System.out.println("Warning: Field cannot be empty!");
-                        System.out.printf("New %s: ", addableDetail);
-                        userInput = Scanner.nextLine();
+                    if (userInput.equals("")){
+                        addableDetails[a] = defaultStaffDetails.get(a + 1);
+                    }else{
+                        addableDetails[a] = userInput;
                     }
-                    newDetails.add(userInput);
                 }
 
+
                 // pass values
-                ManagingStaff managingStaff = new ManagingStaff();
                 switch(idType) {
                     case STAFF:
-                        managingStaff.addEmpAccount(newEmpID, newPassword, newDetails);
+                        if (addID.startsWith("MS")){
+                            employee = new ManagingStaff(addID, addableDetails[0],
+                                    Integer.parseInt(addableDetails[1]), addableDetails[2],
+                                    addableDetails[3]);
+                            ManagingStaff managingStaff = (ManagingStaff) employee;
+                            managingStaff.addEmpAccount(addID, newPassword, managingStaff);
+                        } else if(addID.startsWith("DS")){
+                            employee = new DeliveryStaff(addID, addableDetails[0],
+                                    Integer.parseInt(addableDetails[1]), addableDetails[2], addableDetails[3],
+                                    addableDetails[4], addableDetails[5]);
+                            DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+
+                            // instantiate to access addEmpAccount method
+                            employee = new ManagingStaff();
+                            ManagingStaff managingStaff = (ManagingStaff) employee;
+                            managingStaff.addEmpAccount(addID, newPassword, deliveryStaff);
+                        }
                         break;
                     case CUSTOMER:
-                        managingStaff.addCustDetails(newDetails);
+                        Customer customer = new Customer(addID, addableDetails[0], addableDetails[1],
+                                addableDetails[2], addableDetails[3]);
+
+                        employee = new ManagingStaff();
+                        ManagingStaff managingStaff = (ManagingStaff) employee;
+                        managingStaff.addCustDetails(customer);
                         break;
                     case ITEM:
-                        managingStaff.addItemDetails(newDetails);
+                        Item item = new Item(addID, addableDetails[0], Integer.parseInt(addableDetails[1]),
+                                Double.parseDouble(addableDetails[2]), addableDetails[3], addableDetails[4]);
+
+                        employee = new ManagingStaff();
+                        ManagingStaff managingStaff1 = (ManagingStaff) employee;
+                        managingStaff1.addItemDetails(item);
                         break;
                 }
 
@@ -336,65 +369,83 @@ public class Main {
             case 3:
                 System.out.print("Edit ID: ");
                 String editID = Scanner.next();
-                String[] editableDetails = {};
+                String[] staffEditableDetails = {};
+                List<String> defaultDetails = new ArrayList<>();
 
                 if(!idExistVerification(editID, idType)){
-                    System.out.println("Alert: Employee ID does not exist!");
+                    System.out.println("Alert: ID does not exist!");
                     managingStaffManagementCLI(idType);
                     break;
-                }else if(editID.contains("MS")){
+                }else if(editID.startsWith("MS")){
+                    staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email"};
                     employee = new ManagingStaff();
-                    editableDetails = new String[]{"Name", "Age", "Gender", "Email"};
-                    employee.viewStaffDetails(editID);
-                    System.out.println("-----------------------");
-                }else if(editID.contains("DS")){
+                    defaultDetails = employee.defaultStaffDetails(editID);
+                    employee.displayStaffDetails(editID);
+                }else if(editID.startsWith("DS")){
+                    staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                            "Vehicle Plate NO"};
                     employee = new DeliveryStaff();
-                    editableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand", "Vehicle Plate " +
-                            "NO"};
-                    employee.viewStaffDetails(editID);
-                    System.out.println("-----------------------");
-                }else if(editID.contains("CS")){
+                    defaultDetails = employee.defaultStaffDetails(editID);
+                    employee.displayStaffDetails(editID);
+                }else if(editID.startsWith("CS")){
+                    staffEditableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
                     Customer customer = new Customer();
-                    editableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
+                    defaultDetails = customer.defaultCustomerDetails(editID);
                     customer.viewCustDetails(editID);
-                    System.out.println("-----------------------");
-                }else if(editID.contains("IT")){
+                }else if(editID.startsWith("IT")){
+                    staffEditableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                     Item item = new Item();
-                    editableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
+                    defaultDetails = item.defaultItemDetails(editID);
                     item.viewItemDetails(editID);
-                    System.out.println("-----------------------");
                 }
 
+                System.out.println("-----------------------");
                 Scanner.nextLine();
-                List<String> newDetails1 = new ArrayList<>();
-                newDetails1.add(editID);
-                for (String editableDetail : editableDetails) {
-                    System.out.printf("New %s: ", editableDetail);
-                    String userInput = Scanner.nextLine();
 
+                for (int a = 0; a < staffEditableDetails.length; a ++){
+                    System.out.printf("New %s: ", staffEditableDetails[a]);
+                    String userInput = Scanner.nextLine();
                     if (userInput.equals("")){
-                        newDetails1.add("");
-                    } else {
-                        newDetails1.add(userInput);
+                        staffEditableDetails[a] = defaultDetails.get(a + 1);
+                    }else{
+                        staffEditableDetails[a] = userInput;
                     }
                 }
 
                 switch(idType) {
                     case STAFF:
-                        employee.editStaffDetails(editID, newDetails1);
+                        if (editID.startsWith("MS")){
+                            employee = new ManagingStaff(editID, staffEditableDetails[0],
+                                    Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                                    staffEditableDetails[3]);
+                            ManagingStaff managingStaff1 = (ManagingStaff) employee;
+                            managingStaff1.editStaffDetails(managingStaff1);
+                        }else if (editID.startsWith("DS")){
+                            employee = new DeliveryStaff(editID, staffEditableDetails[0],
+                                    Integer.parseInt(staffEditableDetails[1]), staffEditableDetails[2],
+                                    staffEditableDetails[3], staffEditableDetails[4], staffEditableDetails[5]);
+                            DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+                            deliveryStaff.editStaffDetails(deliveryStaff);
+                        }
                         break;
                     case CUSTOMER:
+                        Customer customer = new Customer(editID, staffEditableDetails[0], staffEditableDetails[1],
+                                staffEditableDetails[2], staffEditableDetails[3]);
+
                         employee = new ManagingStaff();
                         ManagingStaff managingStaff1 = (ManagingStaff) employee;
-                        managingStaff1.editCustDetails(editID, newDetails1);
+                        managingStaff1.editCustDetails(customer);
                         break;
                     case ITEM:
+                        Item item = new Item(editID, staffEditableDetails[0], Integer.parseInt(staffEditableDetails[1]),
+                                Double.parseDouble(staffEditableDetails[2]), staffEditableDetails[3],
+                                staffEditableDetails[4]);
+
                         employee = new ManagingStaff();
                         ManagingStaff managingStaff2 = (ManagingStaff) employee;
-                        managingStaff2.editItemDetails(editID, newDetails1);
+                        managingStaff2.editItemDetails(item);
                         break;
                 }
-
 
                 managingStaffManagementCLI(idType);
                 break;
@@ -407,11 +458,11 @@ public class Main {
 
                 if(!idExistVerification(removeID, idType)){
                     System.out.println("Alert: Employee ID does not exist!");
-                } else if(removeID.contains("MS") || removeID.contains("DS")){
+                } else if(removeID.startsWith("MS") || removeID.startsWith("DS")){
                     managingStaff1.removeEmpAccount(removeID);
-                } else if(removeID.contains("CS")){
+                } else if(removeID.startsWith("CS")){
                     managingStaff1.removeCustDetails(removeID);
-                } else if(removeID.contains("IT")){
+                } else if(removeID.startsWith("IT")){
                     managingStaff1.removeItemDetails(removeID);
                 }
 
@@ -425,7 +476,7 @@ public class Main {
         }
     }
 
-    public static void managingStaffOrderCLI(){
+    public static void managingStaffOrderCLI(String empID){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.println("X         Order         X");
         System.out.println("X       Management      X");
@@ -441,21 +492,126 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch(intUserChoice){
             case 1:
-                managingStaffOrderCLI();
+
+                managingStaffOrderCLI(empID);
                 break;
             case 2:
-                managingStaffOrderCLI();
+                Order order = new Order();
+                String newOrderID = order.generateOrderID();
+                boolean exit = false;
+
+                // Retrieve Local Date Time
+                String currentLocalDateTime = customDateTimePrompt();
+
+                // Customer ID Input and Verification
+                // Display customer ID and name for selection purpose
+                Customer customer = new Customer();
+                customer.displayLimitedCustDetails();
+                System.out.print("Customer ID: ");
+                String customerID = Scanner.next();
+                while((!idExistVerification(customerID, idType.CUSTOMER)) || !(customerID.startsWith("CS")) || (customerID.isBlank())){
+                    System.out.println("Warning: Customer ID does not Exist or not Valid!");
+                    System.out.print("Customer ID: ");
+                    customerID = Scanner.next();
+                }
+                customer = new Customer(customerID);
+
+                // Item ID Input and Verification
+                Item item = new Item();
+                item.displayLimitedItemDetails();
+                System.out.print("Item ID: ");
+                String itemID = Scanner.next();
+                int itemQuantity = 0;
+                while((!idExistVerification(itemID, idType.ITEM)) || !(itemID.startsWith("IT")) || (itemID.isBlank()) || !(item.modifyItemQuantity(itemID, itemQuantity))){
+                    System.out.println("Warning: Item ID does not Exist or out of stock!");
+                    System.out.print("Item ID: ");
+                    itemID = Scanner.next();
+                }
+
+                // Item Quantity Input and Verification
+                while(!exit || !(item.modifyItemQuantity(itemID, itemQuantity))){
+                    try{
+                        Scanner.nextLine();
+                        System.out.print("Item Quantity: ");
+                        itemQuantity = Scanner.nextInt();
+                        if(itemQuantity <= 0){
+                            System.out.println("Warning: Quantity cannot be less than 1!");
+                        }else{
+                            exit = true;
+                        }
+                    } catch (InputMismatchException e){
+                        System.out.println("Warning: Quantity Must be an Integer value!");
+                    }
+                }exit = false;
+                item = new Item(itemID, itemQuantity);
+
+                // Delivery ID Input and Verification // Association between Delivery and Order
+                // Auto generated
+                System.out.print("Create a delivery [y/n]? ");
+                String deliveryNeeded = Scanner.next();
+                Delivery delivery;
+                String DeliveryID = "";
+                while(!exit){
+                    switch(deliveryNeeded.toLowerCase()){
+                        case "y":
+                            DeliveryStaff deliveryStaff = new DeliveryStaff();
+                            deliveryStaff.displayLimitedDeliveryStaffDetails();
+                            System.out.print("Delivery Staff ID: ");
+                            String deliveryStaffID = Scanner.next();
+                            while((!idExistVerification(deliveryStaffID, idType.STAFF)) || !(deliveryStaffID.startsWith("DS")) || (deliveryStaffID.isBlank())){
+                                System.out.println("Warning: Delivery Staff ID does not Exist or not Valid!");
+                                System.out.print("Delivery Staff ID: ");
+                                deliveryStaffID = Scanner.next();
+                            }
+                            deliveryStaff = new DeliveryStaff(deliveryStaffID);
+
+                            delivery = new Delivery();
+                            DeliveryID = delivery.generateDeliveryID();
+                            delivery = new Delivery(DeliveryID, currentLocalDateTime, deliveryStaff.getEmpID(),
+                                    customerID, item);
+                            delivery.add();
+
+                            exit = true;
+                            break;
+                        case "n":
+                            exit = true;
+                            System.out.println("Alert: No delivery is created!\n");
+                            break;
+                        default:
+                            System.out.println("Warning: Kindly Provide valid Input!");
+                            break;
+                    }
+                }
+
+                // Association between managingStaff and order
+                ManagingStaff managingStaff = new ManagingStaff(empID);
+
+                switch(deliveryNeeded.toLowerCase()){
+                    case "y":
+                        order = new Order(newOrderID, currentLocalDateTime, customer, DeliveryID, item,
+                                managingStaff.getEmpID(), false);
+                        break;
+                    case "n":
+                        order = new Order(newOrderID, currentLocalDateTime, customer, item, managingStaff.getEmpID(),
+                                false);
+                        break;
+                }
+                order.add();
+
+                managingStaffOrderCLI(empID);
                 break;
             case 3:
-                managingStaffOrderCLI();
+
+
+                managingStaffOrderCLI(empID);
                 break;
             case 4:
-                managingStaffOrderCLI();
+                managingStaffOrderCLI(empID);
                 break;
             case 5:
                 break;
             default:
-                managingStaffOrderCLI();
+                managingStaffOrderCLI(empID);
                 break;
         }
     }
@@ -512,6 +668,7 @@ public class Main {
     }
 
     private static Boolean idExistVerification(String ID, idType idType){
+
         switch(idType){
             case STAFF:
                 Account account = new Account();
@@ -531,6 +688,15 @@ public class Main {
                     }
                 }
                 break;
+            case ORDER:
+                Order order = new Order();
+                List<Order> orders = order.getAllOrder();
+                for (Order order1: orders){
+                    if(order1.getOrderID().equals(ID)){
+                        return true;
+                    }
+                }
+                break;
             case ITEM:
                 Item item = new Item();
                 List<Item> items = item.getAllItemDetails();
@@ -540,8 +706,53 @@ public class Main {
                     }
                 }
                 break;
+            case DELIVERY:
+                Delivery delivery = new Delivery();
+                List<Delivery> deliveries = delivery.getAllDelivery();
+                for (Delivery delivery1: deliveries){
+                    if(delivery1.getDeliveryID().equals(ID)){
+                        return true;
+                    }
+                }
+                break;
         }
         return false;
+    }
+
+    private static String customDateTimePrompt(){
+        boolean exit = false;
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime currentLocalDateTime = LocalDateTime.now();
+        System.out.println("Current Date Time: " + dateTimeFormatter.format(currentLocalDateTime));
+        while(!exit) {
+            System.out.print("Custom Date Time [y/n]? ");
+            String userRespond = Scanner.next();
+            switch (userRespond.toLowerCase()) {
+                case "y":
+                    try {
+                        System.out.print("Date (dd/MM/yyyy): ");
+                        String customDate = Scanner.next();
+                        System.out.print("Time (HH:mm:ss): ");
+                        String customTime = Scanner.next();
+                        String customDateTime = customDate + " " + customTime;
+                        currentLocalDateTime = LocalDateTime.parse(customDateTime, dateTimeFormatter);
+                        System.out.println("Custom Date Time: " + dateTimeFormatter.format(currentLocalDateTime));
+                        exit = true;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Warning: Date Time input format error!");
+                        //e.printStackTrace();
+                    }
+                    break;
+                case "n":
+                    System.out.println("Alert: Default Date Time used!");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Warning: Kindly Provide valid Input!");
+                    break;
+            }
+        }
+        return dateTimeFormatter.format(currentLocalDateTime);
     }
 
     public static void main(String[] args) {
