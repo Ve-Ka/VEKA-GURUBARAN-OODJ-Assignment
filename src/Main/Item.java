@@ -62,6 +62,16 @@ public class Item {
         }
     }
 
+    protected void displayLimitedItemDetails(){
+        List<Item> items = getAllItemDetails();
+        System.out.println("\nAll item details");
+        for (Item item: items){
+            System.out.printf("%s|%s|%d|RM%.2f|%s|%s\n", item.getItemID(), item.getItemName(), item.getItemQuantity(),
+                    item.getItemPrice(), item.getItemSupplier(), item.getItemDescription());
+        }
+        System.out.println("");
+    }
+
     protected List<String> defaultItemDetails(String itemID){
         List<Item> originalDetails = getAllItemDetails();
         List<String> defaultDetails = new ArrayList<>();

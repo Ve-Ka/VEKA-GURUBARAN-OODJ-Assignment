@@ -58,6 +58,15 @@ public class Customer {
         }
     }
 
+    protected void displayLimitedCustDetails(){
+        List<Customer> customers = getAllCustDetails();
+        System.out.println("\nAll customer details");
+        for (Customer customer: customers){
+            System.out.printf("%S|%S|%s\n", customer.getCustID(), customer.getCustName(), customer.getCustPhoneNo());
+        }
+        System.out.println("");
+    }
+
     protected List<String> defaultCustomerDetails(String custID){
         List<Customer> originalDetails = getAllCustDetails();
         List<String> defaultDetails = new ArrayList<>();

@@ -1,5 +1,6 @@
 package Main;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,7 +11,7 @@ import java.util.List;
 
 public class Order implements Task{
     private String orderID;
-    private LocalDateTime orderDateTime;
+    private String orderDateTime;
     private String deliveryID;
     private String managingStaffID;
     private boolean orderCompletion;
@@ -25,9 +26,8 @@ public class Order implements Task{
 
     public Order(){}
 
-    public Order(String orderID, LocalDateTime orderDateTime, Customer customer, String deliveryID, Item item,
-                 String managingStaffID, boolean orderCompletion) {
-        this.orderID = orderID;
+    public Order(String orderDateTime, Customer customer, String deliveryID, Item item, String managingStaffID,
+                 boolean orderCompletion) {
         this.orderDateTime = orderDateTime;
         this.customer = customer;
         this.deliveryID = deliveryID;
@@ -44,7 +44,21 @@ public class Order implements Task{
 
     @Override
     public void add() {
+        List<Order> defaultList = getAllOrder();
+        String newOrderID = String.format("OD%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                - 1).getDeliveryID().replaceAll("OD", ""))) + 1));
 
+        try{
+            // Write to Delivery File
+            FileWriter WriteData = new FileWriter(orderFile, true);
+            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newOrderID, orderDateTime, customer.getCustID(),
+                    item.getItemID(), deliveryID, managingStaffID, orderCompletion));
+            WriteData.close();
+
+            System.out.println("Alert: New Delivery Created!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -67,12 +81,12 @@ public class Order implements Task{
                 String[] rec = record.split("\\|");
                 Order order = new Order();
                 order.setOrderID(rec[0]);
-                order.setOrderDateTime(LocalDateTime.parse(rec[1],dateTimeFormatter));
+                order.setOrderDateTime(rec[1]);
                 customer = new Customer(rec[2]);
                 order.setCustomer(customer);
-                order.setDeliveryID(rec[3]);
-                item = new Item(rec[4]);
+                item = new Item(rec[3]);
                 order.setItem(item);
+                order.setDeliveryID(rec[4]);
                 order.setManagingStaffID(rec[5]);
                 order.setOrderCompletion(Boolean.parseBoolean(rec[6]));
                 orderList.add(order);
@@ -92,11 +106,11 @@ public class Order implements Task{
         this.orderID = orderID;
     }
 
-    public LocalDateTime getOrderDateTime() {
+    public String getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(LocalDateTime orderDateTime) {
+    public void setOrderDateTime(String orderDateTime) {
         this.orderDateTime = orderDateTime;
     }
 
@@ -142,5 +156,18 @@ public class Order implements Task{
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderID='" + orderID + '\'' +
+                ", orderDateTime=" + orderDateTime +
+                ", deliveryID='" + deliveryID + '\'' +
+                ", managingStaffID='" + managingStaffID + '\'' +
+                ", orderCompletion=" + orderCompletion +
+                ", customer=" + customer +
+                ", item=" + item +
+                '}';
     }
 }

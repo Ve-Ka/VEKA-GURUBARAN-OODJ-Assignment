@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Main {
     private static java.util.Scanner Scanner = new Scanner(System.in);
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static Employee employee;
 
     private enum idType{
@@ -495,46 +494,21 @@ public class Main {
                 break;
             case 2:
                 // Order ID Input and Verification
-                System.out.print("Order ID: ");
-                String orderID = Scanner.next();
-                while((idExistVerification(orderID, idType.ORDER)) || !(orderID.startsWith("OD")) || (orderID.isBlank())){
-                    System.out.println("Alert: Order ID Exist or not Valid!");
-                    System.out.print("Order ID: ");
-                    orderID = Scanner.next();
-                }
+//                System.out.print("Order ID: ");
+//                String orderID = Scanner.next();
+//                while((idExistVerification(orderID, idType.ORDER)) || !(orderID.startsWith("OD")) || (orderID.isBlank())){
+//                    System.out.println("Alert: Order ID Exist or not Valid!");
+//                    System.out.print("Order ID: ");
+//                    orderID = Scanner.next();
+//                }
 
                 // Retrieve Local Date Time
-                LocalDateTime currentLocalDateTime = LocalDateTime.now();
-                System.out.println("Current Date Time: " + dateTimeFormatter.format(currentLocalDateTime));
-                boolean exit = false;
-                while(!exit){
-                    System.out.print("Custom Date Time [y/n]? ");
-                    String userRespond = Scanner.next();
-                    switch (userRespond.toLowerCase()){
-                        case "y":
-                            try{
-                                System.out.print("Date (dd/MM/yyyy): ");
-                                String customDate = Scanner.next();
-                                System.out.print("Time (HH:mm:ss): ");
-                                String customTime = Scanner.next();
-                                String customDateTime = customDate + " " + customTime;
-                                currentLocalDateTime = LocalDateTime.parse(customDateTime, dateTimeFormatter);
-                            } catch (DateTimeParseException e) {
-                                System.out.println("Warning: Date Time input format error!");
-                                //e.printStackTrace();
-                            }
-                            break;
-                        case "n":
-                            System.out.println("Alert: Default Date Time used!");
-                            exit = true;
-                            break;
-                        default:
-                            System.out.println("Warning: Kindly Provide valid Input!");
-                            break;
-                    }
-                }
+                String currentLocalDateTime = customDateTimePrompt();
 
                 // Customer ID Input and Verification
+                // Display customer ID and name for selection purpose
+                Customer customer = new Customer();
+                customer.displayLimitedCustDetails();
                 System.out.print("Customer ID: ");
                 String customerID = Scanner.next();
                 while((!idExistVerification(customerID, idType.CUSTOMER)) || !(customerID.startsWith("CS")) || (customerID.isBlank())){
@@ -542,20 +516,11 @@ public class Main {
                     System.out.print("Customer ID: ");
                     customerID = Scanner.next();
                 }
-                Customer customer = new Customer(customerID);
-
-                // Delivery ID Input and Verification // Association between Delivery and Order
-                System.out.print("Delivery ID: ");
-                String deliveryID = Scanner.next();
-                while((idExistVerification(deliveryID, idType.DELIVERY)) || !(deliveryID.startsWith("DE")) || (deliveryID.isBlank())){
-                    System.out.println("Alert: Delivery Staff ID Exist or not Valid!");
-                    System.out.print("Delivery Staff ID: ");
-                    deliveryID = Scanner.next();
-                }
-                Delivery delivery = new Delivery(deliveryID);
-
+                customer = new Customer(customerID);
 
                 // Item ID Input and Verification
+                Item item = new Item();
+                item.displayLimitedItemDetails();
                 System.out.print("Item ID: ");
                 String itemID = Scanner.next();
                 while((!idExistVerification(itemID, idType.ITEM)) || !(itemID.startsWith("IT")) || (itemID.isBlank())){
@@ -563,12 +528,54 @@ public class Main {
                     System.out.print("Item ID: ");
                     itemID = Scanner.next();
                 }
-                Item item = new Item(itemID);
+                item = new Item(itemID);
+
+
+                // Delivery ID Input and Verification // Association between Delivery and Order
+                // Auto generated
+                System.out.print("Create a delivery [y/n]? ");
+                String deliveryNeeded = Scanner.next();
+                boolean exit = false;
+                while(!exit){
+                    switch(deliveryNeeded){
+                        case "y":
+                            System.out.print("Delivery Staff ID: ");
+                            String deliveryStaffID = Scanner.next();
+                            while((!idExistVerification(deliveryStaffID, idType.STAFF)) || !(deliveryStaffID.startsWith("DS")) || (deliveryStaffID.isBlank())){
+                                System.out.println("Alert: Delivery Staff ID does not Exist or not Valid!");
+                                System.out.print("Delivery Staff ID: ");
+                                deliveryStaffID = Scanner.next();
+                                exit = true;
+                            }
+                            DeliveryStaff deliveryStaff = new DeliveryStaff(deliveryStaffID);
+
+                            Delivery delivery = new Delivery(currentLocalDateTime, deliveryStaff.getEmpID(), customerID, item);
+                            delivery.add();
+                            break;
+                        case "n":
+                            exit = true;
+                            System.out.println("Alert: No delivery is created!");
+                            break;
+                        default:
+                            System.out.println("Warning: Kindly Provide valid Input!");
+                            break;
+                    }
+                }
+
+                Delivery delivery = new Delivery();
+
+                System.out.print("Delivery ID: ");
+                String deliveryID = Scanner.next();
+                while((idExistVerification(deliveryID, idType.DELIVERY)) || !(deliveryID.startsWith("DE")) || (deliveryID.isBlank())){
+                    System.out.println("Alert: Delivery ID Exist or not Valid!");
+                    System.out.print("Delivery ID: ");
+                    deliveryID = Scanner.next();
+                }
 
                 // Association between managingStaff and order
                 ManagingStaff managingStaff = new ManagingStaff(empID);
 
-                Order order = new Order(orderID, currentLocalDateTime, customer, delivery.getDeliveryID(), item,
+                Order order = new Order(currentLocalDateTime, customer, delivery.getDeliveryID(), item,
                         managingStaff.getEmpID(), false);
                 order.add();
 
@@ -644,55 +651,89 @@ public class Main {
     }
 
     private static Boolean idExistVerification(String ID, idType idType){
-        if(!ID.startsWith("*")){
-            switch(idType){
-                case STAFF:
-                    Account account = new Account();
-                    List<Account> accounts = account.getAllEmpCredential();
-                    for (Account account1: accounts) {
-                        if (account1.getEmpID().equals(ID)) {
-                            return true;
-                        }
+
+        switch(idType){
+            case STAFF:
+                Account account = new Account();
+                List<Account> accounts = account.getAllEmpCredential();
+                for (Account account1: accounts) {
+                    if (account1.getEmpID().equals(ID)) {
+                        return true;
                     }
-                    break;
-                case CUSTOMER:
-                    Customer customer = new Customer();
-                    List<Customer> customers = customer.getAllCustDetails();
-                    for (Customer customer1: customers){
-                        if(customer1.getCustID().equals(ID)){
-                            return true;
-                        }
+                }
+                break;
+            case CUSTOMER:
+                Customer customer = new Customer();
+                List<Customer> customers = customer.getAllCustDetails();
+                for (Customer customer1: customers){
+                    if(customer1.getCustID().equals(ID)){
+                        return true;
                     }
-                    break;
-                case ORDER:
-                    Order order = new Order();
-                    List<Order> orders = order.getAllOrder();
-                    for (Order order1: orders){
-                        if(order1.getOrderID().equals(ID)){
-                            return true;
-                        }
+                }
+                break;
+            case ORDER:
+                Order order = new Order();
+                List<Order> orders = order.getAllOrder();
+                for (Order order1: orders){
+                    if(order1.getOrderID().equals(ID)){
+                        return true;
                     }
-                    break;
-                case ITEM:
-                    Item item = new Item();
-                    List<Item> items = item.getAllItemDetails();
-                    for (Item item1: items){
-                        if(item1.getItemID().equals(ID)){
-                            return true;
-                        }
+                }
+                break;
+            case ITEM:
+                Item item = new Item();
+                List<Item> items = item.getAllItemDetails();
+                for (Item item1: items){
+                    if(item1.getItemID().equals(ID)){
+                        return true;
                     }
-                    break;
-                case DELIVERY:
-                    Delivery delivery = new Delivery();
-                    List<Delivery> deliveries = delivery.getAllDelivery();
-                    for (Delivery delivery1: deliveries){
-                        if(delivery1.getDeliveryID().equals(ID)){
-                            return true;
-                        }
+                }
+                break;
+            case DELIVERY:
+                Delivery delivery = new Delivery();
+                List<Delivery> deliveries = delivery.getAllDelivery();
+                for (Delivery delivery1: deliveries){
+                    if(delivery1.getDeliveryID().equals(ID)){
+                        return true;
                     }
-            }
+                }
+                break;
         }
         return false;
+    }
+
+    private static String customDateTimePrompt(){
+        boolean exit = false;
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime currentLocalDateTime = LocalDateTime.now();
+        System.out.println("Current Date Time: " + dateTimeFormatter.format(currentLocalDateTime));
+        while(!exit) {
+            System.out.print("Custom Date Time [y/n]? ");
+            String userRespond = Scanner.next();
+            switch (userRespond.toLowerCase()) {
+                case "y":
+                    try {
+                        System.out.print("Date (dd/MM/yyyy): ");
+                        String customDate = Scanner.next();
+                        System.out.print("Time (HH:mm:ss): ");
+                        String customTime = Scanner.next();
+                        String customDateTime = customDate + " " + customTime;
+                        currentLocalDateTime = LocalDateTime.parse(customDateTime, dateTimeFormatter);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Warning: Date Time input format error!");
+                        //e.printStackTrace();
+                    }
+                    break;
+                case "n":
+                    System.out.println("Alert: Default Date Time used!");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Warning: Kindly Provide valid Input!");
+                    break;
+            }
+        }
+        return dateTimeFormatter.format(currentLocalDateTime);
     }
 
     public static void main(String[] args) {

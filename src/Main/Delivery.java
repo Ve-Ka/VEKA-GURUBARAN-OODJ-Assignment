@@ -1,5 +1,6 @@
 package Main;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,8 +11,7 @@ import java.util.List;
 
 public class Delivery implements Task{
     private String deliveryID;
-    private LocalDateTime deliveryDateTime;
-    private String orderID;
+    private String deliveryDateTime;
     private String deliveryStaffID;
     private String custID;
 
@@ -28,11 +28,8 @@ public class Delivery implements Task{
         this.deliveryID = deliveryID;
     }
 
-    public Delivery(String deliveryID, LocalDateTime deliveryDateTime, String orderID, String deliveryStaffID,
-                    String custID, Item item){
-        this.deliveryID = deliveryID;
+    public Delivery(String deliveryDateTime, String deliveryStaffID, String custID, Item item){
         this.deliveryDateTime = deliveryDateTime;
-        this.orderID = orderID;
         this.deliveryStaffID = deliveryStaffID;
         this.custID = custID;
         this.item = item;
@@ -45,7 +42,21 @@ public class Delivery implements Task{
 
     @Override
     public void add() {
+        List<Delivery> defaultList = getAllDelivery();
+        String newDeliveryID = String.format("DE%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                        - 1).getDeliveryID().replaceAll("DE", ""))) + 1));
 
+        try{
+            // Write to Delivery File
+            FileWriter WriteData = new FileWriter(deliveryFile, true);
+            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newDeliveryID, deliveryDateTime, deliveryStaffID,
+                    custID, item.getItemID()));
+            WriteData.close();
+
+            System.out.println("Alert: New Delivery Created!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -66,11 +77,10 @@ public class Delivery implements Task{
                 String[] rec = record.split("\\|");
                     Delivery delivery = new Delivery();
                     delivery.setDeliveryID(rec[0]);
-                    delivery.setDeliveryDateTime(LocalDateTime.parse(rec[1], dateTimeFormatter));
-                    delivery.setOrderID(rec[2]);
-                    delivery.setDeliveryStaffID(rec[3]);
-                    delivery.setCustID(rec[4]);
-                    item = new Item(rec[5]);
+                    delivery.setDeliveryDateTime(rec[1]);
+                    delivery.setDeliveryStaffID(rec[2]);
+                    delivery.setCustID(rec[3]);
+                    item = new Item(rec[4]);
                     delivery.setItem(item);
                     deliveryList.add(delivery);
             }
@@ -89,20 +99,12 @@ public class Delivery implements Task{
         this.deliveryID = deliveryID;
     }
 
-    public LocalDateTime getDeliveryDateTime() {
+    public String getDeliveryDateTime() {
         return deliveryDateTime;
     }
 
-    public void setDeliveryDateTime(LocalDateTime deliveryDateTime) {
+    public void setDeliveryDateTime(String deliveryDateTime) {
         this.deliveryDateTime = deliveryDateTime;
-    }
-
-    public String getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(String orderID) {
-        this.orderID = orderID;
     }
 
     public String getDeliveryStaffID() {
