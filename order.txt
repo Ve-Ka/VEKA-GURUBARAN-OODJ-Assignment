@@ -1,1 +1,2 @@
-OrderID|OrderDate|OrderTime|CustomerID|OrderStatus
+*OrderID|OrderDateTime|CustomerID|ItemID|DeliveryID|ManagingStaffID|OrderCompleted
+OD0001|20/11/2020 19:10:10|CS0001|IT0001|DE0001|MS0001|false

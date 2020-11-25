@@ -1,3 +1,4 @@
+*CustomerID|Name|Email|PhoneNumber|Address
 CS0001|Liang Yip|liangyip@mail.com|012-234 8917|62, Jalan BRP 7/1A, Selengor
 CS0002|Racher|racher@mail.com|012-459 2394|19, Jalan Cawkit, Selangor
 CS0003|Pavan|pavan@mail.com|012-564 1234|12, Jalan Ipoh, Sabah

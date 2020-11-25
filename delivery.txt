@@ -1,1 +1,1 @@
-DeliveryID|DeliveryDate|DeliveryTime|CustomerName|CustomerAddress|ItemID
+*DeliveryID|DeliveryDateTime|OrderID|DeliveryStaffID|CustID|ItemID

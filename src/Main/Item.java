@@ -18,6 +18,10 @@ public class Item {
 
     public Item(){}
 
+    public Item(String itemID){
+        this.itemID = itemID;
+    }
+
     public Item(String itemID, String itemName, int itemQuantity, double itemPrice, String itemSupplier,
                 String itemDescription) {
         this.itemID = itemID;

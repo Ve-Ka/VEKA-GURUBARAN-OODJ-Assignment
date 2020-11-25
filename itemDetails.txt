@@ -1,3 +1,4 @@
+*ItemID|ItemName|Quantity|Price|Supplier|ItemDescription
 IT0001|Network Interface Card|11|199.90|Dell|NIC for Server
 IT0002|Nvidia GT1030|5|349.90|Nvidia|Graphics Card for Computer
 IT0003|E5-2620V3|21|80.00|Intel|Server CPU

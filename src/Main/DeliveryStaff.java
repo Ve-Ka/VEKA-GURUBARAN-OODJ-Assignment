@@ -14,6 +14,10 @@ public class DeliveryStaff extends Employee{
 
     public DeliveryStaff(){}
 
+    public DeliveryStaff(String empID){
+        super(empID);
+    }
+
     public DeliveryStaff(String empID, String empPassword) {
         super(empID, empPassword);
     }

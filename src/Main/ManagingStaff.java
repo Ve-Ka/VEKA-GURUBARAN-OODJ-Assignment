@@ -11,7 +11,14 @@ import java.util.List;
 public class ManagingStaff extends Employee{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
 
+    // Association
+    private Order order;
+
     public ManagingStaff(){}
+
+    public ManagingStaff(String empID){
+        super(empID);
+    }
 
     public ManagingStaff(String empID, String empPassword) {
         super(empID, empPassword);
@@ -76,7 +83,7 @@ public class ManagingStaff extends Employee{
 
     // modify all staff section
     protected List<ManagingStaff> getAllManagingStaffDetails(){
-            List<ManagingStaff> managingStaffDetailsList = new ArrayList();
+        List<ManagingStaff> managingStaffDetailsList = new ArrayList();
         try {
             List<String> empDetailsList = Files.readAllLines(Paths.get(managingStaffDetailsFile));
             for (String record : empDetailsList){

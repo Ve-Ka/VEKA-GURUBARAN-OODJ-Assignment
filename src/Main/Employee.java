@@ -15,6 +15,10 @@ public abstract class Employee {
     // Static polymorphism (constructor overloading)
     public Employee(){}
 
+    public Employee(String empID){
+        this.empID = empID;
+    }
+
     public Employee(String empID, String empPassword){
         this.account = new Account();
         account.setEmpID(empID);

@@ -11,8 +11,6 @@ public class Account {
     private String empPassword;
     protected final static String empCredentialFile = "empCredential.txt";
 
-    public Account(){}
-
     protected List<Account> getAllEmpCredential(){
         List<Account> accountList = new ArrayList();
         try {
