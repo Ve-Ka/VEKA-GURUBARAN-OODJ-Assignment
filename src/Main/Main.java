@@ -45,6 +45,8 @@ public class Main {
                     if (employee.login()) {
                         deliveryStaffMainCLI(empID);
                     }
+                }else{
+                    System.out.println("Warning: Login ID or Password invalid!");
                 }
                 loginCLI();
                 break;
@@ -497,6 +499,7 @@ public class Main {
                 Order order = new Order();
                 String newOrderID = order.generateOrderID();
                 boolean exit = false;
+
                 // Retrieve Local Date Time
                 String currentLocalDateTime = customDateTimePrompt();
 
@@ -541,7 +544,6 @@ public class Main {
                     }
                 }exit = false;
                 item = new Item(itemID, itemQuantity);
-
 
                 // Delivery ID Input and Verification // Association between Delivery and Order
                 // Auto generated

@@ -42,7 +42,7 @@ public abstract class Employee {
                 return true;
             }
         }
-        System.out.println("Warning: Wrong Credential!");
+        System.out.println("Warning: Invalid Credential!");
         return false;
     }
 
