@@ -1,8 +1,10 @@
 package Main;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,11 @@ public class Item {
 
     public Item(String itemID){
         this.itemID = itemID;
+    }
+
+    public Item(String itemID, int itemQuantity){
+        this.itemID = itemID;
+        this.itemQuantity = itemQuantity;
     }
 
     public Item(String itemID, String itemName, int itemQuantity, double itemPrice, String itemSupplier,
@@ -86,6 +93,38 @@ public class Item {
             }
         }
         return defaultDetails;
+    }
+
+    protected boolean modifyItemQuantity(String itemID, int quantitySold){
+        List<Item> items = getAllItemDetails();
+        for (Item item: items){
+            if (item.itemID.equals(itemID)){
+                if((item.getItemQuantity() < quantitySold) || (item.getItemQuantity() == 0)){
+                    System.out.println("Warning: Quantity requested exceed inventory quantity!");
+                    return false;
+                }else if(quantitySold == 0){
+                    return true;
+                }
+                else{
+                    item.setItemQuantity(item.getItemQuantity() - quantitySold);
+                }
+            }
+        }
+
+        // Write to file
+        try{
+            FileWriter WriteData = new FileWriter(Item.itemDetailsFile);
+            for (Item detail : items) {
+                WriteData.write(String.format("%s|%s|%d|%.2f|%s|%s\n", detail.getItemID(), detail.getItemName(),
+                        detail.getItemQuantity(), detail.getItemPrice(), detail.getItemSupplier(),
+                        detail.getItemDescription()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Item Quantity Updated\n");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return true;
     }
 
     protected String getItemID() {

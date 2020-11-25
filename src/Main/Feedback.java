@@ -4,7 +4,7 @@ public class Feedback implements Task{
 
 
     @Override
-    public void search() {
+    public void search(String ID) {
 
     }
 
@@ -19,7 +19,7 @@ public class Feedback implements Task{
     }
 
     @Override
-    public void remove() {
+    public void remove(String ID) {
 
     }
 }

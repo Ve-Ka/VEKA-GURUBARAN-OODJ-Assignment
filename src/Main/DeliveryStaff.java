@@ -39,6 +39,16 @@ public class DeliveryStaff extends Employee{
         }
     }
 
+    protected void displayLimitedDeliveryStaffDetails(){
+        List<DeliveryStaff> deliveryStaffs = getAllDeliveryStaffDetails();
+        System.out.println("\nAll Delivery Staff details");
+        for (DeliveryStaff deliveryStaff: deliveryStaffs){
+            System.out.printf("%s|%s|%s|%s\n", deliveryStaff.getEmpID(), deliveryStaff.getEmpName(),
+                    deliveryStaff.getVehicleBrand(), deliveryStaff.getVehicleBrand());
+        }
+        System.out.println("");
+    }
+
     @Override
     protected List<String> defaultStaffDetails(String empID) {
         List<DeliveryStaff> originalDetails = getAllDeliveryStaffDetails();

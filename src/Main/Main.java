@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -493,15 +494,9 @@ public class Main {
                 managingStaffOrderCLI(empID);
                 break;
             case 2:
-                // Order ID Input and Verification
-//                System.out.print("Order ID: ");
-//                String orderID = Scanner.next();
-//                while((idExistVerification(orderID, idType.ORDER)) || !(orderID.startsWith("OD")) || (orderID.isBlank())){
-//                    System.out.println("Alert: Order ID Exist or not Valid!");
-//                    System.out.print("Order ID: ");
-//                    orderID = Scanner.next();
-//                }
-
+                Order order = new Order();
+                String newOrderID = order.generateOrderID();
+                boolean exit = false;
                 // Retrieve Local Date Time
                 String currentLocalDateTime = customDateTimePrompt();
 
@@ -512,7 +507,7 @@ public class Main {
                 System.out.print("Customer ID: ");
                 String customerID = Scanner.next();
                 while((!idExistVerification(customerID, idType.CUSTOMER)) || !(customerID.startsWith("CS")) || (customerID.isBlank())){
-                    System.out.println("Alert: Customer ID does not Exist or not Valid!");
+                    System.out.println("Warning: Customer ID does not Exist or not Valid!");
                     System.out.print("Customer ID: ");
                     customerID = Scanner.next();
                 }
@@ -523,38 +518,62 @@ public class Main {
                 item.displayLimitedItemDetails();
                 System.out.print("Item ID: ");
                 String itemID = Scanner.next();
-                while((!idExistVerification(itemID, idType.ITEM)) || !(itemID.startsWith("IT")) || (itemID.isBlank())){
-                    System.out.println("Alert: Item ID does not Exist or not Valid!");
+                int itemQuantity = 0;
+                while((!idExistVerification(itemID, idType.ITEM)) || !(itemID.startsWith("IT")) || (itemID.isBlank()) || !(item.modifyItemQuantity(itemID, itemQuantity))){
+                    System.out.println("Warning: Item ID does not Exist or out of stock!");
                     System.out.print("Item ID: ");
                     itemID = Scanner.next();
                 }
-                item = new Item(itemID);
+
+                // Item Quantity Input and Verification
+                while(!exit || !(item.modifyItemQuantity(itemID, itemQuantity))){
+                    try{
+                        Scanner.nextLine();
+                        System.out.print("Item Quantity: ");
+                        itemQuantity = Scanner.nextInt();
+                        if(itemQuantity <= 0){
+                            System.out.println("Warning: Quantity cannot be less than 1!");
+                        }else{
+                            exit = true;
+                        }
+                    } catch (InputMismatchException e){
+                        System.out.println("Warning: Quantity Must be an Integer value!");
+                    }
+                }exit = false;
+                item = new Item(itemID, itemQuantity);
 
 
                 // Delivery ID Input and Verification // Association between Delivery and Order
                 // Auto generated
                 System.out.print("Create a delivery [y/n]? ");
                 String deliveryNeeded = Scanner.next();
-                boolean exit = false;
+                Delivery delivery;
+                String DeliveryID = "";
                 while(!exit){
-                    switch(deliveryNeeded){
+                    switch(deliveryNeeded.toLowerCase()){
                         case "y":
+                            DeliveryStaff deliveryStaff = new DeliveryStaff();
+                            deliveryStaff.displayLimitedDeliveryStaffDetails();
                             System.out.print("Delivery Staff ID: ");
                             String deliveryStaffID = Scanner.next();
                             while((!idExistVerification(deliveryStaffID, idType.STAFF)) || !(deliveryStaffID.startsWith("DS")) || (deliveryStaffID.isBlank())){
-                                System.out.println("Alert: Delivery Staff ID does not Exist or not Valid!");
+                                System.out.println("Warning: Delivery Staff ID does not Exist or not Valid!");
                                 System.out.print("Delivery Staff ID: ");
                                 deliveryStaffID = Scanner.next();
-                                exit = true;
                             }
-                            DeliveryStaff deliveryStaff = new DeliveryStaff(deliveryStaffID);
+                            deliveryStaff = new DeliveryStaff(deliveryStaffID);
 
-                            Delivery delivery = new Delivery(currentLocalDateTime, deliveryStaff.getEmpID(), customerID, item);
+                            delivery = new Delivery();
+                            DeliveryID = delivery.generateDeliveryID();
+                            delivery = new Delivery(DeliveryID, currentLocalDateTime, deliveryStaff.getEmpID(),
+                                    customerID, item);
                             delivery.add();
+
+                            exit = true;
                             break;
                         case "n":
                             exit = true;
-                            System.out.println("Alert: No delivery is created!");
+                            System.out.println("Alert: No delivery is created!\n");
                             break;
                         default:
                             System.out.println("Warning: Kindly Provide valid Input!");
@@ -562,24 +581,20 @@ public class Main {
                     }
                 }
 
-                Delivery delivery = new Delivery();
-
-                System.out.print("Delivery ID: ");
-                String deliveryID = Scanner.next();
-                while((idExistVerification(deliveryID, idType.DELIVERY)) || !(deliveryID.startsWith("DE")) || (deliveryID.isBlank())){
-                    System.out.println("Alert: Delivery ID Exist or not Valid!");
-                    System.out.print("Delivery ID: ");
-                    deliveryID = Scanner.next();
-                }
-
                 // Association between managingStaff and order
                 ManagingStaff managingStaff = new ManagingStaff(empID);
 
-                Order order = new Order(currentLocalDateTime, customer, delivery.getDeliveryID(), item,
-                        managingStaff.getEmpID(), false);
+                switch(deliveryNeeded.toLowerCase()){
+                    case "y":
+                        order = new Order(newOrderID, currentLocalDateTime, customer, DeliveryID, item,
+                                managingStaff.getEmpID(), false);
+                        break;
+                    case "n":
+                        order = new Order(newOrderID, currentLocalDateTime, customer, item, managingStaff.getEmpID(),
+                                false);
+                        break;
+                }
                 order.add();
-
-                System.out.println(order.toString());
 
                 managingStaffOrderCLI(empID);
                 break;
@@ -719,6 +734,8 @@ public class Main {
                         String customTime = Scanner.next();
                         String customDateTime = customDate + " " + customTime;
                         currentLocalDateTime = LocalDateTime.parse(customDateTime, dateTimeFormatter);
+                        System.out.println("Custom Date Time: " + dateTimeFormatter.format(currentLocalDateTime));
+                        exit = true;
                     } catch (DateTimeParseException e) {
                         System.out.println("Warning: Date Time input format error!");
                         //e.printStackTrace();

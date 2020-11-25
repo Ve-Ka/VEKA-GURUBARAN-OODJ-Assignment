@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +12,10 @@ public class Delivery implements Task{
     private String deliveryDateTime;
     private String deliveryStaffID;
     private String custID;
+    private String custAddress;
 
 
     private final static String deliveryFile = "delivery.txt";
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     // Aggregration
     private Item item;
@@ -28,7 +26,8 @@ public class Delivery implements Task{
         this.deliveryID = deliveryID;
     }
 
-    public Delivery(String deliveryDateTime, String deliveryStaffID, String custID, Item item){
+    public Delivery(String deliveryID, String deliveryDateTime, String deliveryStaffID, String custID, Item item){
+        this.deliveryID = deliveryID;
         this.deliveryDateTime = deliveryDateTime;
         this.deliveryStaffID = deliveryStaffID;
         this.custID = custID;
@@ -36,24 +35,28 @@ public class Delivery implements Task{
     }
 
     @Override
-    public void search() {
+    public void search(String ID) {
 
     }
 
     @Override
     public void add() {
-        List<Delivery> defaultList = getAllDelivery();
-        String newDeliveryID = String.format("DE%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
-                        - 1).getDeliveryID().replaceAll("DE", ""))) + 1));
+        Customer customer = new Customer();
+        List<Customer> customerInfo = customer.getAllCustDetails();
+        for (Customer customers : customerInfo){
+            if (customers.getCustID().equals(custID)){
+                setCustAddress(customers.getCustAddress());
+            }
+        }
 
         try{
             // Write to Delivery File
             FileWriter WriteData = new FileWriter(deliveryFile, true);
-            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newDeliveryID, deliveryDateTime, deliveryStaffID,
-                    custID, item.getItemID()));
+            WriteData.write(String.format("%s|%s|%s|%s|%s|%s|%d\n", deliveryID, deliveryDateTime, deliveryStaffID,
+                    custID, custAddress, item.getItemID(), item.getItemQuantity()));
             WriteData.close();
 
-            System.out.println("Alert: New Delivery Created!");
+            System.out.println("Alert: New Delivery Created!\n");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -65,7 +68,7 @@ public class Delivery implements Task{
     }
 
     @Override
-    public void remove() {
+    public void remove(String ID) {
 
     }
 
@@ -80,7 +83,8 @@ public class Delivery implements Task{
                     delivery.setDeliveryDateTime(rec[1]);
                     delivery.setDeliveryStaffID(rec[2]);
                     delivery.setCustID(rec[3]);
-                    item = new Item(rec[4]);
+                    delivery.setCustAddress(rec[4]);
+                    item = new Item(rec[5], Integer.parseInt(rec[6]));
                     delivery.setItem(item);
                     deliveryList.add(delivery);
             }
@@ -90,6 +94,17 @@ public class Delivery implements Task{
         return deliveryList;
     }
 
+    protected String generateDeliveryID(){
+        List<Delivery> defaultList = getAllDelivery();
+        String newDeliveryID;
+        try{
+            newDeliveryID = String.format("DE%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getDeliveryID().replaceAll("DE", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newDeliveryID = "DE0001";
+        }
+        return newDeliveryID;
+    }
 
     public String getDeliveryID() {
         return deliveryID;
@@ -121,6 +136,14 @@ public class Delivery implements Task{
 
     public void setCustID(String custID) {
         this.custID = custID;
+    }
+
+    public String getCustAddress() {
+        return custAddress;
+    }
+
+    public void setCustAddress(String custAddress) {
+        this.custAddress = custAddress;
     }
 
     public Item getItem() {

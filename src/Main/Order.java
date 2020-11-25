@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +15,6 @@ public class Order implements Task{
     private boolean orderCompletion;
 
     private final static String orderFile = "order.txt";
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     // Aggregation
     private Customer customer;
@@ -26,8 +23,20 @@ public class Order implements Task{
 
     public Order(){}
 
-    public Order(String orderDateTime, Customer customer, String deliveryID, Item item, String managingStaffID,
+    public Order(String orderID, String orderDateTime, Customer customer, Item item, String managingStaffID,
                  boolean orderCompletion) {
+        this.orderID = orderID;
+        this.orderDateTime = orderDateTime;
+        this.customer = customer;
+        this.deliveryID = "";
+        this.item = item;
+        this.managingStaffID = managingStaffID;
+        this.orderCompletion = orderCompletion;
+    }
+
+    public Order(String orderID, String orderDateTime, Customer customer, String deliveryID, Item item,
+                 String managingStaffID, boolean orderCompletion) {
+        this.orderID = orderID;
         this.orderDateTime = orderDateTime;
         this.customer = customer;
         this.deliveryID = deliveryID;
@@ -38,24 +47,20 @@ public class Order implements Task{
 
     // search can be depreciated
     @Override
-    public void search() {
+    public void search(String ID) {
 
     }
 
     @Override
     public void add() {
-        List<Order> defaultList = getAllOrder();
-        String newOrderID = String.format("OD%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
-                - 1).getDeliveryID().replaceAll("OD", ""))) + 1));
-
         try{
             // Write to Delivery File
             FileWriter WriteData = new FileWriter(orderFile, true);
-            WriteData.write(String.format("%s|%s|%s|%s|%s\n", newOrderID, orderDateTime, customer.getCustID(),
-                    item.getItemID(), deliveryID, managingStaffID, orderCompletion));
+            WriteData.write(String.format("%s|%s|%s|%s|%d|%s|%s|%s\n", orderID, orderDateTime, customer.getCustID(),
+                    item.getItemID(), item.getItemQuantity(), deliveryID, managingStaffID, orderCompletion));
             WriteData.close();
 
-            System.out.println("Alert: New Delivery Created!");
+            System.out.println("Alert: New Order Created!");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -67,7 +72,7 @@ public class Order implements Task{
     }
 
     @Override
-    public void remove() {
+    public void remove(String ID) {
 
     }
 
@@ -84,11 +89,11 @@ public class Order implements Task{
                 order.setOrderDateTime(rec[1]);
                 customer = new Customer(rec[2]);
                 order.setCustomer(customer);
-                item = new Item(rec[3]);
+                item = new Item(rec[3], Integer.parseInt(rec[4]));
                 order.setItem(item);
-                order.setDeliveryID(rec[4]);
-                order.setManagingStaffID(rec[5]);
-                order.setOrderCompletion(Boolean.parseBoolean(rec[6]));
+                order.setDeliveryID(rec[5]);
+                order.setManagingStaffID(rec[6]);
+                order.setOrderCompletion(Boolean.parseBoolean(rec[7]));
                 orderList.add(order);
             }
         }catch (IOException e){
@@ -97,6 +102,17 @@ public class Order implements Task{
         return orderList;
     }
 
+    protected String generateOrderID(){
+        List<Order> defaultList = getAllOrder();
+        String newOrderID;
+        try{
+            newOrderID = String.format("OD%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getOrderID().replaceAll("OD", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newOrderID = "OD0001";
+        }
+        return newOrderID;
+    }
 
     public String getOrderID() {
         return orderID;
