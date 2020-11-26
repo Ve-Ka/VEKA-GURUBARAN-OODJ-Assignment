@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ManagingStaff extends Employee{
+public class ManagingStaff extends Employee implements MiscellaneousFunction{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
 
     public ManagingStaff(){}
@@ -62,6 +62,11 @@ public class ManagingStaff extends Employee{
             newEmpID = "MS0001";
         }
         return newEmpID;
+    }
+
+    @Override
+    public void generateReport() {
+
     }
 
     protected void editStaffDetails(ManagingStaff managingStaff) {

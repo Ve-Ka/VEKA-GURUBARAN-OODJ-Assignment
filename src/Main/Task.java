@@ -8,5 +8,4 @@ public interface Task {
     void modify(Object object);
     void remove(String ID);
     List<String> defaultDetails(String ID);
-    String generateID();
 }

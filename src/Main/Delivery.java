@@ -1,13 +1,18 @@
 package Main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Delivery implements Task{
+public class Delivery implements Task, MiscellaneousFunction{
     private String deliveryID;
     private String deliveryDateTime;
     private String deliveryStaffID;
@@ -160,6 +165,57 @@ public class Delivery implements Task{
             newDeliveryID = "DE0001";
         }
         return newDeliveryID;
+    }
+
+    @Override
+    public void generateReport(){
+        try {
+            FileReader in = new FileReader(deliveryFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<Delivery> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                Delivery processed = new Delivery(split[0], split[1], split[2], split[3], split[4], split[5],
+                        split[6], Integer.parseInt(split[7]));
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Delivery Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Delivery Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
+            doc.add(new Paragraph(" "));
+
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+            table.addCell("Delivery ID");
+            table.addCell("Date Time Created");
+            table.addCell("Delivery Staff ID");
+            table.addCell("Customer ID");
+            table.addCell("Customer Name");
+            table.addCell("Customer Address");
+            table.addCell("Item ID");
+            table.addCell("Item Quantity");
+
+            for(Delivery object : item){
+                table.addCell(object.getDeliveryID());
+                table.addCell(object.getDeliveryDateTime());
+                table.addCell(object.getDeliveryStaffID());
+                table.addCell(object.getCustID());
+                table.addCell(object.getCustName());
+                table.addCell(object.getCustAddress());
+                table.addCell(object.getItem().getItemID());
+                table.addCell(Integer.toString(object.getItem().getItemQuantity()));
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected List<Delivery> getAllDelivery(){

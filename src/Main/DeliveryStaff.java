@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryStaff extends Employee{
+public class DeliveryStaff extends Employee implements MiscellaneousFunction{
     private String vehicleBrand;
     private String vehiclePlateNo;
     protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
@@ -69,6 +69,11 @@ public class DeliveryStaff extends Employee{
             newEmpID = "DS0001";
         }
         return newEmpID;
+    }
+
+    @Override
+    public void generateReport() {
+
     }
 
     protected void displayLimitedDeliveryStaffDetails(){

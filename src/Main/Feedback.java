@@ -1,13 +1,18 @@
 package Main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Feedback implements Task{
+public class Feedback implements Task, MiscellaneousFunction{
     private String feedbackID;
     private String feedbackDateTime;
     private String feedbackTitle;
@@ -163,6 +168,57 @@ public class Feedback implements Task{
             newFeedbackID = "FE0001";
         }
         return newFeedbackID;
+    }
+
+    @Override
+    public void generateReport(){
+        try {
+            FileReader in = new FileReader(feedbackFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<Feedback> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                Feedback processed = new Feedback(split[0], split[1], split[2], split[3], split[4], split[5],
+                        split[6], split[7]);
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Feedback Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Feedback Report",FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
+            doc.add(new Paragraph(" "));
+
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+            table.addCell("Feedback ID");
+            table.addCell("Date Time Created");
+            table.addCell("Title");
+            table.addCell("Content");
+            table.addCell("Customer ID");
+            table.addCell("Customer Name");
+            table.addCell("Customer Phone Number");
+            table.addCell("Managing Staff ID");
+
+            for(Feedback object : item){
+                table.addCell(object.getFeedbackID());
+                table.addCell(object.getFeedbackDateTime());
+                table.addCell(object.getFeedbackTitle());
+                table.addCell(object.getFeedbackContent());
+                table.addCell(object.getCustomer().getCustID());
+                table.addCell(object.getCustomer().getCustName());
+                table.addCell(object.getCustomer().getCustPhoneNo());
+                table.addCell(object.getManagingStaffID());
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected List<Feedback> getAllFeedbackDetails(){

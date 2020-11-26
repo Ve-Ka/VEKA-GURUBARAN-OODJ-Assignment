@@ -1,13 +1,18 @@
 package Main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Order implements Task{
+public class Order implements Task, MiscellaneousFunction{
     private String orderID;
     private String orderDateTime;
     private String deliveryID;
@@ -48,9 +53,9 @@ public class Order implements Task{
                  String deliveryID, String managingStaffID, boolean orderCompletion) {
         this.orderID = orderID;
         this.orderDateTime = orderDateTime;
-        Customer customer = new Customer(custID);
+        customer = new Customer(custID);
         this.deliveryID = deliveryID;
-        Item item = new Item(itemID, itemQuantity);
+        item = new Item(itemID, itemQuantity);
         this.managingStaffID = managingStaffID;
         this.orderCompletion = orderCompletion;
     }
@@ -171,6 +176,57 @@ public class Order implements Task{
             newOrderID = "OD0001";
         }
         return newOrderID;
+    }
+
+    @Override
+    public void generateReport(){
+        try {
+            FileReader in = new FileReader(orderFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<Order> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                Order processed = new Order(split[0], split[1], split[2], split[3], Integer.parseInt(split[4]),
+                        split[5], split[6], Boolean.parseBoolean(split[7]));
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Order Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Order Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
+            doc.add(new Paragraph(" "));
+
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+            table.addCell("Order ID");
+            table.addCell("Date Time Created");
+            table.addCell("Customer ID");
+            table.addCell("Item ID");
+            table.addCell("Item Quantity");
+            table.addCell("Delivery Staff ID");
+            table.addCell("Managing Staff ID");
+            table.addCell("Order Completed");
+
+            for(Order object : item){
+                table.addCell(object.getOrderID());
+                table.addCell(object.getOrderDateTime());
+                table.addCell(object.getCustomer().getCustID());
+                table.addCell(object.getItem().getItemID());
+                table.addCell(Integer.toString(object.getItem().getItemQuantity()));
+                table.addCell(object.getDeliveryID());
+                table.addCell(object.getManagingStaffID());
+                table.addCell(Boolean.toString(getOrderCompletion()));
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //customer -> order -> order list

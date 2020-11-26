@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Item {
+public class Item implements MiscellaneousFunction{
     private String itemID;
     private String itemName;
     private int itemQuantity;
@@ -122,6 +122,7 @@ public class Item {
         return true;
     }
 
+    @Override
     public String generateID() {
         List<Item> defaultList = getAllItemDetails();
         String newItemID;
@@ -134,6 +135,10 @@ public class Item {
         return newItemID;
     }
 
+    @Override
+    public void generateReport() {
+
+    }
 
 
     protected String getItemID() {
