@@ -11,9 +11,6 @@ import java.util.List;
 public class ManagingStaff extends Employee{
     private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
 
-    // Association
-    private Order order;
-
     public ManagingStaff(){}
 
     public ManagingStaff(String empID){

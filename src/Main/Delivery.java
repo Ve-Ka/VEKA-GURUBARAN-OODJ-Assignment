@@ -17,7 +17,7 @@ public class Delivery implements Task{
 
     private final static String deliveryFile = "delivery.txt";
 
-    // Aggregration
+    // Aggregation
     private Item item;
 
     public Delivery(){}

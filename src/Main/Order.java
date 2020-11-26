@@ -119,7 +119,6 @@ public class Order implements Task{
         //Order order = new Order();
         List<Order> orderList = getAllOrder();
         for(Order item: orderList){
-            System.out.println(item.getOrderID());
             if(item.getOrderID().equals(ID)){
                 setDeliveryID(item.getDeliveryID());
             }
