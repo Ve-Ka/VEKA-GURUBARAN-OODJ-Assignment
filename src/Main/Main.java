@@ -286,10 +286,18 @@ public class Main {
                     System.out.println("Alert: ID does not exist!");
                     managingStaffManagementCLI(empID, idType);
                     break;
-                }else if(searchID.startsWith("MS") || searchID.startsWith("DS")){
+                }else if(searchID.startsWith("MS")){
                     employee.viewSelfAccount(searchID);
                     System.out.println("-----------------------");
-                    employee.displayStaffDetails(searchID);
+                    employee = new ManagingStaff();
+                    ManagingStaff managingStaff = (ManagingStaff) employee;
+                    managingStaff.displayStaffDetails(searchID);
+                }else if (searchID.startsWith("DS")){
+                    employee.viewSelfAccount(searchID);
+                    System.out.println("-----------------------");
+                    employee = new DeliveryStaff();
+                    DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+                    deliveryStaff.displayStaffDetails(searchID);
                 }else if(searchID.startsWith("CS")){
                     Customer customer = new Customer();
                     System.out.println("ID: " + searchID);

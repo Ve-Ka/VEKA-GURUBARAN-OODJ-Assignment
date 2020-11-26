@@ -114,10 +114,6 @@ public class ManagingStaff extends Employee implements MiscellaneousFunction{
         }
     }
 
-    public static void main(String[] args) {
-        ManagingStaff a = new ManagingStaff();
-        a.generateReport();
-    }
 
     protected void editStaffDetails(ManagingStaff managingStaff) {
         // Overwrite Original List with new data
