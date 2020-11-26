@@ -13,7 +13,7 @@ public class Main {
     private static Employee employee;
 
     private enum idType{
-        STAFF, CUSTOMER, ORDER, ITEM, DELIVERY
+        STAFF, CUSTOMER, ORDER, ITEM, DELIVERY, FEEDBACK
     }
 
     private static void loginCLI(){
@@ -91,7 +91,7 @@ public class Main {
                 managingStaffMainCLI(empID);
                 break;
             case 3:
-
+                managingStaffManagementCLI(empID, idType.FEEDBACK);
                 managingStaffMainCLI(empID);
                 break;
             case 4:
@@ -250,6 +250,9 @@ public class Main {
             case DELIVERY:
                 System.out.println("X        Delivery       X");
                 break;
+            case FEEDBACK:
+                System.out.println("X        Feedback       X");
+                break;
         }
         System.out.println("X       Management      X");
         System.out.println("X-----------------------X");
@@ -305,6 +308,10 @@ public class Main {
                     Delivery delivery = new Delivery();
                     System.out.println("-----------------------");
                     delivery.search(searchID);
+                }else if(searchID.startsWith("FE")){
+                    Feedback feedback = new Feedback();
+                    System.out.println("-----------------------");
+                    feedback.search(searchID);
                 }
 
                 managingStaffManagementCLI(empID, idType);
@@ -318,28 +325,39 @@ public class Main {
                 // Order ID will be auto generated so there is not a need to input a value
                 // Check for any other id that have potential to be auto generated
                 if(!idType.equals(idType.ORDER)) {
-                    System.out.print("New ID: ");
-                    addID = Scanner.next();
+                    while ((!addID.toUpperCase().contains("MS") || !addID.toUpperCase().contains("DS")) && idType.equals(idType.STAFF)){
+                        System.out.print("Managing Staff | Delivery Staff [MS/DS]: ");
+                        addID = Scanner.next();
+                    }
 
-
-                    if ((addID.startsWith("MS") || addID.startsWith("DS")) && !idExistVerification(addID, idType)) {
+                    if (addID.startsWith("MS")) {
+                        addableDetails = new String[]{"Name", "Age", "Gender", "Email"};
                         employee = new ManagingStaff();
                         System.out.print("New Password: ");
                         newPassword = Scanner.next();
+                        ManagingStaff managingStaff = (ManagingStaff) employee;
+                        addID = managingStaff.generateID();
+                    } else if (addID.startsWith("DS")) {
+                        addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                                "Vehicle Plate NO"};
                         employee = new ManagingStaff();
-
-                        if (addID.startsWith("MS")) {
-                            addableDetails = new String[]{"Name", "Age", "Gender", "Email"};
-                        } else if (addID.startsWith("DS")) {
-                            addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
-                                    "Vehicle Plate NO"};
-                        }
-
-                    } else if (addID.startsWith("CS") && !idExistVerification(addID, idType)) {
+                        System.out.print("New Password: ");
+                        newPassword = Scanner.next();
+                        DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
+                        addID = deliveryStaff.generateID();
+                    } else if (idType.equals(idType.CUSTOMER)) {
                         addableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
-                    } else if (addID.startsWith("IT") && !idExistVerification(addID, idType)) {
+                        Customer customer = new Customer();
+                        addID = customer.generateID();
+                    } else if (idType.equals(idType.ITEM)) {
                         addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
-                    } else {
+                        Item item = new Item();
+                        addID = item.generateID();
+                    } else if (idType.equals(idType.FEEDBACK)) {
+                        addableDetails = new String[]{"Feedback Title", "Feedback Content", "Customer ID"};
+                        Feedback feedback = new Feedback();
+                        addID = feedback.generateID();
+                    }else {
                         System.out.println("Alert: ID input Invalid or exist!");
                         managingStaffManagementCLI(empID, idType);
                         break;
@@ -501,6 +519,13 @@ public class Main {
                         }
                         order.add();
                         break;
+
+                    case FEEDBACK:
+                        Customer customer2 = new Customer(addableDetails[2]);
+                        Feedback feedback = new Feedback(addID, customDateTimePrompt(), addableDetails[0],
+                                addableDetails[1], customer2, empID);
+                        feedback.add();
+                        break;
                 }
 
                 managingStaffManagementCLI(empID, idType);
@@ -547,6 +572,11 @@ public class Main {
                     Delivery delivery = new Delivery();
                     defaultDetails = delivery.defaultDetails(editID);
                     delivery.search(editID);
+                } else if(editID.startsWith("FE")) {
+                    staffEditableDetails = new String[]{"Feedback Title", "Feedback Content"};
+                    Feedback feedback = new Feedback();
+                    defaultDetails = feedback.defaultDetails(editID);
+                    feedback.search(editID);
                 }
 
                 System.out.println("-----------------------");
@@ -607,6 +637,12 @@ public class Main {
                                 defaultDetails.get(5), defaultDetails.get(6), Integer.parseInt(defaultDetails.get(7)));
                         delivery.modify(delivery);
                         break;
+                    case FEEDBACK:
+                        Feedback feedback1 = new Feedback(defaultDetails.get(0), defaultDetails.get(1),
+                                staffEditableDetails[0], staffEditableDetails[1], defaultDetails.get(4),
+                                defaultDetails.get(5), defaultDetails.get(6), empID);
+                        feedback1.modify(feedback1);
+                        break;
                 }
 
                 managingStaffManagementCLI(empID, idType);
@@ -631,6 +667,9 @@ public class Main {
                     order.remove(removeID);
                     Delivery delivery = new Delivery();
                     delivery.remove(order.getDeliveryID());
+                } else if(removeID.startsWith("FE")) {
+                    Feedback feedback = new Feedback();
+                    feedback.remove(removeID);
                 }
 
                 managingStaffManagementCLI(empID, idType);
@@ -803,6 +842,15 @@ public class Main {
                 int position = 0;
                 for (Delivery delivery1: deliveries){
                     if(delivery1.getDeliveryStaffID().equals(ID) && !orderList.get(position).getOrderCompletion()){
+                        return true;
+                    }
+                }
+                break;
+            case FEEDBACK:
+                Feedback feedback = new Feedback();
+                List<Feedback> feedbacks = feedback.getAllFeedbackDetails();
+                for(Feedback feedback1: feedbacks){
+                    if(feedback1.getFeedbackID().equals(ID)){
                         return true;
                     }
                 }

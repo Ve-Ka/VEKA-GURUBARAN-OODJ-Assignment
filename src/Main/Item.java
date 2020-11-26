@@ -122,6 +122,18 @@ public class Item {
         return true;
     }
 
+    public String generateID() {
+        List<Item> defaultList = getAllItemDetails();
+        String newItemID;
+        try{
+            newItemID = String.format("IT%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getItemID().replaceAll("IT", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newItemID = "IT0001";
+        }
+        return newItemID;
+    }
+
 
 
     protected String getItemID() {

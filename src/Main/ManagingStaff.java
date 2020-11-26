@@ -51,6 +51,19 @@ public class ManagingStaff extends Employee{
         return defaultDetails;
     }
 
+    @Override
+    public String generateID(){
+        List<ManagingStaff> defaultList = getAllManagingStaffDetails();
+        String newEmpID;
+        try{
+            newEmpID = String.format("MS%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getEmpID().replaceAll("MS", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newEmpID = "MS0001";
+        }
+        return newEmpID;
+    }
+
     protected void editStaffDetails(ManagingStaff managingStaff) {
         // Overwrite Original List with new data
         List<ManagingStaff> originalDetails = getAllManagingStaffDetails();

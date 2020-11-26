@@ -56,6 +56,7 @@ public abstract class Employee {
 
     protected abstract void displayStaffDetails(String empID);
     protected abstract List<String> defaultStaffDetails(String empID);
+    protected abstract String generateID();
 
 
 

@@ -1,5 +1,6 @@
 package Main;
 
+import javax.management.DescriptorKey;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,16 +40,6 @@ public class DeliveryStaff extends Employee{
         }
     }
 
-    protected void displayLimitedDeliveryStaffDetails(){
-        List<DeliveryStaff> deliveryStaffs = getAllDeliveryStaffDetails();
-        System.out.println("\nAll Delivery Staff details");
-        for (DeliveryStaff deliveryStaff: deliveryStaffs){
-            System.out.printf("%s|%s|%s|%s\n", deliveryStaff.getEmpID(), deliveryStaff.getEmpName(),
-                    deliveryStaff.getVehicleBrand(), deliveryStaff.getVehicleBrand());
-        }
-        System.out.println("");
-    }
-
     @Override
     protected List<String> defaultStaffDetails(String empID) {
         List<DeliveryStaff> originalDetails = getAllDeliveryStaffDetails();
@@ -65,6 +56,29 @@ public class DeliveryStaff extends Employee{
             }
         }
         return defaultDetails;
+    }
+
+    @Override
+    public String generateID(){
+        List<DeliveryStaff> defaultList = getAllDeliveryStaffDetails();
+        String newEmpID;
+        try{
+            newEmpID = String.format("DS%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getEmpID().replaceAll("DS", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newEmpID = "DS0001";
+        }
+        return newEmpID;
+    }
+
+    protected void displayLimitedDeliveryStaffDetails(){
+        List<DeliveryStaff> deliveryStaffs = getAllDeliveryStaffDetails();
+        System.out.println("\nAll Delivery Staff details");
+        for (DeliveryStaff deliveryStaff: deliveryStaffs){
+            System.out.printf("%s|%s|%s|%s\n", deliveryStaff.getEmpID(), deliveryStaff.getEmpName(),
+                    deliveryStaff.getVehicleBrand(), deliveryStaff.getVehicleBrand());
+        }
+        System.out.println("");
     }
 
     protected void editStaffDetails(DeliveryStaff deliveryStaff) {

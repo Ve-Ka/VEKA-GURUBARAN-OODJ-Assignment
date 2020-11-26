@@ -21,6 +21,12 @@ public class Customer {
         this.custID = custID;
     }
 
+    public Customer(String custID, String custName, String custPhoneNo){
+        this.custID = custID;
+        this.custName = custName;
+        this.custPhoneNo = custPhoneNo;
+    }
+
     public Customer(String custID, String custName, String custEmail, String custPhoneNo, String custAddress) {
         this.custID = custID;
         this.custName = custName;
@@ -80,6 +86,18 @@ public class Customer {
             }
         }
         return defaultDetails;
+    }
+
+    public String generateID() {
+        List<Customer> defaultList = getAllCustDetails();
+        String newCustID;
+        try{
+            newCustID = String.format("CS%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getCustID().replaceAll("CS", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newCustID = "CS0001";
+        }
+        return newCustID;
     }
 
 
