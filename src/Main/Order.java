@@ -19,7 +19,7 @@ public class Order implements Task, MiscellaneousFunction{
     private String managingStaffID;
     private boolean orderCompletion;
 
-    private final static String orderFile = "order.txt";
+    private final static String orderFile = "txt Files/order.txt";
 
     // Aggregation
     private Customer customer;
@@ -193,7 +193,7 @@ public class Order implements Task, MiscellaneousFunction{
             }
             br.close();
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream("Order Report.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Order Report.pdf"));
             doc.open();
             doc.add(new Paragraph("Order Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
             doc.add(new Paragraph(" "));
@@ -228,6 +228,8 @@ public class Order implements Task, MiscellaneousFunction{
             e.printStackTrace();
         }
     }
+
+
 
     //customer -> order -> order list
     //object -> object item -> object list

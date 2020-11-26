@@ -20,7 +20,7 @@ public class Delivery implements Task, MiscellaneousFunction{
     private String custName;
     private String custAddress;
 
-    private final static String deliveryFile = "delivery.txt";
+    private final static String deliveryFile = "txt Files/delivery.txt";
 
     // Aggregation
     private Item item;
@@ -182,7 +182,7 @@ public class Delivery implements Task, MiscellaneousFunction{
             }
             br.close();
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream("Delivery Report.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Delivery Report.pdf"));
             doc.open();
             doc.add(new Paragraph("Delivery Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
             doc.add(new Paragraph(" "));

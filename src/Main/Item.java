@@ -1,11 +1,16 @@
 package Main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Item implements MiscellaneousFunction{
     private String itemID;
@@ -15,7 +20,7 @@ public class Item implements MiscellaneousFunction{
     private String itemSupplier;
     private String itemDescription;
 
-    protected final static String itemDetailsFile = "itemDetails.txt";
+    protected final static String itemDetailsFile = "txt Files/itemDetails.txt";
 
     public Item(){}
 
@@ -74,22 +79,6 @@ public class Item implements MiscellaneousFunction{
         System.out.println("");
     }
 
-    protected List<String> defaultItemDetails(String itemID){
-        List<Item> originalDetails = getAllItemDetails();
-        List<String> defaultDetails = new ArrayList<>();
-        for (Item detail : originalDetails) {
-            if (detail.getItemID().equals(itemID)) {
-                defaultDetails.add(detail.getItemID());
-                defaultDetails.add(detail.getItemName());
-                defaultDetails.add(Integer.toString(detail.getItemQuantity()));
-                defaultDetails.add(Double.toString(detail.getItemPrice()));
-                defaultDetails.add(detail.getItemSupplier());
-                defaultDetails.add(detail.getItemDescription());
-            }
-        }
-        return defaultDetails;
-    }
-
     protected boolean modifyItemQuantity(String itemID, int quantitySold){
         List<Item> items = getAllItemDetails();
         for (Item item: items){
@@ -123,6 +112,23 @@ public class Item implements MiscellaneousFunction{
     }
 
     @Override
+    public List<String> defaultDetails(String ID){
+        List<Item> originalDetails = getAllItemDetails();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Item detail : originalDetails) {
+            if (detail.getItemID().equals(ID)) {
+                defaultDetails.add(detail.getItemID());
+                defaultDetails.add(detail.getItemName());
+                defaultDetails.add(Integer.toString(detail.getItemQuantity()));
+                defaultDetails.add(Double.toString(detail.getItemPrice()));
+                defaultDetails.add(detail.getItemSupplier());
+                defaultDetails.add(detail.getItemDescription());
+            }
+        }
+        return defaultDetails;
+    }
+
+    @Override
     public String generateID() {
         List<Item> defaultList = getAllItemDetails();
         String newItemID;
@@ -137,9 +143,50 @@ public class Item implements MiscellaneousFunction{
 
     @Override
     public void generateReport() {
+        try {
+            FileReader in = new FileReader(itemDetailsFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<Item> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                Item processed = new Item(split[0], split[1], Integer.parseInt(split[2]),
+                        Double.parseDouble(split[3]), split[4], split[5]);
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Item Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Item Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
+            doc.add(new Paragraph(" "));
 
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(6);
+            table.setWidthPercentage(100);
+            table.addCell("ID");
+            table.addCell("Name");
+            table.addCell("Quantity");
+            table.addCell("Price");
+            table.addCell("Supplier");
+            table.addCell("Description");
+
+            for(Item object : item){
+                table.addCell(object.getItemID());
+                table.addCell(object.getItemName());
+                table.addCell(Integer.toString(object.getItemQuantity()));
+                table.addCell(Double.toString(object.getItemPrice()));
+                table.addCell(object.getItemSupplier());
+                table.addCell(object.getItemDescription());
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
-
 
     protected String getItemID() {
         return itemID;

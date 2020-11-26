@@ -19,7 +19,7 @@ public class Feedback implements Task, MiscellaneousFunction{
     private String feedbackContent;
     private String managingStaffID;
 
-    protected final static String feedbackFile = "feedback.txt";
+    protected final static String feedbackFile = "txt Files/feedback.txt";
 
     private Customer customer;
 
@@ -185,7 +185,7 @@ public class Feedback implements Task, MiscellaneousFunction{
             }
             br.close();
             Document doc = new Document();
-            PdfWriter.getInstance(doc, new FileOutputStream("Feedback Report.pdf"));
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Feedback Report.pdf"));
             doc.open();
             doc.add(new Paragraph("Feedback Report",FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
             doc.add(new Paragraph(" "));

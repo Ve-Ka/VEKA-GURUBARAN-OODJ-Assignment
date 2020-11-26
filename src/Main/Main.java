@@ -99,7 +99,7 @@ public class Main {
                 managingStaffMainCLI(empID);
                 break;
             case 5:
-
+                managingStaffReportCLI();
                 managingStaffMainCLI(empID);
                 break;
             case 6:
@@ -178,14 +178,14 @@ public class Main {
                     System.out.println("-----------------------");
                     Scanner.nextLine();
 
-                    List<String> defaultStaffDetails = employee.defaultStaffDetails(empID);
+                    List<String> defaultDetails = employee.defaultDetails(empID);
 
                     String[] editableDetails = {"Name", "Age", "Gender", "Email"};
                     for (int a = 0; a < editableDetails.length; a ++){
                         System.out.printf("New %s: ", editableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")){
-                            editableDetails[a] = defaultStaffDetails.get(a + 1);
+                            editableDetails[a] = defaultDetails.get(a + 1);
                         }else{
                             editableDetails[a] = userInput;
                         }
@@ -202,7 +202,7 @@ public class Main {
                     System.out.println("-----------------------");
                     Scanner.nextLine();
 
-                    List<String> defaultStaffDetails = employee.defaultStaffDetails(empID);
+                    List<String> defaultDetails = employee.defaultDetails(empID);
 
                     String[] staffEditableDetails = {"Name", "Age", "Gender", "Email", "Vehicle Brand",
                             "Vehicle Plate No"};
@@ -210,7 +210,7 @@ public class Main {
                         System.out.printf("New %s: ", staffEditableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")){
-                            staffEditableDetails[a] = defaultStaffDetails.get(a + 1);
+                            staffEditableDetails[a] = defaultDetails.get(a + 1);
                         }else{
                             staffEditableDetails[a] = userInput;
                         }
@@ -366,13 +366,13 @@ public class Main {
 
                     System.out.println("-----------------------");
                     Scanner.nextLine();
-                    List<String> defaultStaffDetails = employee.defaultStaffDetails(addID);
+                    List<String> defaultDetails = employee.defaultDetails(addID);
 
                     for (int a = 0; a < addableDetails.length; a++) {
                         System.out.printf("New %s: ", addableDetails[a]);
                         String userInput = Scanner.nextLine();
                         if (userInput.equals("")) {
-                            addableDetails[a] = defaultStaffDetails.get(a + 1);
+                            addableDetails[a] = defaultDetails.get(a + 1);
                         } else {
                             addableDetails[a] = userInput;
                         }
@@ -544,23 +544,23 @@ public class Main {
                 }else if(editID.startsWith("MS")){
                     staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email"};
                     employee = new ManagingStaff();
-                    defaultDetails = employee.defaultStaffDetails(editID);
+                    defaultDetails = employee.defaultDetails(editID);
                     employee.displayStaffDetails(editID);
                 }else if(editID.startsWith("DS")){
                     staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
                             "Vehicle Plate NO"};
                     employee = new DeliveryStaff();
-                    defaultDetails = employee.defaultStaffDetails(editID);
+                    defaultDetails = employee.defaultDetails(editID);
                     employee.displayStaffDetails(editID);
                 }else if(editID.startsWith("CS")){
                     staffEditableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
                     Customer customer = new Customer();
-                    defaultDetails = customer.defaultCustomerDetails(editID);
+                    defaultDetails = customer.defaultDetails(editID);
                     customer.viewCustDetails(editID);
                 }else if(editID.startsWith("IT")){
                     staffEditableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                     Item item = new Item();
-                    defaultDetails = item.defaultItemDetails(editID);
+                    defaultDetails = item.defaultDetails(editID);
                     item.viewItemDetails(editID);
                 }else if(editID.startsWith("OD")){
                     staffEditableDetails = new String[]{"Order Completed"};
@@ -681,6 +681,76 @@ public class Main {
                 break;
         }
     }
+
+
+    private static void managingStaffReportCLI(){
+        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("X       Generate        X");
+        System.out.println("X        Report         X");
+        System.out.println("X-----------------------X");
+        System.out.println("X  [1] Account          X");
+        System.out.println("X  [2] Managing Staff   X");
+        System.out.println("X  [3] Delivery Staff   X");
+        System.out.println("X  [4] Feedback         X");
+        System.out.println("X  [5] Item             X");
+        System.out.println("X  [6] Order            X");
+        System.out.println("X  [7] Delivery         X");
+        System.out.println("X  [8] Back             X");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.print("--> ");
+        String userChoice = Scanner.next();
+        int intUserChoice = userChoiceVerification(userChoice, 1, 8);
+        switch(intUserChoice){
+            case 1:
+                Account account = new Account();
+                account.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 2:
+                ManagingStaff managingStaff = new ManagingStaff();
+                managingStaff.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 3:
+                DeliveryStaff deliveryStaff = new DeliveryStaff();
+                deliveryStaff.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 4:
+                Feedback feedback = new Feedback();
+                feedback.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 5:
+                Item item = new Item();
+                item.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 6:
+                Order order = new Order();
+                order.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 7:
+                Delivery delivery = new Delivery();
+                delivery.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 8:
+                break;
+            default:
+                managingStaffReportCLI();
+                break;
+        }
+    }
+
 
     /*
 

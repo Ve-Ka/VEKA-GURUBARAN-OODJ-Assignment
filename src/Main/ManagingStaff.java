@@ -1,15 +1,20 @@
 package Main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ManagingStaff extends Employee implements MiscellaneousFunction{
-    private final static String managingStaffDetailsFile = "managingStaffDetails.txt";
+    private final static String managingStaffDetailsFile = "txt Files/managingStaffDetails.txt";
 
     public ManagingStaff(){}
 
@@ -36,11 +41,11 @@ public class ManagingStaff extends Employee implements MiscellaneousFunction{
     }
 
     @Override
-    protected List<String> defaultStaffDetails(String empID){
+    public List<String> defaultDetails(String ID){
         List<ManagingStaff> originalDetails = getAllManagingStaffDetails();
         List<String> defaultDetails = new ArrayList<>();
         for (ManagingStaff detail : originalDetails) {
-            if (detail.getEmpID().equals(empID)) {
+            if (detail.getEmpID().equals(ID)) {
                 defaultDetails.add(detail.getEmpID());
                 defaultDetails.add(detail.getEmpName());
                 defaultDetails.add(Integer.toString(detail.getEmpAge()));
@@ -66,7 +71,52 @@ public class ManagingStaff extends Employee implements MiscellaneousFunction{
 
     @Override
     public void generateReport() {
+        try {
+            FileReader in = new FileReader(managingStaffDetailsFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<ManagingStaff> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                ManagingStaff processed = new ManagingStaff(split[0], split[1], Integer.parseInt(split[2]), split[3],
+                        split[4]);
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Managing Staff Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Managing Staff Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
+            doc.add(new Paragraph(" "));
 
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.addCell("ID");
+            table.addCell("Name");
+            table.addCell("Age");
+            table.addCell("Gender");
+            table.addCell("Email");
+
+            for(ManagingStaff object : item){
+                table.addCell(object.getEmpID());
+                table.addCell(object.getEmpName());
+                table.addCell(Integer.toString(object.getEmpAge()));
+                table.addCell(object.getEmpGender());
+                table.addCell(object.getEmpEmail());
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        ManagingStaff a = new ManagingStaff();
+        a.generateReport();
     }
 
     protected void editStaffDetails(ManagingStaff managingStaff) {
