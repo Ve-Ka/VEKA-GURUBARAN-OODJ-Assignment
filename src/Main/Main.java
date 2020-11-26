@@ -607,6 +607,8 @@ public class Main {
                 } else if(removeID.startsWith("OD")){
                     Order order = new Order();
                     order.remove(removeID);
+                    Delivery delivery = new Delivery();
+                    delivery.remove(order.getDeliveryID());
                 }
 
                 managingStaffManagementCLI(empID, idType);

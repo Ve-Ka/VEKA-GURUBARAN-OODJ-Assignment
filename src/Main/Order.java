@@ -79,8 +79,14 @@ public class Order implements Task{
     @Override
     public void remove(String ID) {
         // Remove Details from Customer Object List
-        Order order = new Order();
-        List<Order> orderList = order.getAllOrder();
+        //Order order = new Order();
+        List<Order> orderList = getAllOrder();
+        for(Order item: orderList){
+            System.out.println(item.getOrderID());
+            if(item.getOrderID().equals(ID)){
+                setDeliveryID(item.getDeliveryID());
+            }
+        }
         orderList.removeIf(order1 -> order1.getOrderID().equals(ID));
 
         // Write all data to file
@@ -135,11 +141,6 @@ public class Order implements Task{
             newOrderID = "OD0001";
         }
         return newOrderID;
-    }
-
-    // probably not be implemented
-    protected void removeDelivery(String ID){
-
     }
 
     public String getOrderID() {

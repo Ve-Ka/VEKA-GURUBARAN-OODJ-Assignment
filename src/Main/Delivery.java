@@ -1,5 +1,7 @@
 package Main;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -76,7 +78,25 @@ public class Delivery implements Task{
 
     @Override
     public void remove(String ID) {
+        // Remove Details from Customer Object List
+        //Delivery delivery = new Delivery();
+        List<Delivery> deliveryList = getAllDelivery();
+        deliveryList.removeIf(delivery1 -> delivery1.getDeliveryID().equals(ID));
 
+        // Write all data to file
+        try {
+            FileWriter WriteData = new FileWriter(deliveryFile);
+            for (Delivery delivery2 : deliveryList) {
+                WriteData.write(String.format("%s|%s|%s|%s|%s|%s|%s|%d\n", delivery2.getDeliveryID(),
+                        delivery2.getDeliveryDateTime(), delivery2.getDeliveryStaffID(), delivery2.getCustID(),
+                        delivery2.getCustName(), delivery2.getCustAddress(), delivery2.getItem().getItemID(),
+                        delivery2.getItem().getItemQuantity()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Delivery Details Removed!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     protected List<Delivery> getAllDelivery(){
