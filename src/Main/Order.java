@@ -176,7 +176,6 @@ public class Order implements Task{
 
     //customer -> order -> order list
     //object -> object item -> object list
-    // to be added into interface after renaming
     protected List<Order> getAllOrder(){
         List<Order> orderList = new ArrayList();
         try {
