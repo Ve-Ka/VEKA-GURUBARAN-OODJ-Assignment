@@ -12,6 +12,7 @@ public class Delivery implements Task{
     private String deliveryDateTime;
     private String deliveryStaffID;
     private String custID;
+    private String custName;
     private String custAddress;
 
 
@@ -36,7 +37,12 @@ public class Delivery implements Task{
 
     @Override
     public void search(String ID) {
-
+        List<Delivery> deliveryList = getAllDelivery();
+        for(Delivery item: deliveryList){
+            if(item.getDeliveryID().equals(ID)){
+                System.out.println(item.toString());
+            }
+        }
     }
 
     @Override
@@ -45,6 +51,7 @@ public class Delivery implements Task{
         List<Customer> customerInfo = customer.getAllCustDetails();
         for (Customer customers : customerInfo){
             if (customers.getCustID().equals(custID)){
+                setCustName(customers.getCustName());
                 setCustAddress(customers.getCustAddress());
             }
         }
@@ -52,8 +59,8 @@ public class Delivery implements Task{
         try{
             // Write to Delivery File
             FileWriter WriteData = new FileWriter(deliveryFile, true);
-            WriteData.write(String.format("%s|%s|%s|%s|%s|%s|%d\n", deliveryID, deliveryDateTime, deliveryStaffID,
-                    custID, custAddress, item.getItemID(), item.getItemQuantity()));
+            WriteData.write(String.format("%s|%s|%s|%s|%s|%s|%s|%d\n", deliveryID, deliveryDateTime, deliveryStaffID,
+                    custID, custName, custAddress, item.getItemID(), item.getItemQuantity()));
             WriteData.close();
 
             System.out.println("Alert: New Delivery Created!\n");
@@ -83,8 +90,9 @@ public class Delivery implements Task{
                     delivery.setDeliveryDateTime(rec[1]);
                     delivery.setDeliveryStaffID(rec[2]);
                     delivery.setCustID(rec[3]);
-                    delivery.setCustAddress(rec[4]);
-                    item = new Item(rec[5], Integer.parseInt(rec[6]));
+                    delivery.setCustName(rec[4]);
+                    delivery.setCustAddress(rec[5]);
+                    item = new Item(rec[6], Integer.parseInt(rec[7]));
                     delivery.setItem(item);
                     deliveryList.add(delivery);
             }
@@ -138,6 +146,14 @@ public class Delivery implements Task{
         this.custID = custID;
     }
 
+    public String getCustName() {
+        return custName;
+    }
+
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
     public String getCustAddress() {
         return custAddress;
     }
@@ -152,5 +168,16 @@ public class Delivery implements Task{
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return  "Delivery Date Time: " + deliveryDateTime + '\n' +
+                "Delivery Staff ID: " + deliveryStaffID + '\n' +
+                "Customer ID: " + custID + '\n' +
+                "Customer Name: " + custName + '\n' +
+                "Customer Address: " + custAddress + '\n' +
+                "Item ID: " + item.getItemID() + '\n' +
+                "Item Quantity: " + item.getItemQuantity();
     }
 }

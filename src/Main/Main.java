@@ -71,35 +71,42 @@ public class Main {
         System.out.printf("X         %s        X\n", empID);
         System.out.println("X-----------------------X");
         System.out.println("X      [1] Order        X");
-        System.out.println("X      [2] Feedback     X");
-        System.out.println("X      [3] Item         X");
-        System.out.println("X      [4] Report       X");
-        System.out.println("X      [5] Account      X");
-        System.out.println("X      [6] Logout       X");
+        System.out.println("X      [2] Delivery     X");
+        System.out.println("X      [3] Feedback     X");
+        System.out.println("X      [4] Item         X");
+        System.out.println("X      [5] Report       X");
+        System.out.println("X      [6] Account      X");
+        System.out.println("X      [7] Logout       X");
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 6);
+        int intUserChoice = userChoiceVerification(userChoice, 1, 7);
         switch(intUserChoice){
             case 1:
-                managingStaffOrderCLI(empID);
+                managingStaffManagementCLI(empID, idType.ORDER);
                 managingStaffMainCLI(empID);
                 break;
             case 2:
+                managingStaffManagementCLI(empID, idType.DELIVERY);
                 managingStaffMainCLI(empID);
                 break;
             case 3:
-                managingStaffManagementCLI(idType.ITEM);
+
                 managingStaffMainCLI(empID);
                 break;
             case 4:
+                managingStaffManagementCLI(empID, idType.ITEM);
                 managingStaffMainCLI(empID);
                 break;
             case 5:
-                managingStaffAccountCLI(empID);
+
                 managingStaffMainCLI(empID);
                 break;
             case 6:
+                managingStaffAccountCLI(empID);
+                managingStaffMainCLI(empID);
+                break;
+            case 7:
                 break;
             default:
                 managingStaffMainCLI(empID);
@@ -126,11 +133,11 @@ public class Main {
                 managingStaffAccountCLI(empID);
                 break;
             case 2:
-                managingStaffManagementCLI(idType.STAFF);
+                managingStaffManagementCLI(empID, idType.STAFF);
                 managingStaffAccountCLI(empID);
                 break;
             case 3:
-                managingStaffManagementCLI(idType.CUSTOMER);
+                managingStaffManagementCLI(empID, idType.CUSTOMER);
                 managingStaffAccountCLI(empID);
                 break;
             case 4:
@@ -225,7 +232,7 @@ public class Main {
         }
     }
 
-    private static void managingStaffManagementCLI(idType idType){
+    private static void managingStaffManagementCLI(String empID, idType idType){
         System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
         switch(idType) {
             case STAFF:
@@ -237,17 +244,35 @@ public class Main {
             case ITEM:
                 System.out.println("X        Item           X");
                 break;
+            case ORDER:
+                System.out.println("X        Order          X");
+                break;
+            case DELIVERY:
+                System.out.println("X        Delivery       X");
+                break;
         }
         System.out.println("X       Management      X");
         System.out.println("X-----------------------X");
         System.out.println("X       [1] Search      X");
-        System.out.println("X       [2] Add         X");
-        System.out.println("X       [3] Edit        X");
-        System.out.println("X       [4] Remove      X");
-        System.out.println("X       [5] Back        X");
+        if(idType.equals(idType.DELIVERY)){
+            System.out.println("X       [3] Edit        X");
+            System.out.println("X       [5] Back        X");
+        }else{
+            System.out.println("X       [2] Add         X");
+            System.out.println("X       [3] Edit        X");
+            System.out.println("X       [4] Remove      X");
+            System.out.println("X       [5] Back        X");
+        }
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
+
+        if(idType.equals(idType.DELIVERY)){
+            if(!((userChoice.equals("1")) || (userChoice.equals("3")) || (userChoice.equals("5")))){
+                userChoice ="0";
+            }
+        }
+
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch(intUserChoice){
             case 1:
@@ -256,7 +281,7 @@ public class Main {
 
                 if(!idExistVerification(searchID, idType)){
                     System.out.println("Alert: ID does not exist!");
-                    managingStaffManagementCLI(idType);
+                    managingStaffManagementCLI(empID, idType);
                     break;
                 }else if(searchID.startsWith("MS") || searchID.startsWith("DS")){
                     employee.viewSelfAccount(searchID);
@@ -272,58 +297,69 @@ public class Main {
                     System.out.println("ID: " + searchID);
                     System.out.println("-----------------------");
                     item.viewItemDetails(searchID);
+                }else if(searchID.startsWith("OD")){
+                    Order order = new Order();
+                    System.out.println("-----------------------");
+                    order.search(searchID);
+                }else if(searchID.startsWith("DE")){
+                    Delivery delivery = new Delivery();
+                    System.out.println("-----------------------");
+                    delivery.search(searchID);
                 }
 
-                managingStaffManagementCLI(idType);
+                managingStaffManagementCLI(empID, idType);
                 break;
             case 2:
                 // Add new Account
-                System.out.print("New ID: ");
-                String addID = Scanner.next();
-
+                String addID = "";
                 String newPassword = "";
                 String[] addableDetails = {};
 
+                // Order ID will be auto generated so there is not a need to input a value
+                // Check for any other id that have potential to be auto generated
+                if(!idType.equals(idType.ORDER)) {
+                    System.out.print("New ID: ");
+                    addID = Scanner.next();
 
-                if ((addID.startsWith("MS") || addID.startsWith("DS")) && !idExistVerification(addID, idType)){
-                    employee = new ManagingStaff();
-                    System.out.print("New Password: ");
-                    newPassword = Scanner.next();
-                    employee = new ManagingStaff();
 
-                    if(addID.startsWith("MS")){
-                        addableDetails = new String[]{"Name", "Age", "Gender", "Email"};
+                    if ((addID.startsWith("MS") || addID.startsWith("DS")) && !idExistVerification(addID, idType)) {
+                        employee = new ManagingStaff();
+                        System.out.print("New Password: ");
+                        newPassword = Scanner.next();
+                        employee = new ManagingStaff();
+
+                        if (addID.startsWith("MS")) {
+                            addableDetails = new String[]{"Name", "Age", "Gender", "Email"};
+                        } else if (addID.startsWith("DS")) {
+                            addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
+                                    "Vehicle Plate NO"};
+                        }
+
+                    } else if (addID.startsWith("CS") && !idExistVerification(addID, idType)) {
+                        addableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
+                    } else if (addID.startsWith("IT") && !idExistVerification(addID, idType)) {
+                        addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
+                    } else {
+                        System.out.println("Alert: ID input not valid or exist!");
+                        managingStaffManagementCLI(empID, idType);
+                        break;
                     }
-                    else if(addID.startsWith("DS")){
-                        addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
-                                "Vehicle Plate NO"};
-                    }
 
-                }else if (addID.startsWith("CS") && !idExistVerification(addID, idType)){
-                    addableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
-                }else if (addID.startsWith("IT") && !idExistVerification(addID, idType)){
-                    addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
-                }else{
-                    System.out.println("Alert: ID input not valid or exist!");
-                    managingStaffManagementCLI(idType);
-                    break;
+
+                    System.out.println("-----------------------");
+                    Scanner.nextLine();
+                    List<String> defaultStaffDetails = employee.defaultStaffDetails(addID);
+
+                    for (int a = 0; a < addableDetails.length; a++) {
+                        System.out.printf("New %s: ", addableDetails[a]);
+                        String userInput = Scanner.nextLine();
+                        if (userInput.equals("")) {
+                            addableDetails[a] = defaultStaffDetails.get(a + 1);
+                        } else {
+                            addableDetails[a] = userInput;
+                        }
+                    }
                 }
-
-
-                System.out.println("-----------------------");
-                Scanner.nextLine();
-                List<String> defaultStaffDetails = employee.defaultStaffDetails(addID);
-
-                for (int a = 0; a < addableDetails.length; a ++){
-                    System.out.printf("New %s: ", addableDetails[a]);
-                    String userInput = Scanner.nextLine();
-                    if (userInput.equals("")){
-                        addableDetails[a] = defaultStaffDetails.get(a + 1);
-                    }else{
-                        addableDetails[a] = userInput;
-                    }
-                }
-
 
                 // pass values
                 switch(idType) {
@@ -362,19 +398,123 @@ public class Main {
                         ManagingStaff managingStaff1 = (ManagingStaff) employee;
                         managingStaff1.addItemDetails(item);
                         break;
+                    case ORDER:
+                        Order order = new Order();
+                        String newOrderID = order.generateOrderID();
+                        boolean exit = false;
+
+                        // Retrieve Local Date Time
+                        String currentLocalDateTime = customDateTimePrompt();
+
+                        // Customer ID Input and Verification
+                        // Display customer ID and name for selection purpose
+                        Customer customer1 = new Customer();
+                        customer1.displayLimitedCustDetails();
+                        System.out.print("Customer ID: ");
+                        String customerID = Scanner.next();
+                        while((!idExistVerification(customerID, idType.CUSTOMER)) || !(customerID.startsWith("CS")) || (customerID.isBlank())){
+                            System.out.println("Warning: Customer ID does not Exist or not Valid!");
+                            System.out.print("Customer ID: ");
+                            customerID = Scanner.next();
+                        }
+                        customer1 = new Customer(customerID);
+
+                        // Item ID Input and Verification
+                        Item item1 = new Item();
+                        item1.displayLimitedItemDetails();
+                        System.out.print("Item ID: ");
+                        String itemID = Scanner.next();
+                        int itemQuantity = 0;
+                        while((!idExistVerification(itemID, idType.ITEM)) || !(itemID.startsWith("IT")) || (itemID.isBlank()) || !(item1.modifyItemQuantity(itemID, itemQuantity))){
+                            System.out.println("Warning: Item ID does not Exist or out of stock!");
+                            System.out.print("Item ID: ");
+                            itemID = Scanner.next();
+                        }
+
+                        // Item Quantity Input and Verification
+                        while(!exit || !(item1.modifyItemQuantity(itemID, itemQuantity))){
+                            try{
+                                Scanner.nextLine();
+                                System.out.print("Item Quantity: ");
+                                itemQuantity = Scanner.nextInt();
+                                if(itemQuantity <= 0){
+                                    System.out.println("Warning: Quantity cannot be less than 1!");
+                                }else{
+                                    exit = true;
+                                }
+                            } catch (InputMismatchException e){
+                                System.out.println("Warning: Quantity Must be an Integer value!");
+                            }
+                        }exit = false;
+                        item1 = new Item(itemID, itemQuantity);
+
+                        // Delivery ID Input and Verification // Association between Delivery and Order
+                        // Auto generated
+                        System.out.print("Create a delivery [y/n]? ");
+                        String deliveryNeeded = Scanner.next();
+                        Delivery delivery;
+                        String DeliveryID = "";
+                        while(!exit){
+                            switch(deliveryNeeded.toLowerCase()){
+                                case "y":
+                                    DeliveryStaff deliveryStaff = new DeliveryStaff();
+                                    deliveryStaff.displayLimitedDeliveryStaffDetails();
+                                    System.out.print("Delivery Staff ID: ");
+                                    String deliveryStaffID = Scanner.next();
+                                    while((!idExistVerification(deliveryStaffID, idType.STAFF)) || !(deliveryStaffID.startsWith("DS")) || (deliveryStaffID.isBlank())){
+                                        System.out.println("Warning: Delivery Staff ID does not Exist or not Valid!");
+                                        System.out.print("Delivery Staff ID: ");
+                                        deliveryStaffID = Scanner.next();
+                                    }
+                                    deliveryStaff = new DeliveryStaff(deliveryStaffID);
+
+                                    delivery = new Delivery();
+                                    DeliveryID = delivery.generateDeliveryID();
+                                    delivery = new Delivery(DeliveryID, currentLocalDateTime, deliveryStaff.getEmpID(),
+                                            customerID, item1);
+                                    delivery.add();
+
+                                    exit = true;
+                                    break;
+                                case "n":
+                                    exit = true;
+                                    System.out.println("Alert: No delivery is created!\n");
+                                    break;
+                                default:
+                                    System.out.println("Warning: Kindly Provide valid Input!");
+                                    break;
+                            }
+                        }
+
+                        // Association between managingStaff and order
+                        ManagingStaff managingStaff2 = new ManagingStaff(empID);
+
+                        switch(deliveryNeeded.toLowerCase()){
+                            case "y":
+                                order = new Order(newOrderID, currentLocalDateTime, customer1, DeliveryID, item1,
+                                        managingStaff2.getEmpID(), false);
+                                break;
+                            case "n":
+                                order = new Order(newOrderID, currentLocalDateTime, customer1, item1, managingStaff2.getEmpID(),
+                                        false);
+                                break;
+                        }
+                        order.add();
+                        break;
                 }
 
-                managingStaffManagementCLI(idType);
+                managingStaffManagementCLI(empID, idType);
                 break;
             case 3:
-                System.out.print("Edit ID: ");
-                String editID = Scanner.next();
                 String[] staffEditableDetails = {};
                 List<String> defaultDetails = new ArrayList<>();
 
+                System.out.print("Edit ID: ");
+                String editID = Scanner.next();
+
                 if(!idExistVerification(editID, idType)){
                     System.out.println("Alert: ID does not exist!");
-                    managingStaffManagementCLI(idType);
+                    managingStaffManagementCLI(empID, idType);
                     break;
                 }else if(editID.startsWith("MS")){
                     staffEditableDetails = new String[]{"Name", "Age", "Gender", "Email"};
@@ -447,7 +587,7 @@ public class Main {
                         break;
                 }
 
-                managingStaffManagementCLI(idType);
+                managingStaffManagementCLI(empID, idType);
                 break;
             case 4:
                 System.out.print("Remove ID: ");
@@ -457,199 +597,24 @@ public class Main {
                 ManagingStaff managingStaff1 = (ManagingStaff) employee;
 
                 if(!idExistVerification(removeID, idType)){
-                    System.out.println("Alert: Employee ID does not exist!");
+                    System.out.println("Alert: ID does not exist!");
                 } else if(removeID.startsWith("MS") || removeID.startsWith("DS")){
                     managingStaff1.removeEmpAccount(removeID);
                 } else if(removeID.startsWith("CS")){
                     managingStaff1.removeCustDetails(removeID);
                 } else if(removeID.startsWith("IT")){
                     managingStaff1.removeItemDetails(removeID);
+                } else if(removeID.startsWith("OD")){
+                    Order order = new Order();
+                    order.remove(removeID);
                 }
 
-                managingStaffManagementCLI(idType);
+                managingStaffManagementCLI(empID, idType);
                 break;
             case 5:
                 break;
             default:
-                managingStaffManagementCLI(idType);
-                break;
-        }
-    }
-
-    public static void managingStaffOrderCLI(String empID){
-        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("X         Order         X");
-        System.out.println("X       Management      X");
-        System.out.println("X-----------------------X");
-        System.out.println("X       [1] Search      X");
-        System.out.println("X       [2] Add         X");
-        System.out.println("X       [3] Edit        X");
-        System.out.println("X       [4] Remove      X");
-        System.out.println("X       [5] Back        X");
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.print("--> ");
-        String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 5);
-        switch(intUserChoice){
-            case 1:
-                System.out.print("Order ID: ");
-                String searchOrderID = Scanner.next();
-                while((!idExistVerification(searchOrderID, idType.ORDER)) || !(searchOrderID.startsWith("OD")) || (searchOrderID.isBlank())){
-                    System.out.println("Warning: Order ID does not Exist or not Valid!");
-                    System.out.print("Order ID: ");
-                    searchOrderID = Scanner.next();
-                }
-                Order order1 = new Order();
-                order1.search(searchOrderID);
-
-                managingStaffOrderCLI(empID);
-                break;
-            case 2:
-
-                boolean exit = false;
-
-                // Retrieve Local Date Time
-                String currentLocalDateTime = customDateTimePrompt();
-
-                // Customer ID Input and Verification
-                // Display customer ID and name for selection purpose
-                Customer customer = new Customer();
-                customer.displayLimitedCustDetails();
-                System.out.print("Customer ID: ");
-                String customerID = Scanner.next();
-                while((!idExistVerification(customerID, idType.CUSTOMER)) || !(customerID.startsWith("CS")) || (customerID.isBlank())){
-                    System.out.println("Warning: Customer ID does not Exist or not Valid!");
-                    System.out.print("Customer ID: ");
-                    customerID = Scanner.next();
-                }
-                customer = new Customer(customerID);
-
-                // Item ID Input and Verification
-                Item item = new Item();
-                item.displayLimitedItemDetails();
-                System.out.print("Item ID: ");
-                String itemID = Scanner.next();
-                int itemQuantity = 0;
-                while((!idExistVerification(itemID, idType.ITEM)) || !(itemID.startsWith("IT")) || (itemID.isBlank()) || !(item.modifyItemQuantity(itemID, itemQuantity))){
-                    System.out.println("Warning: Item ID does not Exist or out of stock!");
-                    System.out.print("Item ID: ");
-                    itemID = Scanner.next();
-                }
-
-                // Item Quantity Input and Verification
-                while(!exit || !(item.modifyItemQuantity(itemID, itemQuantity))){
-                    try{
-                        Scanner.nextLine();
-                        System.out.print("Item Quantity: ");
-                        itemQuantity = Scanner.nextInt();
-                        if(itemQuantity <= 0){
-                            System.out.println("Warning: Quantity cannot be less than 1!");
-                        }else{
-                            exit = true;
-                        }
-                    } catch (InputMismatchException e){
-                        System.out.println("Warning: Quantity Must be an Integer value!");
-                    }
-                }exit = false;
-                item = new Item(itemID, itemQuantity);
-
-                // Delivery ID Input and Verification // Association between Delivery and Order
-                // Auto generated
-                System.out.print("Create a delivery [y/n]? ");
-                String deliveryNeeded = Scanner.next();
-                Delivery delivery;
-                String DeliveryID = "";
-                while(!exit){
-                    switch(deliveryNeeded.toLowerCase()){
-                        case "y":
-                            DeliveryStaff deliveryStaff = new DeliveryStaff();
-                            deliveryStaff.displayLimitedDeliveryStaffDetails();
-                            System.out.print("Delivery Staff ID: ");
-                            String deliveryStaffID = Scanner.next();
-                            while((!idExistVerification(deliveryStaffID, idType.STAFF)) || !(deliveryStaffID.startsWith("DS")) || (deliveryStaffID.isBlank())){
-                                System.out.println("Warning: Delivery Staff ID does not Exist or not Valid!");
-                                System.out.print("Delivery Staff ID: ");
-                                deliveryStaffID = Scanner.next();
-                            }
-                            deliveryStaff = new DeliveryStaff(deliveryStaffID);
-
-                            // Generate new DeliveryID
-                            delivery = new Delivery();
-                            DeliveryID = delivery.generateDeliveryID();
-
-                            delivery = new Delivery(DeliveryID, currentLocalDateTime, deliveryStaff.getEmpID(),
-                                    customerID, item);
-                            delivery.add();
-
-                            exit = true;
-                            break;
-                        case "n":
-                            exit = true;
-                            System.out.println("Alert: No delivery is created!\n");
-                            break;
-                        default:
-                            System.out.println("Warning: Kindly Provide valid Input!");
-                            break;
-                    }
-                }
-
-                // Generate new OrderID
-                Order order = new Order();
-                String newOrderID = order.generateOrderID();
-
-                // Association between managingStaff and order
-                ManagingStaff managingStaff = new ManagingStaff(empID);
-
-                switch(deliveryNeeded.toLowerCase()){
-                    case "y":
-                        order = new Order(newOrderID, currentLocalDateTime, customer, DeliveryID, item,
-                                managingStaff.getEmpID(), false);
-                        break;
-                    case "n":
-                        order = new Order(newOrderID, currentLocalDateTime, customer, item, managingStaff.getEmpID(),
-                                false);
-                        break;
-                }
-                order.add();
-
-                managingStaffOrderCLI(empID);
-                break;
-            case 3:
-                System.out.print("Order ID: ");
-                String editOrderID = Scanner.next();
-                while((!idExistVerification(editOrderID, idType.ORDER)) || !(editOrderID.startsWith("OD")) || (editOrderID.isBlank())){
-                    System.out.println("Warning: Order ID does not Exist or not Valid!");
-                    System.out.print("Order ID: ");
-                    editOrderID = Scanner.next();
-                }
-
-                Order order2 = new Order();
-                order2.search(editOrderID);
-                System.out.println("-----------------------");
-
-
-
-                order2.modify();
-
-                managingStaffOrderCLI(empID);
-                break;
-            case 4:
-                Order order3 = new Order();
-                System.out.print("Order ID: ");
-                String removeOrderID = Scanner.next();
-                while((!idExistVerification(removeOrderID, idType.ORDER)) || !(removeOrderID.startsWith("OD")) || (removeOrderID.isBlank())){
-                    System.out.println("Warning: Order ID does not Exist or not Valid!");
-                    System.out.print("Order ID: ");
-                    removeOrderID = Scanner.next();
-                }
-                order3.remove(removeOrderID);
-
-                managingStaffOrderCLI(empID);
-                break;
-            case 5:
-                break;
-            default:
-                managingStaffOrderCLI(empID);
+                managingStaffManagementCLI(empID, idType);
                 break;
         }
     }
