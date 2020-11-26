@@ -492,7 +492,15 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch(intUserChoice){
             case 1:
-
+                Order order1 = new Order();
+                System.out.print("Order ID: ");
+                String searchOrderID = Scanner.next();
+                while((!idExistVerification(searchOrderID, idType.ORDER)) || !(searchOrderID.startsWith("OD")) || (searchOrderID.isBlank())){
+                    System.out.println("Warning: Order ID does not Exist or not Valid!");
+                    System.out.print("Order ID: ");
+                    searchOrderID = Scanner.next();
+                }
+                order1.search(searchOrderID);
                 managingStaffOrderCLI(empID);
                 break;
             case 2:
@@ -601,11 +609,18 @@ public class Main {
                 managingStaffOrderCLI(empID);
                 break;
             case 3:
-
-
                 managingStaffOrderCLI(empID);
                 break;
             case 4:
+                Order order3 = new Order();
+                System.out.print("Order ID: ");
+                String removeOrderID = Scanner.next();
+                while((!idExistVerification(removeOrderID, idType.ORDER)) || !(removeOrderID.startsWith("OD")) || (removeOrderID.isBlank())){
+                    System.out.println("Warning: Order ID does not Exist or not Valid!");
+                    System.out.print("Order ID: ");
+                    removeOrderID = Scanner.next();
+                }
+                order3.remove(removeOrderID);
                 managingStaffOrderCLI(empID);
                 break;
             case 5:

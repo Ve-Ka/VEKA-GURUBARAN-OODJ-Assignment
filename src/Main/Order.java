@@ -48,7 +48,12 @@ public class Order implements Task{
     // search can be depreciated
     @Override
     public void search(String ID) {
-
+        List<Order> orderList = getAllOrder();
+        for(Order item: orderList){
+            if(item.getOrderID().equals(ID)){
+                System.out.println(item.toString());
+            }
+        }
     }
 
     @Override
@@ -73,7 +78,25 @@ public class Order implements Task{
 
     @Override
     public void remove(String ID) {
+        // Remove Details from Customer Object List
+        Order order = new Order();
+        List<Order> orderList = order.getAllOrder();
+        orderList.removeIf(order1 -> order1.getOrderID().equals(ID));
 
+        // Write all data to file
+        try {
+            FileWriter WriteData = new FileWriter(orderFile);
+            for (Order order2 : orderList) {
+                WriteData.write(String.format("%s|%s|%s|%s|%d|%s|%s|%s\n", order2.getOrderID(),
+                        order2.getOrderDateTime(), order2.getCustomer().getCustID(), order2.getItem().getItemID(),
+                        order2.getItem().getItemQuantity(), order2.getDeliveryID(), order2.getManagingStaffID(),
+                        order2.getOrderCompletion()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Order Details Removed!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     //customer -> order -> order list
@@ -114,6 +137,11 @@ public class Order implements Task{
         return newOrderID;
     }
 
+    // probably not be implemented
+    protected void removeDelivery(String ID){
+
+    }
+
     public String getOrderID() {
         return orderID;
     }
@@ -146,7 +174,7 @@ public class Order implements Task{
         this.managingStaffID = managingStaffID;
     }
 
-    public boolean isOrderCompletion() {
+    public boolean getOrderCompletion() {
         return orderCompletion;
     }
 
@@ -176,14 +204,12 @@ public class Order implements Task{
 
     @Override
     public String toString() {
-        return "Order{" +
-                "orderID='" + orderID + '\'' +
-                ", orderDateTime=" + orderDateTime +
-                ", deliveryID='" + deliveryID + '\'' +
-                ", managingStaffID='" + managingStaffID + '\'' +
-                ", orderCompletion=" + orderCompletion +
-                ", customer=" + customer +
-                ", item=" + item +
-                '}';
+        return  "Order Date Time: " + orderDateTime + '\n' +
+                "Customer ID: " + customer.getCustID() + '\n' +
+                "Item ID: " + item.getItemID() + '\n' +
+                "Item Quantity: " + item.getItemQuantity() + '\n' +
+                "Delivery ID: " + deliveryID + '\n' +
+                "Managing Staff ID: " + managingStaffID + '\n' +
+                "Order Completed: " + orderCompletion;
     }
 }
