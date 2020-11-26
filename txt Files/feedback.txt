@@ -1,0 +1,2 @@
+FE0001|27/11/2020 03:33:58|Slow Delivery of Item|Slow Delivery|CS0003|Pavan|012-564 1234|MS0002
+FE0002|27/11/2020 06:22:24|Delivery Status not Updated|Delivery was stuck at Tangkak, Johor for many weeks|CS0004|Eva|013-234 1987|MS0002

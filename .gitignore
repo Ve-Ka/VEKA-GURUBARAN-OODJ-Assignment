@@ -28,5 +28,4 @@ out
 *.iml
 *.idea
 *.pdf
-/Generated Report/
-/txt Files/
+/Generated Report/*.pdf
