@@ -708,11 +708,12 @@ public class Main {
         System.out.println("X  [1] Account          X");
         System.out.println("X  [2] Managing Staff   X");
         System.out.println("X  [3] Delivery Staff   X");
-        System.out.println("X  [4] Feedback         X");
-        System.out.println("X  [5] Item             X");
-        System.out.println("X  [6] Order            X");
-        System.out.println("X  [7] Delivery         X");
-        System.out.println("X  [8] Back             X");
+        System.out.println("X  [4] Customer         X");
+        System.out.println("X  [5] Feedback         X");
+        System.out.println("X  [6] Item             X");
+        System.out.println("X  [7] Order            X");
+        System.out.println("X  [8] Delivery         X");
+        System.out.println("X  [9] Back             X");
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
@@ -737,30 +738,36 @@ public class Main {
                 managingStaffReportCLI();
                 break;
             case 4:
+                Customer customer = new Customer();
+                customer.generateReport();
+                System.out.println("Alert: Report Generated!");
+                managingStaffReportCLI();
+                break;
+            case 5:
                 Feedback feedback = new Feedback();
                 feedback.generateReport();
                 System.out.println("Alert: Report Generated!");
                 managingStaffReportCLI();
                 break;
-            case 5:
+            case 6:
                 Item item = new Item();
                 item.generateReport();
                 System.out.println("Alert: Report Generated!");
                 managingStaffReportCLI();
                 break;
-            case 6:
+            case 7:
                 Order order = new Order();
                 order.generateReport();
                 System.out.println("Alert: Report Generated!");
                 managingStaffReportCLI();
                 break;
-            case 7:
+            case 8:
                 Delivery delivery = new Delivery();
                 delivery.generateReport();
                 System.out.println("Alert: Report Generated!");
                 managingStaffReportCLI();
                 break;
-            case 8:
+            case 9:
                 break;
             default:
                 managingStaffReportCLI();
