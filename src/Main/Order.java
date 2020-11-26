@@ -20,7 +20,6 @@ public class Order implements Task{
     private Customer customer;
     private Item item;
 
-
     public Order(){}
 
     public Order(String orderID, String orderDateTime, Customer customer, Item item, String managingStaffID,
@@ -72,7 +71,7 @@ public class Order implements Task{
     }
 
     @Override
-    public void modify() {
+    public void modify(Object object) {
 
     }
 
@@ -105,8 +104,41 @@ public class Order implements Task{
         }
     }
 
+    @Override
+    public List<String> defaultDetails(String ID){
+        List<Order> originalDetails = getAllOrder();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Order detail : originalDetails) {
+            if (detail.getOrderID().equals(ID)) {
+                defaultDetails.add(detail.getOrderID());
+                defaultDetails.add(detail.getOrderDateTime());
+                defaultDetails.add(detail.getCustomer().getCustID());
+                defaultDetails.add(detail.getItem().getItemID());
+                defaultDetails.add(Integer.toString(detail.getItem().getItemQuantity()));
+                defaultDetails.add(detail.getDeliveryID());
+                defaultDetails.add(detail.getManagingStaffID());
+                defaultDetails.add(Boolean.toString(detail.getOrderCompletion()));
+            }
+        }
+        return defaultDetails;
+    }
+
+    @Override
+    public String generateID(){
+        List<Order> defaultList = getAllOrder();
+        String newOrderID;
+        try{
+            newOrderID = String.format("OD%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getOrderID().replaceAll("OD", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newOrderID = "OD0001";
+        }
+        return newOrderID;
+    }
+
     //customer -> order -> order list
     //object -> object item -> object list
+    // to be added into interface after renaming
     protected List<Order> getAllOrder(){
         List<Order> orderList = new ArrayList();
         try {
@@ -131,17 +163,7 @@ public class Order implements Task{
         return orderList;
     }
 
-    protected String generateOrderID(){
-        List<Order> defaultList = getAllOrder();
-        String newOrderID;
-        try{
-            newOrderID = String.format("OD%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
-                    - 1).getOrderID().replaceAll("OD", ""))) + 1));
-        }catch(IndexOutOfBoundsException e){
-            newOrderID = "OD0001";
-        }
-        return newOrderID;
-    }
+
 
     public String getOrderID() {
         return orderID;

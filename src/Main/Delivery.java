@@ -17,7 +17,6 @@ public class Delivery implements Task{
     private String custName;
     private String custAddress;
 
-
     private final static String deliveryFile = "delivery.txt";
 
     // Aggregration
@@ -25,16 +24,23 @@ public class Delivery implements Task{
 
     public Delivery(){}
 
-    public Delivery(String deliveryID){
-        this.deliveryID = deliveryID;
-    }
-
     public Delivery(String deliveryID, String deliveryDateTime, String deliveryStaffID, String custID, Item item){
         this.deliveryID = deliveryID;
         this.deliveryDateTime = deliveryDateTime;
         this.deliveryStaffID = deliveryStaffID;
         this.custID = custID;
         this.item = item;
+    }
+
+    public Delivery(String deliveryID, String deliveryDateTime, String deliveryStaffID, String custID,
+                    String custName, String custAddress, String itemID, int itemQuantity){
+        this.deliveryID = deliveryID;
+        this.deliveryDateTime = deliveryDateTime;
+        this.deliveryStaffID = deliveryStaffID;
+        this.custID = custID;
+        this.custName = custName;
+        this.custAddress = custAddress;
+        item = new Item(itemID, itemQuantity);
     }
 
     @Override
@@ -72,8 +78,35 @@ public class Delivery implements Task{
     }
 
     @Override
-    public void modify() {
+    public void modify(Object object) {
+        // Overwrite Original List with new data
+        Delivery delivery = (Delivery) object;
+        List<Delivery> originalDetails = getAllDelivery();
+        int position = 0;
+        for (Delivery detail: originalDetails){
+            if (detail.getDeliveryID().equals(delivery.getDeliveryID())) {
+                break;
+            }else{
+                position ++;
+            }
+        }
 
+        originalDetails.set(position, delivery);
+
+        // Write to file
+        try{
+            FileWriter WriteData = new FileWriter(deliveryFile);
+            for (Delivery detail: originalDetails){
+                WriteData.write(String.format("%s|%s|%s|%s|%s|%s|%s|%d\n", detail.getDeliveryID(),
+                        detail.getDeliveryDateTime(), detail.getDeliveryStaffID(), detail.getCustID(),
+                        detail.getCustName(), detail.getCustAddress(), detail.getItem().getItemID(),
+                        detail.getItem().getItemQuantity()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Details Updated!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -99,6 +132,38 @@ public class Delivery implements Task{
         }
     }
 
+    @Override
+    public List<String> defaultDetails(String ID){
+        List<Delivery> originalDetails = getAllDelivery();
+        List<String> defaultDetails = new ArrayList<>();
+        for (Delivery detail : originalDetails) {
+            if (detail.getDeliveryID().equals(ID)) {
+                defaultDetails.add(detail.getDeliveryID());
+                defaultDetails.add(detail.getDeliveryDateTime());
+                defaultDetails.add(detail.getDeliveryStaffID());
+                defaultDetails.add(detail.getCustID());
+                defaultDetails.add(detail.getCustName());
+                defaultDetails.add(detail.getCustAddress());
+                defaultDetails.add(detail.getItem().getItemID());
+                defaultDetails.add(Integer.toString(detail.getItem().getItemQuantity()));
+            }
+        }
+        return defaultDetails;
+    }
+
+    @Override
+    public String generateID(){
+        List<Delivery> defaultList = getAllDelivery();
+        String newDeliveryID;
+        try{
+            newDeliveryID = String.format("DE%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getDeliveryID().replaceAll("DE", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newDeliveryID = "DE0001";
+        }
+        return newDeliveryID;
+    }
+
     protected List<Delivery> getAllDelivery(){
         List<Delivery> deliveryList = new ArrayList();
         try {
@@ -122,17 +187,7 @@ public class Delivery implements Task{
         return deliveryList;
     }
 
-    protected String generateDeliveryID(){
-        List<Delivery> defaultList = getAllDelivery();
-        String newDeliveryID;
-        try{
-            newDeliveryID = String.format("DE%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
-                    - 1).getDeliveryID().replaceAll("DE", ""))) + 1));
-        }catch(IndexOutOfBoundsException e){
-            newDeliveryID = "DE0001";
-        }
-        return newDeliveryID;
-    }
+
 
     public String getDeliveryID() {
         return deliveryID;

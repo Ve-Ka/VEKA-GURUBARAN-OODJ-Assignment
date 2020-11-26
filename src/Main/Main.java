@@ -400,7 +400,7 @@ public class Main {
                         break;
                     case ORDER:
                         Order order = new Order();
-                        String newOrderID = order.generateOrderID();
+                        String newOrderID = order.generateID();
                         boolean exit = false;
 
                         // Retrieve Local Date Time
@@ -469,7 +469,7 @@ public class Main {
                                     deliveryStaff = new DeliveryStaff(deliveryStaffID);
 
                                     delivery = new Delivery();
-                                    DeliveryID = delivery.generateDeliveryID();
+                                    DeliveryID = delivery.generateID();
                                     delivery = new Delivery(DeliveryID, currentLocalDateTime, deliveryStaff.getEmpID(),
                                             customerID, item1);
                                     delivery.add();
@@ -537,6 +537,16 @@ public class Main {
                     Item item = new Item();
                     defaultDetails = item.defaultItemDetails(editID);
                     item.viewItemDetails(editID);
+                }else if(editID.startsWith("OD")){
+                    staffEditableDetails = new String[]{"Order Completed"};
+                    Order order = new Order();
+                    defaultDetails = order.defaultDetails(editID);
+                    order.search(editID);
+                }else if(editID.startsWith("DE")){
+                    staffEditableDetails = new String[]{"Delivery Staff"};
+                    Delivery delivery = new Delivery();
+                    defaultDetails = delivery.defaultDetails(editID);
+                    delivery.search(editID);
                 }
 
                 System.out.println("-----------------------");
@@ -584,6 +594,17 @@ public class Main {
                         employee = new ManagingStaff();
                         ManagingStaff managingStaff2 = (ManagingStaff) employee;
                         managingStaff2.editItemDetails(item);
+                        break;
+                    case ORDER:
+                        Order order = new Order();
+                        order.setOrderCompletion( Boolean.parseBoolean(staffEditableDetails[0]));
+                        order.modify(order);
+                        break;
+                    case DELIVERY:
+                        Delivery delivery = new Delivery(defaultDetails.get(0), defaultDetails.get(1),
+                                staffEditableDetails[0], defaultDetails.get(3), defaultDetails.get(4),
+                                defaultDetails.get(5), defaultDetails.get(6), Integer.parseInt(defaultDetails.get(7)));
+                        delivery.modify(delivery);
                         break;
                 }
 

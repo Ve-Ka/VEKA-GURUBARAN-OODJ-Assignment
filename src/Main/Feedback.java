@@ -1,5 +1,7 @@
 package Main;
 
+import java.util.List;
+
 public class Feedback implements Task{
 
 
@@ -14,12 +16,22 @@ public class Feedback implements Task{
     }
 
     @Override
-    public void modify() {
+    public void modify(Object object) {
 
     }
 
     @Override
     public void remove(String ID) {
 
+    }
+
+    @Override
+    public List<String> defaultDetails(String ID) {
+        return null;
+    }
+
+    @Override
+    public String generateID() {
+        return null;
     }
 }
