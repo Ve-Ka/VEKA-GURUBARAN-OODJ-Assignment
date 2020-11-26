@@ -1,16 +1,22 @@
 package Main;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import javax.management.DescriptorKey;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class DeliveryStaff extends Employee{
+public class DeliveryStaff extends Employee implements MiscellaneousFunction{
     private String vehicleBrand;
     private String vehiclePlateNo;
-    protected final static String deliveryStaffDetailsFile = "deliveryStaffDetails.txt";
+    protected final static String deliveryStaffDetailsFile = "txt Files/deliveryStaffDetails.txt";
 
     public DeliveryStaff(){}
 
@@ -39,22 +45,12 @@ public class DeliveryStaff extends Employee{
         }
     }
 
-    protected void displayLimitedDeliveryStaffDetails(){
-        List<DeliveryStaff> deliveryStaffs = getAllDeliveryStaffDetails();
-        System.out.println("\nAll Delivery Staff details");
-        for (DeliveryStaff deliveryStaff: deliveryStaffs){
-            System.out.printf("%s|%s|%s|%s\n", deliveryStaff.getEmpID(), deliveryStaff.getEmpName(),
-                    deliveryStaff.getVehicleBrand(), deliveryStaff.getVehicleBrand());
-        }
-        System.out.println("");
-    }
-
     @Override
-    protected List<String> defaultStaffDetails(String empID) {
+    public List<String> defaultDetails(String ID) {
         List<DeliveryStaff> originalDetails = getAllDeliveryStaffDetails();
         List<String> defaultDetails = new ArrayList<>();
         for (DeliveryStaff detail : originalDetails) {
-            if (detail.getEmpID().equals(empID)) {
+            if (detail.getEmpID().equals(ID)) {
                 defaultDetails.add(detail.getEmpID());
                 defaultDetails.add(detail.getEmpName());
                 defaultDetails.add(Integer.toString(detail.getEmpAge()));
@@ -65,6 +61,79 @@ public class DeliveryStaff extends Employee{
             }
         }
         return defaultDetails;
+    }
+
+    @Override
+    public String generateID(){
+        List<DeliveryStaff> defaultList = getAllDeliveryStaffDetails();
+        String newEmpID;
+        try{
+            newEmpID = String.format("DS%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getEmpID().replaceAll("DS", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newEmpID = "DS0001";
+        }
+        return newEmpID;
+    }
+
+    @Override
+    public void generateReport() {
+        try {
+            FileReader in = new FileReader(deliveryStaffDetailsFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<DeliveryStaff> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                DeliveryStaff processed = new DeliveryStaff(split[0], split[1], Integer.parseInt(split[2]), split[3],
+                        split[4], split[5], split[6]);
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Delivery Staff Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Delivery Staff Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20,
+                    Font.BOLD)));
+            doc.add(new Paragraph(" "));
+
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(7);
+            table.setWidthPercentage(100);
+            table.addCell("ID");
+            table.addCell("Name");
+            table.addCell("Age");
+            table.addCell("Gender");
+            table.addCell("Email");
+            table.addCell("Vehicle Brand");
+            table.addCell("Vehicle Plate NO");
+
+            for(DeliveryStaff object : item){
+                table.addCell(object.getEmpID());
+                table.addCell(object.getEmpName());
+                table.addCell(Integer.toString(object.getEmpAge()));
+                table.addCell(object.getEmpGender());
+                table.addCell(object.getEmpEmail());
+                table.addCell(object.getVehicleBrand());
+                table.addCell(object.getVehiclePlateNo());
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void displayLimitedDeliveryStaffDetails(){
+        List<DeliveryStaff> deliveryStaffs = getAllDeliveryStaffDetails();
+        System.out.println("\nAll Delivery Staff details");
+        for (DeliveryStaff deliveryStaff: deliveryStaffs){
+            System.out.printf("%s|%s|%s|%s\n", deliveryStaff.getEmpID(), deliveryStaff.getEmpName(),
+                    deliveryStaff.getVehicleBrand(), deliveryStaff.getVehicleBrand());
+        }
+        System.out.println("");
     }
 
     protected void editStaffDetails(DeliveryStaff deliveryStaff) {

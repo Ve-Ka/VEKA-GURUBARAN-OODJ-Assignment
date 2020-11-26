@@ -27,4 +27,6 @@ hs_err_pid*
 out
 *.iml
 *.idea
-
+*.pdf
+/Generated Report/
+/txt Files/

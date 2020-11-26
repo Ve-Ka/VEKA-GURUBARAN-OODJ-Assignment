@@ -1,24 +1,36 @@
 package Main;
 
-import java.io.IOException;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Customer {
+public class Customer implements MiscellaneousFunction{
     private String custID;
     private String custName;
     private String custEmail;
     private String custPhoneNo;
     private String custAddress;
 
-    protected final static String custDetailsFile = "custDetails.txt";
+    protected final static String custDetailsFile = "txt Files/custDetails.txt";
 
     public Customer(){}
 
     public Customer(String custID){
         this.custID = custID;
+    }
+
+    public Customer(String custID, String custName, String custPhoneNo){
+        this.custID = custID;
+        this.custName = custName;
+        this.custPhoneNo = custPhoneNo;
     }
 
     public Customer(String custID, String custName, String custEmail, String custPhoneNo, String custAddress) {
@@ -67,11 +79,12 @@ public class Customer {
         System.out.println("");
     }
 
-    protected List<String> defaultCustomerDetails(String custID){
+    @Override
+    public List<String> defaultDetails(String ID){
         List<Customer> originalDetails = getAllCustDetails();
         List<String> defaultDetails = new ArrayList<>();
         for (Customer detail : originalDetails) {
-            if (detail.getCustID().equals(custID)) {
+            if (detail.getCustID().equals(ID)) {
                 defaultDetails.add(detail.getCustID());
                 defaultDetails.add(detail.getCustName());
                 defaultDetails.add(detail.getCustEmail());
@@ -80,6 +93,63 @@ public class Customer {
             }
         }
         return defaultDetails;
+    }
+
+    @Override
+    public String generateID() {
+        List<Customer> defaultList = getAllCustDetails();
+        String newCustID;
+        try{
+            newCustID = String.format("CS%04d", ((Integer.parseInt(defaultList.get(defaultList.size()
+                    - 1).getCustID().replaceAll("CS", ""))) + 1));
+        }catch(IndexOutOfBoundsException e){
+            newCustID = "CS0001";
+        }
+        return newCustID;
+    }
+
+    @Override
+    public void generateReport() {
+        try {
+            FileReader in = new FileReader(custDetailsFile);
+            BufferedReader br = new BufferedReader(in);
+            String record;
+            ArrayList<Customer> item = new ArrayList();
+            while((record = br.readLine())!= null){
+                String[] split = record.split("\\|");
+                Customer processed = new Customer(split[0], split[1], split[2], split[3], split[4]);
+                item.add(processed);
+            }
+            br.close();
+            Document doc = new Document();
+            PdfWriter.getInstance(doc, new FileOutputStream("Generated Report/Customer Report.pdf"));
+            doc.open();
+            doc.add(new Paragraph("Customer Report", FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD)));
+            doc.add(new Paragraph(" "));
+
+            // Defining Column Name
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100);
+            table.addCell("ID");
+            table.addCell("Name");
+            table.addCell("Email");
+            table.addCell("Phone Number");
+            table.addCell("Address");
+
+            for(Customer object : item){
+                table.addCell(object.getCustID());
+                table.addCell(object.getCustName());
+                table.addCell(object.getCustEmail());
+                table.addCell(object.getCustPhoneNo());
+                table.addCell(object.getCustAddress());
+            }
+            doc.add(table);
+            doc.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Feedback.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     protected String getCustID() {

@@ -1,6 +1,5 @@
 package Main;
 
-import java.util.EnumMap;
 import java.util.List;
 
 public abstract class Employee {
@@ -47,16 +46,19 @@ public abstract class Employee {
     }
 
     protected void viewSelfAccount(String empID){
+        Account account = new Account();
         List<Account> accounts = account.getAllEmpCredential();
-        for (Account account: accounts){
-            if (account.getEmpID().equals(empID)){
-                System.out.println(account.toString());
+        for (Account account1: accounts){
+            if (account1.getEmpID().equals(empID)){
+                System.out.println(account1.toString());
             }
         }
     }
 
     protected abstract void displayStaffDetails(String empID);
-    protected abstract List<String> defaultStaffDetails(String empID);
+    protected abstract List<String> defaultDetails(String ID);
+
+
 
     protected String getEmpID() {
         return empID;
@@ -105,4 +107,5 @@ public abstract class Employee {
                 "Gender: " + empGender + '\n' +
                 "Email: " + empEmail;
     }
+
 }
