@@ -19,10 +19,6 @@ public class Item {
 
     public Item(){}
 
-    public Item(String itemID){
-        this.itemID = itemID;
-    }
-
     public Item(String itemID, int itemQuantity){
         this.itemID = itemID;
         this.itemQuantity = itemQuantity;
@@ -125,6 +121,8 @@ public class Item {
         }
         return true;
     }
+
+
 
     protected String getItemID() {
         return itemID;
