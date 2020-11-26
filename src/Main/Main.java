@@ -349,7 +349,7 @@ public class Main {
                     } else if (addID.toUpperCase().startsWith("DS")) {
                         addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
                                 "Vehicle Plate NO"};
-                        employee = new ManagingStaff();
+                        employee = new DeliveryStaff();
                         DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
                         addID = deliveryStaff.generateID();
                         System.out.println("\nNew ID: " + addID);
