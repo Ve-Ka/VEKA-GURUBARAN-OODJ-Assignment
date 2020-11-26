@@ -185,6 +185,31 @@ public class Delivery implements Task{
         return deliveryList;
     }
 
+    protected void viewSelfDelivery(String empID){
+        Order order = new Order();
+        List<Order> orderList = order.getAllOrder();
+        List<Delivery> deliveryList = getAllDelivery();
+        int position = 0;
+        for(Delivery item: deliveryList){
+            if(item.getDeliveryID().equals(orderList.get(position).getDeliveryID())){
+                if((item.getDeliveryStaffID().equals(empID)) && !(orderList.get(position).getOrderCompletion())){
+                    System.out.println("Delivery ID: " + item.getDeliveryID());
+                    System.out.println(item.toString());
+                    System.out.println("+~~~~~~~~~~~~~~~~~~~~~~~+");
+                }
+            }position ++;
+        }
+    }
+
+    protected boolean selfDeliveryVerification(String empID){
+        List<Delivery> deliveryList = getAllDelivery();
+        for(Delivery item: deliveryList){
+            if(item.getDeliveryStaffID().equals(empID)){
+                return true;
+            }
+        }return false;
+    }
+
 
 
     public String getDeliveryID() {
@@ -245,7 +270,7 @@ public class Delivery implements Task{
 
     @Override
     public String toString() {
-        return  "Delivery Date Time: " + deliveryDateTime + '\n' +
+        return  "Created Date Time: " + deliveryDateTime + '\n' +
                 "Delivery Staff ID: " + deliveryStaffID + '\n' +
                 "Customer ID: " + custID + '\n' +
                 "Customer Name: " + custName + '\n' +

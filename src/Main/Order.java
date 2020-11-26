@@ -199,6 +199,30 @@ public class Order implements Task{
         return orderList;
     }
 
+    protected void updateOrder(String deliveryID){
+        List<Order> originalDetails = getAllOrder();
+        for (Order detail: originalDetails){
+            if (detail.getDeliveryID().equals(deliveryID)) {
+                detail.setOrderCompletion(true);
+                break;
+            }
+        }
+
+        // Write to file
+        try{
+            FileWriter WriteData = new FileWriter(orderFile);
+            for (Order detail: originalDetails){
+                WriteData.write(String.format("%s|%s|%s|%s|%d|%s|%s|%s\n", detail.getOrderID(),
+                        detail.getOrderDateTime(), detail.getCustomer().getCustID(), detail.getItem().getItemID(),
+                        detail.getItem().getItemQuantity(), detail.getDeliveryID(), detail.getManagingStaffID(),
+                        detail.getOrderCompletion()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Order Details Updated!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
 
     public String getOrderID() {
@@ -263,7 +287,7 @@ public class Order implements Task{
 
     @Override
     public String toString() {
-        return  "Order Date Time: " + orderDateTime + '\n' +
+        return  "Created Date Time: " + orderDateTime + '\n' +
                 "Customer ID: " + customer.getCustID() + '\n' +
                 "Item ID: " + item.getItemID() + '\n' +
                 "Item Quantity: " + item.getItemQuantity() + '\n' +

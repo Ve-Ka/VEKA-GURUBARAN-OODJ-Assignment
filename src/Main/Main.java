@@ -340,7 +340,7 @@ public class Main {
                     } else if (addID.startsWith("IT") && !idExistVerification(addID, idType)) {
                         addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                     } else {
-                        System.out.println("Alert: ID input not valid or exist!");
+                        System.out.println("Alert: ID input Invalid or exist!");
                         managingStaffManagementCLI(empID, idType);
                         break;
                     }
@@ -413,7 +413,7 @@ public class Main {
                         System.out.print("Customer ID: ");
                         String customerID = Scanner.next();
                         while((!idExistVerification(customerID, idType.CUSTOMER)) || !(customerID.startsWith("CS")) || (customerID.isBlank())){
-                            System.out.println("Warning: Customer ID does not Exist or not Valid!");
+                            System.out.println("Warning: Customer ID does not Exist or Invalid!");
                             System.out.print("Customer ID: ");
                             customerID = Scanner.next();
                         }
@@ -462,7 +462,7 @@ public class Main {
                                     System.out.print("Delivery Staff ID: ");
                                     String deliveryStaffID = Scanner.next();
                                     while((!idExistVerification(deliveryStaffID, idType.STAFF)) || !(deliveryStaffID.startsWith("DS")) || (deliveryStaffID.isBlank())){
-                                        System.out.println("Warning: Delivery Staff ID does not Exist or not Valid!");
+                                        System.out.println("Warning: Delivery Staff ID does not Exist or Invalid!");
                                         System.out.print("Delivery Staff ID: ");
                                         deliveryStaffID = Scanner.next();
                                     }
@@ -653,15 +653,16 @@ public class Main {
         System.out.println("X     Delivery Staff    X");
         System.out.printf("X         %s        X\n", empID);
         System.out.println("X-----------------------X");
-        System.out.println("X       [1] Delivery    X");
-        System.out.println("X       [2] Account     X");
-        System.out.println("X       [3] Logout      X");
+        System.out.println("X      [1] Delivery     X");
+        System.out.println("X      [2] Account      X");
+        System.out.println("X      [3] Logout       X");
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
         int intUserChoice = userChoiceVerification(userChoice, 1, 3);
         switch(intUserChoice) {
             case 1:
+                deliveryStaffDeliveryCLI(empID);
                 deliveryStaffMainCLI(empID);
                 break;
             case 2:
@@ -677,7 +678,64 @@ public class Main {
     }
 
     private static void deliveryStaffDeliveryCLI(String empID){
+        System.out.println("\nXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("X        Delivery       X");
+        System.out.println("X       Management      X");
+        System.out.println("X-----------------------X");
+        System.out.println("X       [1] View        X");
+        System.out.println("X       [2] Update      X");
+        System.out.println("X       [3] Back        X");
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.print("--> ");
+        String userChoice = Scanner.next();
+        int intUserChoice = userChoiceVerification(userChoice, 1, 3);
+        switch(intUserChoice) {
+            case 1:
+                Delivery delivery = new Delivery();
+                delivery.viewSelfDelivery(empID);
+                deliveryStaffDeliveryCLI(empID);
+                break;
+            case 2:
+                Delivery delivery1 = new Delivery();
+                delivery1.viewSelfDelivery(empID);
+                System.out.print("Delivery ID: ");
+                String deliveryID = Scanner.next();
+                if((!idExistVerification(deliveryID, idType.DELIVERY)) || !(deliveryID.startsWith("DE")) ||
+                        (deliveryID.isBlank()) || !(delivery1.selfDeliveryVerification(empID))){
+                    System.out.println("Warning: Delivery ID does not Exist or Invalid!");
+                    deliveryStaffDeliveryCLI(empID);
+                    break;
+                }
 
+                boolean exit = false;
+                while(!exit){
+                    System.out.print("Confirm update order status to completed [y/n]? ");
+                    String userConfirmation = Scanner.next();
+                    switch(userConfirmation.toLowerCase()){
+                        case "y":
+                            Order order = new Order();
+                            order.updateOrder(deliveryID);
+                            System.out.println("Alert: Order status updated!");
+                            exit = true;
+                            break;
+                        case "n":
+                            System.out.println("Alert: Order status not updated!");
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Warning: Kindly provide valid input!");
+                            break;
+                    }
+                }
+
+                deliveryStaffDeliveryCLI(empID);
+                break;
+            case 3:
+                break;
+            default:
+                deliveryStaffDeliveryCLI(empID);
+                break;
+        }
     }
 
     /*
@@ -738,10 +796,13 @@ public class Main {
                 }
                 break;
             case DELIVERY:
+                Order order1 = new Order();
+                List<Order> orderList = order1.getAllOrder();
                 Delivery delivery = new Delivery();
                 List<Delivery> deliveries = delivery.getAllDelivery();
+                int position = 0;
                 for (Delivery delivery1: deliveries){
-                    if(delivery1.getDeliveryID().equals(ID)){
+                    if(delivery1.getDeliveryStaffID().equals(ID) && !orderList.get(position).getOrderCompletion()){
                         return true;
                     }
                 }
