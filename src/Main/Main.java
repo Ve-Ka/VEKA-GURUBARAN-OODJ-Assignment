@@ -596,8 +596,9 @@ public class Main {
                         managingStaff2.editItemDetails(item);
                         break;
                     case ORDER:
-                        Order order = new Order();
-                        order.setOrderCompletion( Boolean.parseBoolean(staffEditableDetails[0]));
+                        Order order = new Order(defaultDetails.get(0), defaultDetails.get(1), defaultDetails.get(2),
+                                defaultDetails.get(3), Integer.parseInt(defaultDetails.get(4)), defaultDetails.get(5),
+                                defaultDetails.get(6), Boolean.parseBoolean(staffEditableDetails[0]));
                         order.modify(order);
                         break;
                     case DELIVERY:

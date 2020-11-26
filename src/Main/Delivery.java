@@ -103,7 +103,7 @@ public class Delivery implements Task{
                         detail.getItem().getItemQuantity()));
             }
             WriteData.close();
-            System.out.println("Alert: Details Updated!");
+            System.out.println("Alert: Delivery Details Updated!");
         }catch (IOException e){
             e.printStackTrace();
         }

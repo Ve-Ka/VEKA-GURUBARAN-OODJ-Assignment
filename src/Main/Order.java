@@ -44,6 +44,17 @@ public class Order implements Task{
         this.orderCompletion = orderCompletion;
     }
 
+    public Order(String orderID, String orderDateTime, String custID, String itemID, int itemQuantity,
+                 String deliveryID, String managingStaffID, boolean orderCompletion) {
+        this.orderID = orderID;
+        this.orderDateTime = orderDateTime;
+        Customer customer = new Customer(custID);
+        this.deliveryID = deliveryID;
+        Item item = new Item(itemID, itemQuantity);
+        this.managingStaffID = managingStaffID;
+        this.orderCompletion = orderCompletion;
+    }
+
     // search can be depreciated
     @Override
     public void search(String ID) {
@@ -72,7 +83,34 @@ public class Order implements Task{
 
     @Override
     public void modify(Object object) {
+        // Overwrite Original List with new data
+        Order order = (Order) object;
+        List<Order> originalDetails = getAllOrder();
+        int position = 0;
+        for (Order detail: originalDetails){
+            if (detail.getOrderID().equals(order.getOrderID())) {
+                break;
+            }else{
+                position ++;
+            }
+        }
 
+        originalDetails.set(position, order);
+
+        // Write to file
+        try{
+            FileWriter WriteData = new FileWriter(orderFile);
+            for (Order detail: originalDetails){
+                WriteData.write(String.format("%s|%s|%s|%s|%d|%s|%s|%s\n", detail.getOrderID(),
+                        detail.getOrderDateTime(), detail.getCustomer().getCustID(), detail.getItem().getItemID(),
+                        detail.getItem().getItemQuantity(), detail.getDeliveryID(), detail.getManagingStaffID(),
+                        detail.getOrderCompletion()));
+            }
+            WriteData.close();
+            System.out.println("Alert: Order Details Updated!");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
