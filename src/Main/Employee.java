@@ -46,10 +46,11 @@ public abstract class Employee {
     }
 
     protected void viewSelfAccount(String empID){
+        Account account = new Account();
         List<Account> accounts = account.getAllEmpCredential();
-        for (Account account: accounts){
-            if (account.getEmpID().equals(empID)){
-                System.out.println(account.toString());
+        for (Account account1: accounts){
+            if (account1.getEmpID().equals(empID)){
+                System.out.println(account1.toString());
             }
         }
     }

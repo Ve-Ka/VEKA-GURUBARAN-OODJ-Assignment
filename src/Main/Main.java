@@ -532,6 +532,7 @@ public class Main {
                 break;
             case 3:
                 String[] staffEditableDetails = {};
+                int pointerOffset = 1;
                 List<String> defaultDetails = new ArrayList<>();
 
                 System.out.print("Edit ID: ");
@@ -564,16 +565,19 @@ public class Main {
                     item.viewItemDetails(editID);
                 }else if(editID.startsWith("OD")){
                     staffEditableDetails = new String[]{"Order Completed"};
+                    pointerOffset = 8;
                     Order order = new Order();
                     defaultDetails = order.defaultDetails(editID);
                     order.search(editID);
                 }else if(editID.startsWith("DE")){
                     staffEditableDetails = new String[]{"Delivery Staff"};
+                    pointerOffset = 2;
                     Delivery delivery = new Delivery();
                     defaultDetails = delivery.defaultDetails(editID);
                     delivery.search(editID);
                 } else if(editID.startsWith("FE")) {
                     staffEditableDetails = new String[]{"Feedback Title", "Feedback Content"};
+                    pointerOffset = 2;
                     Feedback feedback = new Feedback();
                     defaultDetails = feedback.defaultDetails(editID);
                     feedback.search(editID);
@@ -586,7 +590,7 @@ public class Main {
                     System.out.printf("New %s: ", staffEditableDetails[a]);
                     String userInput = Scanner.nextLine();
                     if (userInput.equals("")){
-                        staffEditableDetails[a] = defaultDetails.get(a + 1);
+                        staffEditableDetails[a] = defaultDetails.get(a + pointerOffset);
                     }else{
                         staffEditableDetails[a] = userInput;
                     }
