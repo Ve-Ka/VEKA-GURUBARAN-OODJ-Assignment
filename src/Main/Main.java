@@ -333,38 +333,43 @@ public class Main {
                 // Order ID will be auto generated so there is not a need to input a value
                 // Check for any other id that have potential to be auto generated
                 if(!idType.equals(idType.ORDER)) {
-                    while ((!addID.toUpperCase().contains("MS") || !addID.toUpperCase().contains("DS")) && idType.equals(idType.STAFF)){
+                    while ((!addID.toUpperCase().contains("MS") && !addID.toUpperCase().contains("DS")) && idType.equals(idType.STAFF)){
                         System.out.print("Managing Staff | Delivery Staff [MS/DS]: ");
                         addID = Scanner.next();
                     }
 
-                    if (addID.startsWith("MS")) {
+                    if (addID.toUpperCase().startsWith("MS")) {
                         addableDetails = new String[]{"Name", "Age", "Gender", "Email"};
                         employee = new ManagingStaff();
-                        System.out.print("New Password: ");
-                        newPassword = Scanner.next();
                         ManagingStaff managingStaff = (ManagingStaff) employee;
                         addID = managingStaff.generateID();
-                    } else if (addID.startsWith("DS")) {
+                        System.out.println("\nNew ID: " + addID);
+                        System.out.print("New Password: ");
+                        newPassword = Scanner.next();
+                    } else if (addID.toUpperCase().startsWith("DS")) {
                         addableDetails = new String[]{"Name", "Age", "Gender", "Email", "Vehicle Brand",
                                 "Vehicle Plate NO"};
                         employee = new ManagingStaff();
-                        System.out.print("New Password: ");
-                        newPassword = Scanner.next();
                         DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
                         addID = deliveryStaff.generateID();
+                        System.out.println("\nNew ID: " + addID);
+                        System.out.print("New Password: ");
+                        newPassword = Scanner.next();
                     } else if (idType.equals(idType.CUSTOMER)) {
                         addableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
                         Customer customer = new Customer();
                         addID = customer.generateID();
+                        System.out.println("\nNew ID: " + addID);
                     } else if (idType.equals(idType.ITEM)) {
                         addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                         Item item = new Item();
                         addID = item.generateID();
+                        System.out.println("\nNew ID: " + addID);
                     } else if (idType.equals(idType.FEEDBACK)) {
                         addableDetails = new String[]{"Feedback Title", "Feedback Content", "Customer ID"};
                         Feedback feedback = new Feedback();
                         addID = feedback.generateID();
+                        System.out.println("\nNew ID: " + addID);
                     }else {
                         System.out.println("Alert: ID input Invalid or exist!");
                         managingStaffManagementCLI(empID, idType);
