@@ -717,7 +717,7 @@ public class Main {
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXX");
         System.out.print("--> ");
         String userChoice = Scanner.next();
-        int intUserChoice = userChoiceVerification(userChoice, 1, 8);
+        int intUserChoice = userChoiceVerification(userChoice, 1, 9);
         switch(intUserChoice){
             case 1:
                 Account account = new Account();
