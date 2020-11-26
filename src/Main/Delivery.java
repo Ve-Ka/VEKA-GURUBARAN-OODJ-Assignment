@@ -1,7 +1,5 @@
 package Main;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
