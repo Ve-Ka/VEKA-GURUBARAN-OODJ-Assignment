@@ -492,7 +492,6 @@ public class Main {
         int intUserChoice = userChoiceVerification(userChoice, 1, 5);
         switch(intUserChoice){
             case 1:
-                Order order1 = new Order();
                 System.out.print("Order ID: ");
                 String searchOrderID = Scanner.next();
                 while((!idExistVerification(searchOrderID, idType.ORDER)) || !(searchOrderID.startsWith("OD")) || (searchOrderID.isBlank())){
@@ -500,12 +499,13 @@ public class Main {
                     System.out.print("Order ID: ");
                     searchOrderID = Scanner.next();
                 }
+                Order order1 = new Order();
                 order1.search(searchOrderID);
+
                 managingStaffOrderCLI(empID);
                 break;
             case 2:
-                Order order = new Order();
-                String newOrderID = order.generateOrderID();
+
                 boolean exit = false;
 
                 // Retrieve Local Date Time
@@ -573,8 +573,10 @@ public class Main {
                             }
                             deliveryStaff = new DeliveryStaff(deliveryStaffID);
 
+                            // Generate new DeliveryID
                             delivery = new Delivery();
                             DeliveryID = delivery.generateDeliveryID();
+
                             delivery = new Delivery(DeliveryID, currentLocalDateTime, deliveryStaff.getEmpID(),
                                     customerID, item);
                             delivery.add();
@@ -590,6 +592,10 @@ public class Main {
                             break;
                     }
                 }
+
+                // Generate new OrderID
+                Order order = new Order();
+                String newOrderID = order.generateOrderID();
 
                 // Association between managingStaff and order
                 ManagingStaff managingStaff = new ManagingStaff(empID);
@@ -609,6 +615,22 @@ public class Main {
                 managingStaffOrderCLI(empID);
                 break;
             case 3:
+                System.out.print("Order ID: ");
+                String editOrderID = Scanner.next();
+                while((!idExistVerification(editOrderID, idType.ORDER)) || !(editOrderID.startsWith("OD")) || (editOrderID.isBlank())){
+                    System.out.println("Warning: Order ID does not Exist or not Valid!");
+                    System.out.print("Order ID: ");
+                    editOrderID = Scanner.next();
+                }
+
+                Order order2 = new Order();
+                order2.search(editOrderID);
+                System.out.println("-----------------------");
+
+
+
+                order2.modify();
+
                 managingStaffOrderCLI(empID);
                 break;
             case 4:
@@ -621,6 +643,7 @@ public class Main {
                     removeOrderID = Scanner.next();
                 }
                 order3.remove(removeOrderID);
+
                 managingStaffOrderCLI(empID);
                 break;
             case 5:
