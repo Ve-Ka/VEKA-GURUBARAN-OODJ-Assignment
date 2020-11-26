@@ -343,7 +343,7 @@ public class Main {
                         employee = new ManagingStaff();
                         ManagingStaff managingStaff = (ManagingStaff) employee;
                         addID = managingStaff.generateID();
-                        System.out.println("\nNew ID: " + addID);
+                        System.out.println("New ID: " + addID);
                         System.out.print("New Password: ");
                         newPassword = Scanner.next();
                     } else if (addID.toUpperCase().startsWith("DS")) {
@@ -352,24 +352,24 @@ public class Main {
                         employee = new DeliveryStaff();
                         DeliveryStaff deliveryStaff = (DeliveryStaff) employee;
                         addID = deliveryStaff.generateID();
-                        System.out.println("\nNew ID: " + addID);
+                        System.out.println("New ID: " + addID);
                         System.out.print("New Password: ");
                         newPassword = Scanner.next();
                     } else if (idType.equals(idType.CUSTOMER)) {
                         addableDetails = new String[]{"Name", "Email", "Phone NO", "Address"};
                         Customer customer = new Customer();
                         addID = customer.generateID();
-                        System.out.println("\nNew ID: " + addID);
+                        System.out.println("New ID: " + addID);
                     } else if (idType.equals(idType.ITEM)) {
                         addableDetails = new String[]{"Name", "Quantity", "Price", "Supplier", "Description"};
                         Item item = new Item();
                         addID = item.generateID();
-                        System.out.println("\nNew ID: " + addID);
+                        System.out.println("New ID: " + addID);
                     } else if (idType.equals(idType.FEEDBACK)) {
                         addableDetails = new String[]{"Feedback Title", "Feedback Content", "Customer ID"};
                         Feedback feedback = new Feedback();
                         addID = feedback.generateID();
-                        System.out.println("\nNew ID: " + addID);
+                        System.out.println("New ID: " + addID);
                     }else {
                         System.out.println("Alert: ID input Invalid or exist!");
                         managingStaffManagementCLI(empID, idType);
