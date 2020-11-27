@@ -1,8 +1,11 @@
 IT0001|Network Interface Card|18|199.90|Dell|NIC for Server
 IT0002|Nvidia GT1030|25|349.90|Nvidia|Graphics Card for Computer
-IT0003|E5-2620V3|11|80.00|Intel|Server CPU
-IT0004|Seagate Skyhawk 1TB|3|149.90|Seagate|Hard Disk With Survalence Write Performance
+IT0003|E5-2620V3|9|80.00|Intel|Server CPU
+IT0004|Seagate Skyhawk 1TB|4|149.90|Seagate|Hard Disk With Survalence Write Performance
 IT0005|SoundBlasterX M1|0|399.99|Crucial|Audio Soundcard for Computer
 IT0006|X5670|0|20.00|Intel|Server CPU
 IT0007|480GB SAS SSD|21|399.90|Samsung|Server SAS SSD
 IT0008|10M Cat7 Ethernet Cable|30|50.60|Ubiquity|Ethernet Patch Cable
+IT0009|Tp-Link M1|25|199.90|Tp-Link|Consumer Grade Mesh Router
+IT0010|Logitech M331|10|200.00|Logitech|Stereo Speaker
+IT0011|Avantree BT001|30|399.00|Avantree|Bluetooth Audio Receiver

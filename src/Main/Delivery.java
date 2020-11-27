@@ -245,15 +245,16 @@ public class Delivery implements Task, MiscellaneousFunction{
         Order order = new Order();
         List<Order> orderList = order.getAllOrder();
         List<Delivery> deliveryList = getAllDelivery();
-        int position = 0;
         for(Delivery item: deliveryList){
-            if(item.getDeliveryID().equals(orderList.get(position).getDeliveryID())){
-                if((item.getDeliveryStaffID().equals(empID)) && !(orderList.get(position).getOrderCompletion())){
-                    System.out.println("Delivery ID: " + item.getDeliveryID());
-                    System.out.println(item.toString());
-                    System.out.println("+~~~~~~~~~~~~~~~~~~~~~~~+");
+            for (Order item1: orderList){
+                if(item.getDeliveryID().equals(item1.getDeliveryID())){
+                    if((item.getDeliveryStaffID().equals(empID)) && !(item1.getOrderCompletion())){
+                        System.out.println("Delivery ID: " + item.getDeliveryID());
+                        System.out.println(item.toString());
+                        System.out.println("+~~~~~~~~~~~~~~~~~~~~~~~+");
+                    }
                 }
-            }position ++;
+            }
         }
     }
 
