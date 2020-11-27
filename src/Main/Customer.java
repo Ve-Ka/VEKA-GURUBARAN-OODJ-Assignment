@@ -41,44 +41,6 @@ public class Customer implements MiscellaneousFunction{
         this.custAddress = custAddress;
     }
 
-    protected List<Customer> getAllCustDetails(){
-        List<Customer> custList = new ArrayList();
-        try {
-            List<String> custDetailsList = Files.readAllLines(Paths.get(custDetailsFile));
-            for (String record : custDetailsList){
-                String[] rec = record.split("\\|");
-                Customer customer = new Customer();
-                customer.setCustID(rec[0]);
-                customer.setCustName(rec[1]);
-                customer.setCustEmail(rec[2]);
-                customer.setCustPhoneNo(rec[3]);
-                customer.setCustAddress(rec[4]);
-                custList.add(customer);
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return custList;
-    }
-
-    protected void viewCustDetails(String custID){
-        List<Customer> customers = getAllCustDetails();
-        for (Customer customer: customers){
-            if (customer.getCustID().equals(custID)){
-                System.out.println(customer.toString());
-            }
-        }
-    }
-
-    protected void displayLimitedCustDetails(){
-        List<Customer> customers = getAllCustDetails();
-        System.out.println("\nAll customer details");
-        for (Customer customer: customers){
-            System.out.printf("%S|%S|%s\n", customer.getCustID(), customer.getCustName(), customer.getCustPhoneNo());
-        }
-        System.out.println("");
-    }
-
     @Override
     public List<String> defaultDetails(String ID){
         List<Customer> originalDetails = getAllCustDetails();
@@ -150,6 +112,44 @@ public class Customer implements MiscellaneousFunction{
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected List<Customer> getAllCustDetails(){
+        List<Customer> custList = new ArrayList();
+        try {
+            List<String> custDetailsList = Files.readAllLines(Paths.get(custDetailsFile));
+            for (String record : custDetailsList){
+                String[] rec = record.split("\\|");
+                Customer customer = new Customer();
+                customer.setCustID(rec[0]);
+                customer.setCustName(rec[1]);
+                customer.setCustEmail(rec[2]);
+                customer.setCustPhoneNo(rec[3]);
+                customer.setCustAddress(rec[4]);
+                custList.add(customer);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return custList;
+    }
+
+    protected void viewCustDetails(String custID){
+        List<Customer> customers = getAllCustDetails();
+        for (Customer customer: customers){
+            if (customer.getCustID().equals(custID)){
+                System.out.println(customer.toString());
+            }
+        }
+    }
+
+    protected void displayLimitedCustDetails(){
+        List<Customer> customers = getAllCustDetails();
+        System.out.println("\nAll customer details");
+        for (Customer customer: customers){
+            System.out.printf("%S|%S|%s\n", customer.getCustID(), customer.getCustName(), customer.getCustPhoneNo());
+        }
+        System.out.println("");
     }
 
     protected String getCustID() {

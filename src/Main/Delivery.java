@@ -266,61 +266,59 @@ public class Delivery implements Task, MiscellaneousFunction{
         }return false;
     }
 
-
-
-    public String getDeliveryID() {
+    private String getDeliveryID() {
         return deliveryID;
     }
 
-    public void setDeliveryID(String deliveryID) {
+    private void setDeliveryID(String deliveryID) {
         this.deliveryID = deliveryID;
     }
 
-    public String getDeliveryDateTime() {
+    private String getDeliveryDateTime() {
         return deliveryDateTime;
     }
 
-    public void setDeliveryDateTime(String deliveryDateTime) {
+    private void setDeliveryDateTime(String deliveryDateTime) {
         this.deliveryDateTime = deliveryDateTime;
     }
 
-    public String getDeliveryStaffID() {
+    protected String getDeliveryStaffID() {
         return deliveryStaffID;
     }
 
-    public void setDeliveryStaffID(String deliveryStaffID) {
+    private void setDeliveryStaffID(String deliveryStaffID) {
         this.deliveryStaffID = deliveryStaffID;
     }
 
-    public String getCustID() {
+    private String getCustID() {
         return custID;
     }
 
-    public void setCustID(String custID) {
+    private void setCustID(String custID) {
         this.custID = custID;
     }
 
-    public String getCustName() {
+    private String getCustName() {
         return custName;
     }
 
-    public void setCustName(String custName) {
+    private void setCustName(String custName) {
         this.custName = custName;
     }
 
-    public String getCustAddress() {
+    private String getCustAddress() {
         return custAddress;
     }
 
-    public void setCustAddress(String custAddress) {
+    private void setCustAddress(String custAddress) {
         this.custAddress = custAddress;
     }
 
-    public Item getItem() {
+    private Item getItem() {
         return item;
     }
 
-    public void setItem(Item item) {
+    private void setItem(Item item) {
         this.item = item;
     }
 

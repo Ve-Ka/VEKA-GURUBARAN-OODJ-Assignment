@@ -1,7 +1,6 @@
 package Main;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.*;
@@ -243,53 +242,51 @@ public class Feedback implements Task, MiscellaneousFunction{
         return feedbackList;
     }
 
-
-
-    public String getFeedbackID() {
+    protected String getFeedbackID() {
         return feedbackID;
     }
 
-    public void setFeedbackID(String feedbackID) {
+    private void setFeedbackID(String feedbackID) {
         this.feedbackID = feedbackID;
     }
 
-    public String getFeedbackDateTime() {
+    private String getFeedbackDateTime() {
         return feedbackDateTime;
     }
 
-    public void setFeedbackDateTime(String orderDateTime) {
+    private void setFeedbackDateTime(String orderDateTime) {
         this.feedbackDateTime = orderDateTime;
     }
 
-    public String getFeedbackTitle() {
+    private String getFeedbackTitle() {
         return feedbackTitle;
     }
 
-    public void setFeedbackTitle(String feedbackTitle) {
+    private void setFeedbackTitle(String feedbackTitle) {
         this.feedbackTitle = feedbackTitle;
     }
 
-    public String getFeedbackContent() {
+    private String getFeedbackContent() {
         return feedbackContent;
     }
 
-    public void setFeedbackContent(String feedbackContent) {
+    private void setFeedbackContent(String feedbackContent) {
         this.feedbackContent = feedbackContent;
     }
 
-    public Customer getCustomer() {
+    private Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    private void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public String getManagingStaffID() {
+    private String getManagingStaffID() {
         return managingStaffID;
     }
 
-    public void setManagingStaffID(String managingStaffID) {
+    private void setManagingStaffID(String managingStaffID) {
         this.managingStaffID = managingStaffID;
     }
 

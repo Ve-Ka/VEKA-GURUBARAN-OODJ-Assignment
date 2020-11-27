@@ -17,6 +17,13 @@ public class Account {
     private String empPassword;
     protected final static String empCredentialFile = "txt Files/empCredential.txt";
 
+    public Account(){}
+
+    public Account(String empID, String empPassword){
+        this.empID = empID;
+        this.empPassword = empPassword;
+    }
+
     protected List<Account> getAllEmpCredential(){
         List<Account> accountList = new ArrayList();
         try {
@@ -32,30 +39,6 @@ public class Account {
             e.printStackTrace();
         }
         return accountList;
-    }
-
-    Account(){}
-
-    Account(String empID, String empPassword){
-        this.empID = empID;
-        this.empPassword = empPassword;
-    }
-
-
-    protected String getEmpID() {
-        return empID;
-    }
-
-    protected void setEmpID(String empID) {
-        this.empID = empID;
-    }
-
-    protected String getEmpPassword() {
-        return empPassword;
-    }
-
-    protected void setEmpPassword(String empPassword) {
-        this.empPassword = empPassword;
     }
 
     protected void generateReport(){
@@ -93,6 +76,22 @@ public class Account {
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected String getEmpID() {
+        return empID;
+    }
+
+    protected void setEmpID(String empID) {
+        this.empID = empID;
+    }
+
+    protected String getEmpPassword() {
+        return empPassword;
+    }
+
+    protected void setEmpPassword(String empPassword) {
+        this.empPassword = empPassword;
     }
 
     @Override

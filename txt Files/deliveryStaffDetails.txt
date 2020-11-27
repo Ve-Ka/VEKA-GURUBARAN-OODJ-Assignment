@@ -1,4 +1,5 @@
 DS0001|Jaya|15|Female|jaya@mail.com|kanvil|WTF1269
-DS0002|Ronan|23|Male|ronan@mail.com|hondu|JTF3459
+DS0002|Edvin|23|Male|ronan@mail.com|honda|JTF3459
 DS0003|Jellty|35|Female|jeltty@mail.com|toyota|HIR3248
 DS0004|Tee|20|Female|tee@mail.com|hyundai|DLF1265
+DS0005|Dickson|20|Male|dickson@mail.com|myvi|DFH5932
