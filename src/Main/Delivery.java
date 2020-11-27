@@ -267,7 +267,7 @@ public class Delivery implements Task, MiscellaneousFunction{
         }return false;
     }
 
-    private String getDeliveryID() {
+    protected String getDeliveryID() {
         return deliveryID;
     }
 

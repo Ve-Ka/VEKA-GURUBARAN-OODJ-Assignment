@@ -933,11 +933,14 @@ public class Main {
                 List<Order> orderList = order1.getAllOrder();
                 Delivery delivery = new Delivery();
                 List<Delivery> deliveries = delivery.getAllDelivery();
-                int position = 0;
                 for (Delivery delivery1: deliveries){
-                    if(delivery1.getDeliveryStaffID().equals(ID) && !orderList.get(position).getOrderCompletion()){
-                        return true;
+                    for(Order order2: orderList){
+                        if(delivery1.getDeliveryID().equals(ID) && !order2.getOrderCompletion() &&
+                                delivery1.getDeliveryID().equals(order2.getDeliveryID())){
+                            return true;
+                        }
                     }
+
                 }
                 break;
             case FEEDBACK:
