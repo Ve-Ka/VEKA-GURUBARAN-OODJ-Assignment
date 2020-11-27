@@ -1,2 +1,4 @@
 FE0001|27/11/2020 03:33:58|Slow Delivery of Item|Slow Delivery|CS0003|Pavan|012-564 1234|MS0002
 FE0002|27/11/2020 06:22:24|Delivery Status not Updated|Delivery was stuck at Tangkak, Johor for many weeks|CS0004|Eva|013-234 1987|MS0002
+FE0003|27/11/2020 21:12:57|Fast Delivery|Item is delivered the next day after order is made, keep up the good work|CS0007|Lory|018-999 1259|MS0001
+FE0004|27/11/2020 21:23:02|Poor Customer Support|Called the direct phone line but had to wait from 30 minutes in queue|CS0005|Amanda|013-232 2342|MS0001

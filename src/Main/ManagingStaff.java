@@ -114,7 +114,6 @@ public class ManagingStaff extends Employee implements MiscellaneousFunction{
         }
     }
 
-
     protected void editStaffDetails(ManagingStaff managingStaff) {
         // Overwrite Original List with new data
         List<ManagingStaff> originalDetails = getAllManagingStaffDetails();

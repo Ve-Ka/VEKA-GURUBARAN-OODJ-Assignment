@@ -4,4 +4,5 @@ CS0003|Pavan|pavan@mail.com|012-564 1234|12, Jalan Ipoh, Sabah
 CS0004|Eva|eva@mail.com|013-234 1987|40, Jalan Orod, Penang
 CS0005|Amanda|amanda@mail.com|013-232 2342|43, Jalan Taman, Johor
 CS0006|Yam|yam@mail.com|018-981 4373|43, Jalan Jalan, Selangor
-CS0007|Loly|loly@mail.com|018-999 1259|89, Jalan Duta, Perak
+CS0007|Lory|lory@mail.com|018-999 1259|89, Jalan Duta, Perak
+CS0008|Ash|ash@mail.com|015-123 8293|80, Jalan Temp, Perlis

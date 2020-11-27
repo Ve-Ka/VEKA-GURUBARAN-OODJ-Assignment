@@ -4,20 +4,20 @@ import java.util.List;
 
 public abstract class Employee {
     private String empID;
-    protected String empName;
-    protected int empAge;
-    protected String empGender;
-    protected String empEmail;
+    private String empName;
+    private int empAge;
+    private String empGender;
+    private String empEmail;
 
     private Account account;
 
-    // Static polymorphism (constructor overloading)
     public Employee(){}
 
     public Employee(String empID){
         this.empID = empID;
     }
 
+    // Composition of employee and account class
     public Employee(String empID, String empPassword){
         this.account = new Account();
         account.setEmpID(empID);
@@ -57,8 +57,6 @@ public abstract class Employee {
 
     protected abstract void displayStaffDetails(String empID);
     protected abstract List<String> defaultDetails(String ID);
-
-
 
     protected String getEmpID() {
         return empID;

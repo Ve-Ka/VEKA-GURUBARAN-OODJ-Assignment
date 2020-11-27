@@ -229,8 +229,6 @@ public class Order implements Task, MiscellaneousFunction{
         }
     }
 
-
-
     //customer -> order -> order list
     //object -> object item -> object list
     protected List<Order> getAllOrder(){
@@ -282,64 +280,59 @@ public class Order implements Task, MiscellaneousFunction{
         }
     }
 
-
-    public String getOrderID() {
+    protected String getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(String orderID) {
+    private void setOrderID(String orderID) {
         this.orderID = orderID;
     }
 
-    public String getOrderDateTime() {
+    private String getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(String orderDateTime) {
+    private void setOrderDateTime(String orderDateTime) {
         this.orderDateTime = orderDateTime;
     }
 
-    public String getDeliveryID() {
+    protected String getDeliveryID() {
         return deliveryID;
     }
 
-    public void setDeliveryID(String deliveryID) {
+    private void setDeliveryID(String deliveryID) {
         this.deliveryID = deliveryID;
     }
 
-    public String getManagingStaffID() {
+    private String getManagingStaffID() {
         return managingStaffID;
     }
 
-    public void setManagingStaffID(String managingStaffID) {
+    private void setManagingStaffID(String managingStaffID) {
         this.managingStaffID = managingStaffID;
     }
 
-    public boolean getOrderCompletion() {
+    protected boolean getOrderCompletion() {
         return orderCompletion;
     }
 
-    public void setOrderCompletion(boolean orderCompletion) {
+    private void setOrderCompletion(boolean orderCompletion) {
         this.orderCompletion = orderCompletion;
     }
 
-    public static String getOrderFile() {
-        return orderFile;
-    }
-
-    public Customer getCustomer() {
+    private Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    private void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public Item getItem() {
+    private Item getItem() {
         return item;
     }
 
-    public void setItem(Item item) {
+    private void setItem(Item item) {
         this.item = item;
     }
 
